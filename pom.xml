@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.gromit25</groupId>
+  <artifactId>babeagent</artifactId>
+  <version>0.1</version>
+  
+  <properties>
+  
+    <!--
+       charater set 설정
+               설정하지 않으면 Warning 출력됨
+    -->
+    <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
+
+    <!--
+              배포될 위치 설정 
+    -->
+    <deploy.target.dir>D:/apps/BabeAgent</deploy.target.dir>
+
+  </properties>
+  
+  <build>
+    
+    <plugins>
+    
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+    
+  </build>
+  
+  <dependencies>
+  
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>5.0.3</version>
+    </dependency>
+  
+    <dependency>
+      <groupId>com.googlecode.sizeofag</groupId>
+      <artifactId>sizeofag</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>sizeof</artifactId>
+      <version>0.3.0</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.carrotsearch</groupId>
+      <artifactId>java-sizeof</artifactId>
+      <version>0.0.5</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.madhukaraphatak</groupId>
+      <artifactId>java-sizeof_2.11</artifactId>
+      <version>0.1</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.11</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.github.jsqlparser</groupId>
+      <artifactId>jsqlparser</artifactId>
+      <version>1.2</version>
+    </dependency>
+     
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+     
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>4.3.9.RELEASE</version>
+    </dependency>
+    
+  </dependencies>
+</project>
