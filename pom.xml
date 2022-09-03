@@ -9,13 +9,13 @@
   
     <!--
        charater set 설정
-               설정하지 않으면 Warning 출력됨
+       설정하지 않으면 Warning 출력됨
     -->
     <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
 
     <!--
-              배포될 위치 설정 
+       배포될 위치 설정 
     -->
     <deploy.target.dir>D:/apps/BabeAgent</deploy.target.dir>
 
