@@ -17,25 +17,116 @@
     <!--
        배포될 위치 설정 
     -->
-    <deploy.target.dir>D:/apps/BabeAgent</deploy.target.dir>
+    <deploy.target.dir>C:/apps/BabeAgent</deploy.target.dir>
 
   </properties>
   
   <build>
+  <plugins>
     
-    <plugins>
-    
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
+    <plugin>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>3.7.0</version>
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+      </configuration>
+    </plugin>
       
-    </plugins>
+    <plugin>
+      <artifactId>maven-clean-plugin</artifactId>
+      <version>2.5</version>
+      <executions>
+        <execution>
+          <id>clean-target</id>
+          <phase>clean</phase>
+          <goals>
+            <goal>clean</goal>
+          </goals>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>${deploy.target.dir}</directory>
+                <includes>
+                  <include>**/*</include>
+                </includes>
+              </fileset>
+            </filesets>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
     
+    <!-- jar 파일 생성 -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <version>3.1.1</version>
+      <configuration>
+        <outputDirectory>${deploy.target.dir}</outputDirectory>
+        <archive>
+           <manifest>
+           	<mainClass>com.epozen.logfilter.agent.App</mainClass>
+           	<packageName>com.epozen</packageName>
+              <addClasspath>true</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+           </manifest>
+        </archive>
+      </configuration>
+    </plugin>
+    
+    <!-- library jar 파일 복사  -->
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-dependency-plugin</artifactId>
+      <executions>
+        <execution>
+          <id>copy-dependencies</id>
+          <phase>install</phase>
+          <goals>
+            <goal>copy-dependencies</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>
+                ${deploy.target.dir}/lib
+            </outputDirectory>
+            <!--
+                lombok과 사용하지 않는 jar파일들은 복사하지 않음
+                lombok은 프로그램 개발시에만 필요함
+            -->
+            <excludeArtifactIds>
+                lombok, junit
+            </excludeArtifactIds>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    
+    <!-- resource 파일 복사  -->
+    <plugin>
+      <artifactId>maven-resources-plugin</artifactId>
+      <version>3.1.0</version>
+      <executions>
+      <!-- config 파일 복사  -->
+        <execution>
+          <id>copy-resource</id>
+          <phase>install</phase>
+          <goals>
+            <goal>copy-resources</goal>
+          </goals>
+          <configuration>
+            <outputDirectory>${deploy.target.dir}/resources</outputDirectory>
+            <resources>
+              <resource>
+                <directory>src/main/resources</directory>
+              </resource>
+            </resources>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    
+  </plugins>
   </build>
   
   <dependencies>
