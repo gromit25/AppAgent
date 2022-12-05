@@ -7,6 +7,7 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * 메소드 호출 타입
+ * -> 호출 타입에 따른 변환도 수행
  * @author jmsohn
  */
 enum InvokeType {
@@ -32,7 +33,8 @@ enum InvokeType {
 	private static Hashtable<Integer, InvokeType> invokeTypes;
 	
 	/**
-	 * 
+	 * invoke type 목록을 만듦
+	 * class loading 시 호출됨 
 	 */
 	static {
 		InvokeType.invokeTypes = new Hashtable<Integer, InvokeType>();
@@ -43,9 +45,9 @@ enum InvokeType {
 	}
 	
 	/**
-	 * 
-	 * @param opcode
-	 * @return
+	 * opcode에 해당하는 invoke type을 반환
+	 * @param opcode 요청한 opcode
+	 * @return opcode에 해당하는 invoke type
 	 */
 	public static InvokeType getInvokeType(int opcode) {
 		if(InvokeType.invokeTypes != null) {
@@ -74,16 +76,16 @@ enum InvokeType {
 	}
 	
 	/**
-	 * 
-	 * @param opcode
+	 * InvokeType 생성자
+	 * @param opcode invoke type의 opcode
 	 */
 	InvokeType(int opcode) {
 		this.opcode = opcode;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * InvokeType의 opcode 반환
+	 * @return InvokeType의 opcode
 	 */
 	public int getOpcode() {
 		return this.opcode;
