@@ -1,4 +1,4 @@
-package com.babe.log;
+package com.redeye.babe.log;
 
 public enum ApiType {
 	DB("DB"),

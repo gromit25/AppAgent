@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import com.babe.log.ApiType;
-import com.babe.log.Log;
+import com.redeye.babe.log.ApiType;
+import com.redeye.babe.log.Log;
 
 /**
  * 데이터베이스 연결(java.sql.Connection)의 Wrapper클래스

@@ -11,8 +11,8 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import com.babe.log.ApiType;
-import com.babe.log.Log;
+import com.redeye.babe.log.ApiType;
+import com.redeye.babe.log.Log;
 
 /**
  * 

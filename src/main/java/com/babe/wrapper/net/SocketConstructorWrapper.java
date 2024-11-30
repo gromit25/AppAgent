@@ -6,8 +6,8 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.babe.log.ApiType;
-import com.babe.log.Log;
+import com.redeye.babe.log.ApiType;
+import com.redeye.babe.log.Log;
 
 /**
  * 

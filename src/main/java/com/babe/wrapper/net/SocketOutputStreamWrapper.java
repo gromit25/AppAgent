@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.babe.log.ApiType;
-import com.babe.log.Log;
 import com.babe.wrapper.io.OutputStreamWrapper;
+import com.redeye.babe.log.ApiType;
+import com.redeye.babe.log.Log;
 
 class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	

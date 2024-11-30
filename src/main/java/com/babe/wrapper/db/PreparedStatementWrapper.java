@@ -24,7 +24,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Hashtable;
 
-import com.babe.log.Log;
+import com.redeye.babe.log.Log;
 
 /**
  * 데이터베이스 PreparedStatement의  Wrapper클래스
