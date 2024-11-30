@@ -1,12 +1,12 @@
-package com.babe.wrapper.net;
+package com.redeye.babe.wrapper.net;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import com.babe.wrapper.io.OutputStreamWrapper;
 import com.redeye.babe.log.ApiType;
 import com.redeye.babe.log.Log;
+import com.redeye.babe.wrapper.io.OutputStreamWrapper;
 
 class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	

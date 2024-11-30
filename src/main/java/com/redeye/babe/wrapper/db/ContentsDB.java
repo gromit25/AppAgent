@@ -1,4 +1,4 @@
-package com.babe.wrapper.db;
+package com.redeye.babe.wrapper.db;
 
 /**
  * 데이터베이스 쿼리 수행 정보

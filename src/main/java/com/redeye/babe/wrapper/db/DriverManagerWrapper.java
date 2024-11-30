@@ -1,4 +1,4 @@
-package com.babe.wrapper.db;
+package com.redeye.babe.wrapper.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,9 +1,9 @@
-package com.babe.wrapper.was;
+package com.redeye.babe.wrapper.was;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.babe.wrapper.io.OutputStreamWrapper;
+import com.redeye.babe.wrapper.io.OutputStreamWrapper;
 
 public class ResponseOutputStreamWrapper extends OutputStreamWrapper {
 

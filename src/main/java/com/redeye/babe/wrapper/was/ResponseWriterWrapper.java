@@ -1,9 +1,9 @@
-package com.babe.wrapper.was;
+package com.redeye.babe.wrapper.was;
 
 import java.io.IOException;
 import java.io.Writer;
 
-import com.babe.wrapper.io.WriterWrapper;
+import com.redeye.babe.wrapper.io.WriterWrapper;
 
 public class ResponseWriterWrapper extends WriterWrapper {
 

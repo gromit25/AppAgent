@@ -1,4 +1,4 @@
-package com.babe.wrapper.was;
+package com.redeye.babe.wrapper.was;
 
 import java.io.IOException;
 import java.io.OutputStream;
