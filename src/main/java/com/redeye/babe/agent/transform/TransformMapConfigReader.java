@@ -1,4 +1,4 @@
-package com.babe.agent.transform;
+package com.redeye.babe.agent.transform;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.babe.agent.exception.AgentException;
 import com.babe.config.RootConfig;
 import com.babe.log.Log;
+import com.redeye.babe.agent.exception.AgentException;
 
 /**
  * API 호출 변환 맵 Builder
@@ -216,13 +216,13 @@ class BuilderConfig {
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있으면, 현재 변환 맵을 이용하여 변환 수행
-	 * @see com.babe.agent.transform.TransformMap
+	 * @see com.redeye.babe.agent.transform.TransformMap
 	 */
 	private ArrayList<JoinPointInfo> joinPointIncludes;
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있지 않으면, 현재 변환 맵을 이용하여 변환 수행
-	 * @see com.babe.agent.transform.TransformMap
+	 * @see com.redeye.babe.agent.transform.TransformMap
 	 */
 	private ArrayList<JoinPointInfo> joinPointExcludes;
 	

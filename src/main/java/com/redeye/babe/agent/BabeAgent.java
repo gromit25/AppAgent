@@ -1,4 +1,4 @@
-package com.babe.agent;
+package com.redeye.babe.agent;
 
 import java.io.File;
 import java.lang.instrument.Instrumentation;

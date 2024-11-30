@@ -1,4 +1,4 @@
-package com.babe.agent.exception;
+package com.redeye.babe.agent.exception;
 
 /**
  * Agent 에서 발생하는 예외
