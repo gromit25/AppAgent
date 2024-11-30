@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 public class HttpServletResponseWrapper {
 	
@@ -15,5 +16,4 @@ public class HttpServletResponseWrapper {
 	public static Writer getWriter(HttpServletResponse response) throws IOException {
 		return new ResponseWriterWrapper(response.getWriter());
 	}
-
 }
