@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.babe.config.RootConfig;
+import com.redeye.babe.config.RootConfig;
 
 /**
  * 로그파일 관리자

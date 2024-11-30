@@ -1,4 +1,4 @@
-package com.babe.config;
+package com.redeye.babe.config;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;

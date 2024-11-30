@@ -3,7 +3,7 @@ package com.redeye.babe.agent;
 import java.io.File;
 import java.lang.instrument.Instrumentation;
 
-import com.babe.config.RootConfig;
+import com.redeye.babe.config.RootConfig;
 
 /**
  * Babe Agent Main
