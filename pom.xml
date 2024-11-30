@@ -134,43 +134,14 @@
     <dependency>
       <groupId>org.ow2.asm</groupId>
       <artifactId>asm</artifactId>
-      <version>5.0.3</version>
-    </dependency>
-  
-    <dependency>
-      <groupId>com.googlecode.sizeofag</groupId>
-      <artifactId>sizeofag</artifactId>
-      <version>1.0.0</version>
+      <version>9.7.1</version>
     </dependency>
     
     <dependency>
-      <groupId>org.ehcache</groupId>
-      <artifactId>sizeof</artifactId>
-      <version>0.3.0</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.carrotsearch</groupId>
-      <artifactId>java-sizeof</artifactId>
-      <version>0.0.5</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.madhukaraphatak</groupId>
-      <artifactId>java-sizeof_2.11</artifactId>
-      <version>0.1</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.11</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.github.jsqlparser</groupId>
-      <artifactId>jsqlparser</artifactId>
-      <version>1.2</version>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.28</version>
+      <scope>provided</scope>
     </dependency>
     
     <dependency>
@@ -184,6 +155,7 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
       <version>4.3.9.RELEASE</version>
+      <scope>provided</scope>
     </dependency>
     
   </dependencies>

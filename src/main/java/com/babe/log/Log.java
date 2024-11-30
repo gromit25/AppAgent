@@ -3,26 +3,23 @@ package com.babe.log;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Locale;
 import java.util.stream.Stream;
 
 import com.babe.config.RootConfig;
 import com.babe.wrapper.ContentsApp;
-import com.babe.wrapper.db.ContentsDB;
 
 /**
  * 로깅 클래스
+ * 
  * @author jmsohn
  */
 public class Log {
 	
 	/**
 	 * 데이터베이스 쿼리 수행전 로깅 수행 메소드
+	 * 
 	 * @param obj 쿼리 수행을 하는 객체(Statement, PreparedStatement, CallableStatement 등)
 	 * @param sql 쿼리
 	 * @param hash 쿼리의 hash값
@@ -67,6 +64,7 @@ public class Log {
 
 	/**
 	 * 데이터베이스 쿼리 수행후 로깅 수행 메소드
+	 * 
 	 * @param obj 쿼리 수행을 하는 객체(Statement, PreparedStatement, CallableStatement 등)
 	 * @param sql 쿼리
 	 * @param hash 쿼리의 hash값
@@ -92,6 +90,7 @@ public class Log {
 	
 	/**
 	 * 데이터베이스 로깅을 할 쿼리 인지 확인
+	 * 
 	 * @param sql 검사할 sql문
 	 * @return 로깅 여부
 	 */
@@ -110,6 +109,7 @@ public class Log {
 		// 로그를 남기지 않음
 		if(RootConfig.DB_SQL_EXCLUDE.isAvailable() == true) {
 			
+			@SuppressWarnings("unchecked")
 			HashSet<String> sqlExcludes = RootConfig.DB_SQL_EXCLUDE.getValueObject(HashSet.class);
 			for(String sqlExclude : sqlExcludes) {
 				if(sqlUpperCase.contains(sqlExclude) == true) {
@@ -123,6 +123,7 @@ public class Log {
 		// 로그를 남김
 		if(RootConfig.DB_SQL_INCLUDE.isAvailable() == true) {
 			
+			@SuppressWarnings("unchecked")
 			HashSet<String> sqlIncludes = RootConfig.DB_SQL_INCLUDE.getValueObject(HashSet.class);
 			for(String sqlInclude : sqlIncludes) {
 				if(sqlUpperCase.contains(sqlInclude) == true) {
@@ -140,6 +141,7 @@ public class Log {
 	
 	/**
 	 * Agent 자체에서 발생하는 로그
+	 * 
 	 * @param logFormat
 	 * @param params
 	 */
@@ -150,6 +152,7 @@ public class Log {
 
 	/**
 	 * 로그 파일에 로그 저장
+	 * 
 	 * @param apiType
 	 * @param obj
 	 * @param elapsedTime
@@ -252,7 +255,8 @@ public class Log {
 		
 		// 트레이싱 정보를 추가한다.
 		if(RootConfig.LOG_TRACE_PACKAGE.getValue() == null) return "";
-			
+		
+		@SuppressWarnings("unchecked")
 		HashSet<String> loggingPackages = RootConfig.LOG_TRACE_PACKAGE.getValueObject(HashSet.class);
 		
 		StringBuilder stackBuilder = new StringBuilder("");

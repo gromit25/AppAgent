@@ -4,7 +4,6 @@ import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.HashSet;
 import java.util.Hashtable;
 
 import org.objectweb.asm.ClassReader;
@@ -18,6 +17,7 @@ import com.babe.log.Log;
 
 /**
  * API 호출부를 모니터링 메소드 호출로 변경하는 클래스
+ * 
  * @author jmsohn
  */
 public final class BabeTransformer implements ClassFileTransformer {
@@ -27,39 +27,41 @@ public final class BabeTransformer implements ClassFileTransformer {
 	
 	/** API 호출 변환 맵 */ 
 	private Hashtable<String, TransformMap> transformMap;
-	private HashSet<String> exceptionalCodeSources;
 
 	/**
 	 * 생성자
-	 * @param transformConfigFile 클래스 변경 설정 파일
-	 * @param exceptionalCodeSources 예외 코드 소스 목록들
+	 * 
+	 * @param transformConfigFile 클래스 변환 설정 파일
 	 */
-	public BabeTransformer(final File transformConfigFile
-			, final HashSet<String> exceptionalCodeSources) throws Exception {
-		
-		this.setExceptionalCodeSources(exceptionalCodeSources);
+	public BabeTransformer(final File transformConfigFile) throws Exception {
+
+		// 클래스 변환 설정을 읽어옴
 		this.transformMap = TransformMapConfigReader.readConfig(transformConfigFile);
-		
 	}
-	
-	/**
-	 * 로딩되는 클래스 변환 수행
-	 */
+
 	@Override
-	public byte[] transform(final ClassLoader loader, final String className, final Class<?> classBeingRedefined,
-			final ProtectionDomain protectionDomain, final byte[] classfileBuffer) throws IllegalClassFormatException {
+	public byte[] transform(
+			final ClassLoader loader, final String className, final Class<?> classBeingRedefined,
+			final ProtectionDomain protectionDomain, final byte[] classfileBuffer
+	) throws IllegalClassFormatException {
+		
+		// 클래스 변환 작업 수행 후 변환된 클래스 반환
 		return this.transformAPI(className, protectionDomain, classfileBuffer);
 	}
 	
 	/**
+	 * 주어진 클래스를 변환 맵에 따라 바이트 코드 변환 후 반환
 	 * 
-	 * @param className
-	 * @param protectionDomain
-	 * @param classfileBuffer
+	 * @param className 변환할 클래스 명
+	 * @param protectionDomain 
+	 * @param classfileBuffer 
 	 * @return
 	 */
-	public byte[] transformAPI(String className, ProtectionDomain protectionDomain
-		, byte[] classfileBuffer)throws IllegalClassFormatException {
+	public byte[] transformAPI(
+			String className,
+			ProtectionDomain protectionDomain,
+			byte[] classfileBuffer
+	)throws IllegalClassFormatException {
 		
 		try {
 
@@ -115,22 +117,13 @@ public final class BabeTransformer implements ClassFileTransformer {
 		}
 		
 		//---------------------
-		// protection domain이 null인 것은 boot library 임
-		// 좀더 확인 필요... 확신을 몬하겠음
-		// TODO
+		// protection domain이 null인 것은 boot library 이므로 스킵 처리
+		// 아닐 경우 스킵하지 않도록 함
 		if(protectionDomain == null || protectionDomain.getCodeSource() == null ) {
 			return true;
+		} else {
+			return false;
 		}
-		
-		//---------------------
-		// 로딩된 위치가 hash 검증이 되었으면,
-		// skip 한다.
-		String codeSourceLoc = protectionDomain.getCodeSource().getLocation().toString();
-		if(this.getExceptionalCodeSources().contains(codeSourceLoc) == true) {
-			return true;
-		}
-		
-		return false;
 	}
 	
 	/**
@@ -140,28 +133,11 @@ public final class BabeTransformer implements ClassFileTransformer {
 	 * @return
 	 */
 	private Hashtable<String, TransformMap> getTransformMap() {
+		
 		if(this.transformMap == null) {
 			this.transformMap = new Hashtable<String, TransformMap>();
 		}
+		
 		return this.transformMap;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	private HashSet<String> getExceptionalCodeSources() {
-		if(this.exceptionalCodeSources == null) {
-			this.exceptionalCodeSources = new HashSet<String>();
-		}
-		return this.exceptionalCodeSources;
-	}
-
-	/**
-	 * 
-	 * @param exceptionalCodeSources
-	 */
-	private void setExceptionalCodeSources(final HashSet<String> exceptionalCodeSources) {
-		this.exceptionalCodeSources = exceptionalCodeSources;
 	}
 }

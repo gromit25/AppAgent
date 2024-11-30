@@ -24,12 +24,11 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Hashtable;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import com.babe.log.Log;
 
 /**
  * 데이터베이스 PreparedStatement의  Wrapper클래스
+ * 
  * @author jmsohn
  */
 public class PreparedStatementWrapper implements PreparedStatement{
@@ -654,9 +653,6 @@ public class PreparedStatementWrapper implements PreparedStatement{
 
 	private void setSql(String sql) {
 		this.sql = sql;
-		if(this.sql != null) {
-			this.sqlhash = DigestUtils.sha1Hex(sql.getBytes());
-		}
 	}
 
 	private String getSqlhash() {

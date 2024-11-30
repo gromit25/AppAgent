@@ -3,10 +3,9 @@ package com.babe.wrapper.db;
 import java.sql.CallableStatement;
 import java.sql.SQLException;
 
-import com.babe.log.Log;
-
 /**
- * 데이터베이스 CallableStatement의  Wrapper클래스
+ * 데이터베이스 CallableStatement 의 Wrapper 클래스
+ * 
  * @author jmsohn
  */
 public class CallableStatementWrapper {

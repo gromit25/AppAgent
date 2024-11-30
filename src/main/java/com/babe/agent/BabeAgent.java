@@ -2,10 +2,7 @@ package com.babe.agent;
 
 import java.io.File;
 import java.lang.instrument.Instrumentation;
-import java.util.HashSet;
 
-import com.babe.agent.integrity.IntegrityChecker;
-import com.babe.collectionwatcher.CollectionWatcher;
 import com.babe.config.RootConfig;
 
 /**
@@ -14,8 +11,6 @@ import com.babe.config.RootConfig;
  * @author jmsohn
  */
 public final class BabeAgent {
-	
-	private static CollectionWatcher collectionWatcher;
 	
 	/**
 	 * Java VM의 Agent에 Transformer 등록
@@ -34,30 +29,14 @@ public final class BabeAgent {
 				System.exit(1);
 			}
 			
-			// -----------------------
-			// heap 확인을 위한 watcher 기동 수행
-			BabeAgent.collectionWatcher = new CollectionWatcher(args, inst);
-			BabeAgent.collectionWatcher.setDaemon(true);
-			BabeAgent.collectionWatcher.start();
-			
-			//-----------------------
-			// 주요 라이브러리 파일 무결성 체크
-			HashSet<String> exceptionalCodeSources = IntegrityChecker.checkIntigrity(
-					RootConfig.INTIGRITY_CHECK_FILE.getValueObject(File.class));
-			
 			//-----------------------
 			// Transformer 등록하여 변환클래스 등록
 			BabeTransformer transformer = new BabeTransformer(
-					RootConfig.TRANSFORM_FILE.getValueObject(File.class)
-					, exceptionalCodeSources); 
+					RootConfig.TRANSFORM_FILE.getValueObject(File.class)); 
 			inst.addTransformer(transformer, true);
 			
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	public static CollectionWatcher getCollectionWatcher() {
-		return BabeAgent.collectionWatcher;
 	}
 }
