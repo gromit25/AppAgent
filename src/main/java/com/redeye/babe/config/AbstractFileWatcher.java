@@ -11,24 +11,25 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
 /**
- * 설정 파일의 실시간 반영을 위한
+ * 설정 파일의 실시간 반영을 위한<br>
  * 파일 변경 모니터링 클래스
+ * 
  * @author jmsohn
  */
 public abstract class AbstractFileWatcher extends Thread {
-	
-	//--------
 
 	/** 파일 변경 여부를 모니터링하기 위한 watcher */
 	private WatchService fileWatcher;
+	
 	/** 모니터링 파일 */
 	private File watchedFile;
+	
 	/** 모니터링 파일 최종 변경 시간 */
 	private long lastModifiedTime;
+	
 	/** 모니터링 중단 여부 */
 	private boolean isStop;
-	
-	//---------
+
 	
 	/**
 	 * 파일이 변경 되었을 때,
@@ -38,21 +39,23 @@ public abstract class AbstractFileWatcher extends Thread {
 
 	/**
 	 * 생성자
+	 * 
 	 * @param watchedFile 모니터링 파일
 	 */
 	public AbstractFileWatcher(File watchedFile) throws Exception {
 		
 		this.setWatchedFile(watchedFile);
 		
-		// main 프로그램 종료시, 같이 종료되도록 Daemon 으로 설정한다.
+		// main 프로그램 종료시, 같이 종료되도록 Daemon 으로 설정
 		this.setDaemon(true);
 		
-		// 최초 생성시 한번 읽어 들임
+		// 최초 생성시 한번 읽음
 		this.read();
 	}
 	
 	/**
 	 * 생성자
+	 * 
 	 * @param watchedFileName 모니터링 파일 이름
 	 */
 	public AbstractFileWatcher(String watchedFileName) throws Exception {
@@ -99,7 +102,7 @@ public abstract class AbstractFileWatcher extends Thread {
 							// 삭제 예정
 							System.out.println("Event is occured At ConfigWatcher:" + kind.toString() + ":" + this.getWatchedFile().getAbsolutePath());
 							
-							// 파일을 다시 읽어 들인다. 
+							// 파일을 다시 읽음 
 							try {
 								this.read();
 							} catch(Exception ex) {
@@ -109,8 +112,7 @@ public abstract class AbstractFileWatcher extends Thread {
 							}
 							
 							// TODO
-							// 읽기 성공
-							// 다시 이벤트를 기다린다.
+							// 읽기 성공시, 이벤트 대기
 							System.out.println("config is refreshed.");
 						}
 					}

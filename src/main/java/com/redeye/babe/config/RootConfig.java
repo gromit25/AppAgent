@@ -17,6 +17,7 @@ public enum RootConfig {
 	
 	/** agent의 패키지명 */
 	AGENT_PACKAGE("agent.package"),
+	
 	/**
 	 * system process id
 	 * config 파일에서 읽어오지 않는다.
@@ -29,6 +30,7 @@ public enum RootConfig {
 			// 값을 설정하지 못하도록 한다.
 		}
 	},
+	
 	/**
 	 * system server name
 	 * config 파일에서 읽어오지 않는다.
@@ -41,8 +43,10 @@ public enum RootConfig {
 			// 값을 설정하지 못하도록 한다.
 		}		
 	},
+	
 	/** system 구분자(id) */
 	SYSTEM_ID("system.id"),
+	
 	/** CHARACTER SET */
 	SYSTEM_CHARSET("system.charset") {
 		
@@ -53,6 +57,7 @@ public enum RootConfig {
 		}
 		
 	},
+	
 	/** 무결성 검사 파일명 */
 	INTIGRITY_CHECK_FILE("intigrity.checkfile") {
 		
@@ -63,6 +68,7 @@ public enum RootConfig {
 		}
 		
 	},
+	
 	/** 변환 맵(TransformMap) 설정 파일명 */
 	TRANSFORM_FILE("transform.file") {
 		
@@ -73,6 +79,7 @@ public enum RootConfig {
 		}
 		
 	},
+	
 	/** 로그를 남길 파일명 형식 */
 	LOG_FILE_PATH("log.file.path") {
 		
@@ -90,6 +97,7 @@ public enum RootConfig {
 			this.valueObject = value;
 		}
 	},
+	
 	/** 로그 파일의 최대치 (LogFileManager에서 사용)*/
 	LOG_FILE_MAXSIZE("log.file.maxsize") {
 		
@@ -128,6 +136,7 @@ public enum RootConfig {
 			this.valueObject = size;
 		}
 	},
+	
 	/** 로그파일검사 주기 */
 	LOG_FILE_INSPECTIONPERIOD("log.file.inspectionperiod") {
 		
@@ -138,6 +147,7 @@ public enum RootConfig {
 			this.valueObject = Long.parseLong(value); 
 		}
 	},
+	
 	/** 스택 트레이스 정보를 남길 package 명*/
 	LOG_TRACE_PACKAGE("log.tracepackage") {
 		
@@ -158,6 +168,7 @@ public enum RootConfig {
 			this.valueObject = loggingPackages;
 		}
 	},
+	
 	LOG_SHORT_PACKAGE_YN("log.shortpackage.yn") {
 		
 		@Override
@@ -172,6 +183,7 @@ public enum RootConfig {
 			}
 		}
 	},
+	
 	LOG_WRITER_INITIAL_CNT("log.writer.initcount") {
 		
 		@Override
@@ -180,6 +192,7 @@ public enum RootConfig {
 			this.valueObject = Integer.parseInt(value); 
 		}
 	},
+	
 	LOG_WRITER_PROCESSING_CNT("log.writer.processingcount") {
 		
 		@Override
@@ -188,6 +201,7 @@ public enum RootConfig {
 			this.valueObject = Integer.parseInt(value); 
 		}
 	},
+	
 	LOG_WRITER_MONITORING_PERIOD("log.writer.monitoringperiod") {
 		
 		@Override
@@ -197,6 +211,7 @@ public enum RootConfig {
 			this.valueObject = Long.parseLong(value); 
 		}
 	},
+	
 	LOG_WRITER_MAX_SURPLUS_TIME("log.writer.maxsurplustime") {
 		
 		@Override
@@ -206,6 +221,7 @@ public enum RootConfig {
 			this.valueObject = Long.parseLong(value); 
 		}
 	},
+	
 	LOG_WRITER_MAX_TX_CNT("log.writer.maxtxcount") {
 		
 		@Override
@@ -214,6 +230,7 @@ public enum RootConfig {
 			this.valueObject = Integer.parseInt(value); 
 		}
 	},
+	
 	LOG_WRITER_MAX_CNT("log.writer.maxcount") {
 		
 		@Override
@@ -223,6 +240,7 @@ public enum RootConfig {
 			this.valueObject = Integer.parseInt(value); 
 		}
 	},
+	
 	/** DB 접근 로그 남길때, 설정에 포함된 것만 로깅 */
 	DB_SQL_INCLUDE("db.sql.include") {
 		
@@ -243,7 +261,8 @@ public enum RootConfig {
 				this.valueObject = includes;
 			}
 		}
-	}, 
+	},
+	
 	/** DB 접근 로그 남길때, 설정에 포함된 것은 로깅하지 않음 */
 	DB_SQL_EXCLUDE("db.sql.exclude") {
 		
@@ -267,14 +286,15 @@ public enum RootConfig {
 	};
 	
 	//---------------------------
+	
 	/** ConfigValue 파일 변경 여부 감시용 Watcher */
 	private static RootConfigFileWatcher watcher;
-	/** */
+	
+	/** 설정 파일을 성공적으로 읽었는지 여부 */
 	private static boolean isValid;
 	
 	/**
-	 * ConfigValue 클래스 로딩시,
-	 * 설정 초기화를 수행한다.
+	 * ConfigValue 클래스 로딩시, 설정 초기화 수행
 	 */
 	static {
 		try {
@@ -305,8 +325,7 @@ public enum RootConfig {
 				}
 			}
 			
-			// babe.agent.conf property에 설정된 파일명에 
-			// 설정파일을 읽어온다.
+			// babe.agent.conf property에 설정된 파일명의 설정파일을 읽음
 			String confFileName = System.getProperty("babe.agent.conf");
 			RootConfig.watcher = new RootConfigFileWatcher(confFileName);
 			RootConfig.watcher.start();
@@ -320,24 +339,38 @@ public enum RootConfig {
 		}
 	}
 	
+	/**
+	 * 설정 파일을 성공적으로 읽었는지 여부 반환
+	 * 
+	 * @return 설정 파일을 성공적으로 읽었는지 여부
+	 */
 	public static boolean isValid() {
 		return RootConfig.isValid;
 	}
 
-	public static void setValid(boolean isValid) {
+	/**
+	 * 설정 파일을 성공적으로 읽었는지 여부 설정
+	 * 
+	 * @param isValid 설정 파일을 성공적으로 읽었는지 여부
+	 */
+	private static void setValid(boolean isValid) {
 		RootConfig.isValid = isValid;
 	}
 	
 	//---------------------------
+	
 	/** 속성(property) 명 */
 	protected String propertyName;
+	
 	/** 속성값 */
 	protected String value;
+	
 	/** 속성에 설정된 값을 객체화 하여 저장 */
 	protected Object valueObject;
 	
 	/**
 	 * 속성 생성자
+	 * 
 	 * @param propertyName 속성명
 	 */
 	private RootConfig(final String propertyName) {
@@ -345,7 +378,8 @@ public enum RootConfig {
 	}
 	
 	/**
-	 * 설정값이 사용가능한 상태인지 여부
+	 * 설정값이 사용가능한 상태인지 여부 반환
+	 * 
 	 * @return 설정값이 사용가능한 상태인지 여부
 	 */
 	public boolean isAvailable() {
@@ -362,8 +396,9 @@ public enum RootConfig {
 	}
 
 	/**
-	 * 속성명(property name)
-	 * @return 속성명(property name)
+	 * 속성명(property name) 반환
+	 * 
+	 * @return 속성명
 	 */
 	public String getPropertyName() {
 		return this.propertyName;
@@ -371,14 +406,16 @@ public enum RootConfig {
 
 	/**
 	 * 속성명(property name) 설정
+	 * 
 	 * @param propertyName 속성명(property name)
 	 */
-	private void setPropertyName(final String propertyName) {
+	private void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
 	}
 	
 	/**
 	 * 속성값
+	 * 
 	 * @return 속성값
 	 */
 	public String getValue() {
@@ -387,15 +424,17 @@ public enum RootConfig {
 	
 	/**
 	 * 속성값 설정
+	 * 
 	 * @param value 속성값
 	 */
-	protected void setValue(final String value) throws Exception {
+	protected void setValue(String value) throws Exception {
 		this.value = value;
 		this.valueObject = value;
 	}
 	
 	/**
-	 * 속성에 설정된 값을 객체되어 저장된 값 
+	 * 속성에 설정된 값을 객체되어 저장된 값 반환
+	 * 
 	 * @param type 객체의 class type
 	 * @return 속성에 설정된 값을 객체되어 저장된 값
 	 */
@@ -407,5 +446,4 @@ public enum RootConfig {
 		
 		return null;
 	}
-
 }

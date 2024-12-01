@@ -1,6 +1,9 @@
 package com.redeye.babe.agent.transform;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import lombok.Data;
 
 /**
  * API 호출 변환 맵 클래스
@@ -9,19 +12,20 @@ import java.util.ArrayList;
  *     -> com/babe/wrapper/RuntimeWrapper.exec(Ljava/lang/Runtime;Ljava/lang/String;)Ljava/lang/Process;
  * @author jmsohn
  */
+@Data
 public final class TransformMap {
 	
-	// ----- properties --------
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있으면, 현재 변환 맵을 이용하여 변환 수행
 	 */
-	private ArrayList<JoinPointInfo> joinPointIncludes;
+	private List<JoinPointInfo> joinPointIncludes;
+	
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있지 않으면, 현재 변환 맵을 이용하여 변환 수행
 	 */
-	private ArrayList<JoinPointInfo> joinPointExcludes;
+	private List<JoinPointInfo> joinPointExcludes;
 	
 	/** 수정 대상 API 메소드의 클래스 명*/
 	private String targetAPIClass;
@@ -36,9 +40,8 @@ public final class TransformMap {
 	private String altAPIMethod;
 	/** 대체 API 메소드의 Signature*/
 	private String altAPISignature;
-	
-	// ----- method -----
-	
+
+
 	/**
 	 * map에 저장되는 key 값을 만들기 위해,
 	 * 클래스명, 메소드명, 시그니처를 이용해 하나의 스트링으로 만든다.
@@ -47,6 +50,7 @@ public final class TransformMap {
 	 * 메소드명 : exec
 	 * 시그니쳐 : (Ljava/lang/String;)Ljava/lang/Process;
 	 * -> java/lang/Runtime.exec(Ljava/lang/String;)Ljava/lang/Process;
+	 * 
 	 * @param className 클래스명
 	 * @param methodName 메소드명
 	 * @param signature 시그니처
@@ -68,18 +72,19 @@ public final class TransformMap {
 		return fullNameBuilder.toString();
 	}
 	
-	// ------------------
-	
 	/**
-	 * 생성자
-	 * 다른 패키지에서 직접 생성 못하게 package 범위로 설정함
+	 * 생성자<br>
+	 * 다른 패키지에서 직접 생성 못하게 package 범위로 설정함<br>
 	 * readConfig 메소드로만 생성가능하도록 함
 	 */
 	TransformMap() {
+		this.joinPointIncludes = new Vector<>();
+		this.joinPointExcludes = new Vector<>();
 	}
 
 	/**
 	 * 수정 대상 메소드의 전체 이름
+	 * 
 	 * @return 수정 대상 메소드의 전체 이름
 	 */
 	String getTargetAPI() {		
@@ -88,6 +93,7 @@ public final class TransformMap {
 	
 	/**
 	 * 변환 메소드의 전체 이름
+	 * 
 	 * @return 변환 메소드의 전체 이름
 	 */
 	String getAltAPI() {		
@@ -96,6 +102,7 @@ public final class TransformMap {
 	
 	/**
 	 * API 변환 수행 여부
+	 * 
 	 * @param className 클래스명
 	 * @param methodName 메소드명
 	 * @param lineNumber 라인번호
@@ -128,82 +135,5 @@ public final class TransformMap {
 		} else {
 			return true;
 		}
-
-	}
-	
-	// ----- gettter & setter -------
-	
-	public String getTargetAPIClass() {
-		return this.targetAPIClass;
-	}
-	
-	void setTargetAPIClass(final String targetAPIClass) {
-		this.targetAPIClass = targetAPIClass;
-	}
-	
-	public String getTargetAPIMethod() {
-		return this.targetAPIMethod;
-	}
-	
-	void setTargetAPIMethod(final String targetAPIMethod) {
-		this.targetAPIMethod = targetAPIMethod;
-	}
-	
-	public String getTargetAPISignature() {
-		return this.targetAPISignature;
-	}
-	
-	void setTargetAPISignature(final String targetAPISignature) {
-		this.targetAPISignature = targetAPISignature;
-	}
-	
-	public String getAltAPIClass() {
-		return this.altAPIClass;
-	}
-	
-	void setAltAPIClass(final String altAPIClass) {
-		this.altAPIClass = altAPIClass;
-	}
-	
-	public String getAltAPIMethod() {
-		return this.altAPIMethod;
-	}
-	
-	void setAltAPIMethod(final String altAPIMethod) {
-		this.altAPIMethod = altAPIMethod;
-	}
-	
-	public String getAltAPISignature() {
-		return this.altAPISignature;
-	}
-	
-	void setAltAPISignature(final String altAPISignature) {
-		this.altAPISignature = altAPISignature;
-	}
-
-	public ArrayList<JoinPointInfo> getJoinPointIncludes() {
-		
-		if(this.joinPointIncludes == null) {
-			this.joinPointIncludes = new ArrayList<JoinPointInfo>();
-		}
-		
-		return this.joinPointIncludes;
-	}
-
-	public void setJoinPointIncludes(ArrayList<JoinPointInfo> joinPointIncludes) {
-		this.joinPointIncludes = joinPointIncludes;
-	}
-
-	public ArrayList<JoinPointInfo> getJoinPointExcludes() {
-		
-		if(this.joinPointExcludes == null) {
-			this.joinPointExcludes = new ArrayList<JoinPointInfo>();
-		}
-		
-		return this.joinPointExcludes;
-	}
-
-	public void setJoinPointExcludes(ArrayList<JoinPointInfo> joinPointExcludes) {
-		this.joinPointExcludes = joinPointExcludes;
 	}
 }

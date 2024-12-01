@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,28 +15,32 @@ import com.redeye.babe.agent.exception.AgentException;
 import com.redeye.babe.config.RootConfig;
 import com.redeye.babe.log.Log;
 
+import lombok.Data;
+
 /**
  * API 호출 변환 맵 Builder
+ * 
  * @author jmsohn
  */
 public class TransformMapConfigReader {
 	
 	/**
 	 * API 호출 변환 설정 파일 읽음
+	 * 
 	 * @param transformConfigFile API 호출 변환 설정 파일
 	 * @return API 호출 변환 설정 맵
 	 */
-	public static Hashtable<String, TransformMap> readConfig(final File transformConfigFile) throws Exception {
+	public static Map<String, TransformMap> readConfig(final File transformConfigFile) throws Exception {
 		
 		if(transformConfigFile == null || transformConfigFile.canRead() == false) {
 			throw new AgentException("Config file is not readable : " + transformConfigFile.getAbsolutePath());
 		}
 		
 		// TODO
-		System.out.println("*** BABE : Read Transform Config File : " + transformConfigFile.getAbsolutePath());
+		System.out.println("*** init BABE Agent : Read Transform Config File : " + transformConfigFile.getAbsolutePath());
 		
 		// API 호출 변환 맵 생성
-		Hashtable<String, TransformMap> transformMaps = new Hashtable<String, TransformMap>();
+		Map<String, TransformMap> transformMaps = new Hashtable<String, TransformMap>();
 		
 		// 파일에서 설정값들을 읽어옴
 		List<String> reads = Files.readAllLines(transformConfigFile.toPath(), RootConfig.SYSTEM_CHARSET.getValueObject(Charset.class));
@@ -75,7 +81,7 @@ public class TransformMapConfigReader {
 				 
 				// set 명령이 아닌 경우, 
 				// API 변환 Parsing 수행
-				ArrayList<TransformMap> parsedTransformMaps = TransformMapConfigReader.makeTransformMap(read, transformP, builderConfig);
+				List<TransformMap> parsedTransformMaps = TransformMapConfigReader.makeTransformMap(read, transformP, builderConfig);
 				
 				for(TransformMap transformMap : parsedTransformMaps) {
 					
@@ -86,23 +92,23 @@ public class TransformMapConfigReader {
 		}
 		
 		return transformMaps;
-		
 	}
 	
 	/**
-	 * 각 라인별 파싱 수행
+	 * 각 라인별 파싱 수행<br>
 	 * (readConfig 메소드가 복잡한거 같아서 따로 뺌)
+	 * 
 	 * @param read
 	 * @param transformP
 	 * @param builderConfig
 	 * @return
 	 */
-	private static ArrayList<TransformMap> makeTransformMap(final String read
+	private static List<TransformMap> makeTransformMap(final String read
 			, final Pattern transformP, final BuilderConfig builderConfig) throws AgentException {
 		
 		// 명시적으로 변환 되는 것 이외에 묵시적으로
 		// 추가되는 변환맵을 저장하기 위해 배열 형태를 사용
-		ArrayList<TransformMap> transformMaps = new ArrayList<TransformMap>();
+		List<TransformMap> transformMaps = new ArrayList<TransformMap>();
 		
 		// 1. 명시적 변환맵 파싱 및 추가
 		// 변환 맵 생성
@@ -200,31 +206,42 @@ public class TransformMapConfigReader {
 		
 		return transformMaps;
 	}
-
 }
 
 /**
  * 
  * @author jmsohn
  */
+@Data
 class BuilderConfig {
 	
 	/** 현재 target class */
 	private String targetClass;
+	
 	/** 변환할 alternative class */
 	private String altClass;
+	
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있으면, 현재 변환 맵을 이용하여 변환 수행
 	 * @see com.redeye.babe.agent.transform.TransformMap
 	 */
-	private ArrayList<JoinPointInfo> joinPointIncludes;
+	private List<JoinPointInfo> joinPointIncludes;
+	
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있지 않으면, 현재 변환 맵을 이용하여 변환 수행
 	 * @see com.redeye.babe.agent.transform.TransformMap
 	 */
-	private ArrayList<JoinPointInfo> joinPointExcludes;
+	private List<JoinPointInfo> joinPointExcludes;
+
+	
+	/**
+	 * 생성자
+	 */
+	BuilderConfig() {
+		this.clear();
+	}
 	
 	/**
 	 * 현재 설정 초기화
@@ -232,50 +249,8 @@ class BuilderConfig {
 	void clear() {
 		this.setTargetClass(null);
 		this.setAltClass(null);
-		this.setJoinPointIncludes(null);
-		this.setJoinPointExcludes(null);
-	}
-
-	String getTargetClass() {
-		return this.targetClass;
-	}
-
-	void setTargetClass(String targetClass) {
-		this.targetClass = targetClass;
-	}
-
-	String getAltClass() {
-		return this.altClass;
-	}
-
-	void setAltClass(String altClass) {
-		this.altClass = altClass;
-	}
-
-	ArrayList<JoinPointInfo> getJoinPointIncludes() {
-		
-		if(this.joinPointIncludes == null) {
-			this.joinPointIncludes = new ArrayList<JoinPointInfo>();
-		}
-		
-		return this.joinPointIncludes;
-	}
-	
-	void setJoinPointIncludes(ArrayList<JoinPointInfo> joinPointIncludes) {
-		this.joinPointIncludes = joinPointIncludes;
-	}
-	
-	ArrayList<JoinPointInfo> getJoinPointExcludes() {
-		
-		if(this.joinPointExcludes == null) {
-			this.joinPointExcludes = new ArrayList<JoinPointInfo>();
-		}
-		
-		return this.joinPointExcludes;
-	}
-	
-	void setJoinPointExcludes(ArrayList<JoinPointInfo> joinPointExcludes) {
-		this.joinPointExcludes = joinPointExcludes;
+		this.setJoinPointIncludes(new Vector<>());
+		this.setJoinPointExcludes(new Vector<>());
 	}
 }
 

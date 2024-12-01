@@ -5,6 +5,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -26,14 +27,14 @@ public final class BabeTransformer implements ClassFileTransformer {
 	private boolean isSkip = false;
 	
 	/** API 호출 변환 맵 */ 
-	private Hashtable<String, TransformMap> transformMap;
+	private Map<String, TransformMap> transformMap;
 
 	/**
 	 * 생성자
 	 * 
 	 * @param transformConfigFile 클래스 변환 설정 파일
 	 */
-	public BabeTransformer(final File transformConfigFile) throws Exception {
+	public BabeTransformer(File transformConfigFile) throws Exception {
 
 		// 클래스 변환 설정을 읽어옴
 		this.transformMap = TransformMapConfigReader.readConfig(transformConfigFile);
@@ -41,8 +42,8 @@ public final class BabeTransformer implements ClassFileTransformer {
 
 	@Override
 	public byte[] transform(
-			final ClassLoader loader, final String className, final Class<?> classBeingRedefined,
-			final ProtectionDomain protectionDomain, final byte[] classfileBuffer
+			ClassLoader loader, String className, Class<?> classBeingRedefined,
+			ProtectionDomain protectionDomain, byte[] classfileBuffer
 	) throws IllegalClassFormatException {
 		
 		// 클래스 변환 작업 수행 후 변환된 클래스 반환
@@ -55,7 +56,7 @@ public final class BabeTransformer implements ClassFileTransformer {
 	 * @param className 변환할 클래스 명
 	 * @param protectionDomain 
 	 * @param classfileBuffer 
-	 * @return
+	 * @return 변환된 바이트 코드
 	 */
 	public byte[] transformAPI(
 			String className,
@@ -98,6 +99,7 @@ public final class BabeTransformer implements ClassFileTransformer {
 	
 	/**
 	 * 현재 클래스의 변경여부를 결정
+	 * 
 	 * @param className
 	 * @param protectionDomain
 	 * @return 스킵여부(스킵시 true, 변경(transform)시 false)
@@ -112,7 +114,7 @@ public final class BabeTransformer implements ClassFileTransformer {
 		
 		// TODO
 		// 나중에 삭제 해야함.
-		if(className == null || className.startsWith("com/babe") == true) {
+		if(className == null || className.startsWith("com/redeye/babe") == true) {
 			return true;
 		}
 		
@@ -130,9 +132,10 @@ public final class BabeTransformer implements ClassFileTransformer {
 	 * 변환 규칙(transferConfigFile에 있는 내용)을 가져온다. 
 	 * ex) java/lang/Runtime.exec(Ljava/lang/String;)Ljava/lang/Process;
 	 *     -> com/dave/wrapper/RuntimeWrapper.exec(Ljava/lang/Runtime;Ljava/lang/String;)Ljava/lang/Process;
+	 *     
 	 * @return
 	 */
-	private Hashtable<String, TransformMap> getTransformMap() {
+	private Map<String, TransformMap> getTransformMap() {
 		
 		if(this.transformMap == null) {
 			this.transformMap = new Hashtable<String, TransformMap>();

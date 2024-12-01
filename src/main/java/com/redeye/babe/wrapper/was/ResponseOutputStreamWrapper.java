@@ -13,20 +13,16 @@ public class ResponseOutputStreamWrapper extends OutputStreamWrapper {
 	
 	@Override
 	public void write(int b) throws IOException {
-		System.out.println("DEBUG 000:");
 		super.write(b);
 	}
 	
 	@Override
 	public void write(byte b[]) throws IOException {
-		System.out.println("DEBUG 100:");
 		super.write(b);
 	}
 	
 	@Override
 	public void write(byte b[], int off, int len) throws IOException {
-		System.out.println("DEBUG 200:");
 		super.write(b, off, len);
 	}
-
 }
