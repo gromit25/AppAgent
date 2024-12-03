@@ -10,6 +10,7 @@ import com.redeye.babe.config.RootConfig;
 
 /**
  * 로그파일 관리자
+ * 
  * @author jmsohn
  */
 public class LogFileManager extends Thread {
@@ -19,6 +20,7 @@ public class LogFileManager extends Thread {
 	
 	/** 로그 파일 검사 중단 여부 */
 	private boolean isStop;
+	
 	/** 현재 로그 파일 */
 	private File logFile;
 	
@@ -26,6 +28,7 @@ public class LogFileManager extends Thread {
 	
 	static {
 		try {
+			
 			// 새로운 로그파일을 생성한다.
 			LogFileManager.getLogFileManager().makeNewLogFile();;
 			
@@ -100,11 +103,11 @@ public class LogFileManager extends Thread {
 	}
 	
 	/**
-	 * 새로운 로그파일을 만든다.
+	 * 새로운 로그 파일 생성
 	 */
 	private void makeNewLogFile() throws Exception {
 		
-		// 새로운 로그파일명을 만든다.
+		// 새로운 로그 파일명을 만든다.
 		// 로그파일 설정값에서
 		// 확장자와 확장자 앞부분을 추출
 		String logPath = RootConfig.LOG_FILE_PATH.getValue();
@@ -148,7 +151,7 @@ public class LogFileManager extends Thread {
 	}
 
 	/**
-	 * 오래된 로그 파일을 삭제한다.
+	 * 오래된 로그 파일 삭제
 	 */
 	private void removeOldLogFiles() {
 		

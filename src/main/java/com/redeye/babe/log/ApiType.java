@@ -1,20 +1,26 @@
 package com.redeye.babe.log;
 
+/**
+ * 
+ * 
+ * @author jmsohn
+ */
 public enum ApiType {
+	
+	AGENT("AGENT"),
 	DB("DB"),
 	TCP_SOCKET("TCP"),
 	UDP_SOCKET("UDP"),
 	FILE("FILE"),
-	AGENT("AGENT"),
 	NONE("NONE");
 	
-	private String apiTypeName;
+	private String name;
 	
-	private ApiType(String apiTypeName) {
-		this.apiTypeName = apiTypeName;
+	private ApiType(String name) {
+		this.name = name;
 	}
 
-	public String getApiTypeName() {
-		return this.apiTypeName;
+	public String getName() {
+		return this.name;
 	}
 }

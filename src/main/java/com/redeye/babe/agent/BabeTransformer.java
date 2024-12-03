@@ -17,7 +17,7 @@ import com.redeye.babe.agent.transform.TransformMapConfigReader;
 import com.redeye.babe.log.Log;
 
 /**
- * API 호출부를 모니터링 메소드 호출로 변경하는 클래스
+ * API 호출부를 모니터링 메소드 호출로 변환하는 클래스
  * 
  * @author jmsohn
  */
@@ -29,15 +29,25 @@ public final class BabeTransformer implements ClassFileTransformer {
 	/** API 호출 변환 맵 */ 
 	private Map<String, TransformMap> transformMap;
 
+	
 	/**
 	 * 생성자
 	 * 
-	 * @param transformConfigFile 클래스 변환 설정 파일
+	 * @param configFile 클래스 변환 설정 파일 위치 문자열
 	 */
-	public BabeTransformer(File transformConfigFile) throws Exception {
+	public BabeTransformer(String configFile) throws Exception {
+		this(new File(configFile));
+	}
+	
+	/**
+	 * 생성자
+	 * 
+	 * @param configFile 클래스 변환 설정 파일
+	 */
+	public BabeTransformer(File configFile) throws Exception {
 
 		// 클래스 변환 설정을 읽어옴
-		this.transformMap = TransformMapConfigReader.readConfig(transformConfigFile);
+		this.transformMap = TransformMapConfigReader.readConfig(configFile);
 	}
 
 	@Override
@@ -71,14 +81,14 @@ public final class BabeTransformer implements ClassFileTransformer {
 				return classfileBuffer;
 			}
 			
-			// 클래스 변환을 수행한다.
+			// 클래스 변환
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			TransformClassWriter transformWriter = new TransformClassWriter(Opcodes.ASM5, cw, this.getTransformMap(), className);
 			
 			ClassReader cr = new ClassReader(classfileBuffer);
 			cr.accept(transformWriter, 0);
 			
-			// 변환된 결과를 리턴한다.
+			// 변환된 결과 리턴
 			return cw.toByteArray();
 
 		} catch(Exception ex) {
@@ -129,11 +139,11 @@ public final class BabeTransformer implements ClassFileTransformer {
 	}
 	
 	/**
-	 * 변환 규칙(transferConfigFile에 있는 내용)을 가져온다. 
+	 * 변환 규칙(transferConfigFile에 있는 내용) 반환
 	 * ex) java/lang/Runtime.exec(Ljava/lang/String;)Ljava/lang/Process;
 	 *     -> com/dave/wrapper/RuntimeWrapper.exec(Ljava/lang/Runtime;Ljava/lang/String;)Ljava/lang/Process;
 	 *     
-	 * @return
+	 * @return 변환 규칙
 	 */
 	private Map<String, TransformMap> getTransformMap() {
 		

@@ -1,11 +1,6 @@
 package com.redeye.babe.log;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.stream.Stream;
 
 import com.redeye.babe.config.RootConfig;
 import com.redeye.babe.wrapper.ContentsApp;
@@ -17,126 +12,11 @@ import com.redeye.babe.wrapper.ContentsApp;
  */
 public class Log {
 	
-	/**
-	 * 데이터베이스 쿼리 수행전 로깅 수행 메소드
-	 * 
-	 * @param obj 쿼리 수행을 하는 객체(Statement, PreparedStatement, CallableStatement 등)
-	 * @param sql 쿼리
-	 * @param hash 쿼리의 hash값
-	 * @param params 쿼리의 bind 변수 목록
-	 */
-	public static void writePreSqlLog(final Object obj, final String sql, final String hash
-		, final Hashtable<Integer, String> params) {
-		
-		try {
-			
-			if(Log.isSqlLogging(sql) == true) {
-				
-				// params 데이터를 스트링으로 변환한다.
-				StringBuilder paramsBuilder = new StringBuilder("");
-				
-				if(params != null) {
-					
-					// 변수 순서를 정렬한다.
-					Stream.of(params.keySet().toArray())
-					.sorted()
-					.forEach(key -> {
-							
-						if(paramsBuilder.length() != 0) {
-							paramsBuilder.append(" ");
-						}
-							
-						String formattedParam = String.format("%s=%s", key.toString(), params.get(key));
-						paramsBuilder.append(formattedParam);
-					});
-				}
-				
-				// 로그를 남긴다.
-				Log.writeLog(ApiType.DB.getApiTypeName(), obj, 0
-						, "%s\t%s\t%s", hash, sql, paramsBuilder.toString());
-			}
-			
-		} catch(Exception ex) {
-			//TODO
-			ex.printStackTrace();
-		}
-	}
-
-	/**
-	 * 데이터베이스 쿼리 수행후 로깅 수행 메소드
-	 * 
-	 * @param obj 쿼리 수행을 하는 객체(Statement, PreparedStatement, CallableStatement 등)
-	 * @param sql 쿼리
-	 * @param hash 쿼리의 hash값
-	 * @param start 쿼리 수행 시작 시간
-	 * @param end 쿼리 수행 중지 시간
-	 */
-	public static void writePostSqlLog(final Object obj, final String sql, final String hash
-		, final long start, final long end) {
-		
-		try {
-			
-			if(Log.isSqlLogging(sql) == true) {
-				
-				// 로그를 남긴다.
-				Log.writeLog(ApiType.DB.getApiTypeName(), obj, end - start, hash + "\t\t");
-			}
-			
-		} catch(Exception ex) {
-			//TODO
-			ex.printStackTrace();
-		}
-	}
+	/** */
+	private static LogWriter writer;
 	
-	/**
-	 * 데이터베이스 로깅을 할 쿼리 인지 확인
-	 * 
-	 * @param sql 검사할 sql문
-	 * @return 로깅 여부
-	 */
-	private static boolean isSqlLogging(String sql) throws Exception {
-		
-		// sql이 null이면 로그를 남기지 않는다.
-		if(sql == null) {
-			return false;
-		}
-		
-		// 대소문자를 구분하지 않고 비교하기 위해 toUpperCase를 수행한다. 
-		String sqlUpperCase = sql.toUpperCase();
-		
-		// DB_SQL_EXCLUDE 값이 있고,
-		// 쿼리문에서 DB_SQL_EXCLUDE 값이 있는 경우(대소문자 구분안함)
-		// 로그를 남기지 않음
-		if(RootConfig.DB_SQL_EXCLUDE.isAvailable() == true) {
-			
-			@SuppressWarnings("unchecked")
-			HashSet<String> sqlExcludes = RootConfig.DB_SQL_EXCLUDE.getValueObject(HashSet.class);
-			for(String sqlExclude : sqlExcludes) {
-				if(sqlUpperCase.contains(sqlExclude) == true) {
-					return false;
-				}
-			}
-		}
-		
-		// DB_SQL_INCLUDE 값이 있고,
-		// 쿼리문에서 DB_SQL_INCLUDE 값이 있는 경우(대소문자 구분안함)
-		// 로그를 남김
-		if(RootConfig.DB_SQL_INCLUDE.isAvailable() == true) {
-			
-			@SuppressWarnings("unchecked")
-			HashSet<String> sqlIncludes = RootConfig.DB_SQL_INCLUDE.getValueObject(HashSet.class);
-			for(String sqlInclude : sqlIncludes) {
-				if(sqlUpperCase.contains(sqlInclude) == true) {
-					return true;
-				}
-			}
-			
-			// sql문에 포함된게 없음
-			return false;
-		}
-		
-		// 다 통과하면, 로깅 수행
-		return true;
+	static {
+		// writer 객체 생성
 	}
 	
 	/**
@@ -145,9 +25,11 @@ public class Log {
 	 * @param logFormat
 	 * @param params
 	 */
-	public static void writeAgentLog(final String logFormat, final Object... params) {
-		writeLog(ApiType.AGENT.getApiTypeName(), ApiType.AGENT.getApiTypeName(), (long)0
-				, logFormat, params);
+	public static void writeAgentLog(String logFormat, Object... params) {
+		writeLog(
+			ApiType.AGENT.getName(), ApiType.AGENT.getName(), (long)0
+			, logFormat, params
+		);
 	}
 
 	/**
@@ -159,8 +41,10 @@ public class Log {
 	 * @param logFormat
 	 * @param params
 	 */
-	public static void writeLog(final String apiType, final Object obj
-		, final long elapsedTime, final String logFormat, final Object... params) {
+	public static void writeLog(
+			String apiType, Object obj, long elapsedTime
+			, String logFormat, final Object... params
+	) {
 
 		// 파라미터 검사
 		if(logFormat == null) return;
@@ -238,10 +122,8 @@ public class Log {
 		
 		// 로그 저장
 		try {
-			Path sqlFilePath = LogFileManager.getLogFileManager().getLogFile().toPath();
-			Files.write(sqlFilePath, logBuilder.toString().getBytes(), StandardOpenOption.APPEND);
+			writer.write(logBuilder.toString());
 		} catch(Exception ex) {
-			//TODO
 			ex.printStackTrace();
 		}
 	}
