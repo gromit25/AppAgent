@@ -2,7 +2,7 @@ package com.redeye.babe.agent;
 
 import java.lang.instrument.Instrumentation;
 
-import com.redeye.babe.config.RootConfig;
+import com.redeye.babe.config.Config;
 
 /**
  * Babe Agent Main<br>
@@ -24,12 +24,12 @@ public final class BabeAgent {
 			
 			//-----------------------
 			// 환경 변수에서 설정값을 읽음
-			RootConfig.init();
+			Config.init();
 			
 			//-----------------------
 			// Transformer 등록하여 변환클래스 등록
 			BabeTransformer transformer = new BabeTransformer(
-				RootConfig.TRANSFORM_CONFIG_FILE.getValue()
+				Config.TRANSFORM_CONFIG_FILE.getValue()
 			);
 			
 			inst.addTransformer(transformer, true);

@@ -2,7 +2,7 @@ package com.redeye.babe.log;
 
 import java.util.HashSet;
 
-import com.redeye.babe.config.RootConfig;
+import com.redeye.babe.config.Config;
 import com.redeye.babe.wrapper.ContentsApp;
 
 /**
@@ -81,7 +81,7 @@ public class Log {
 				objId = obj.toString();
 			} else {
 				
-				String agentPackageName = RootConfig.AGENT_PACKAGE.getValue();
+				String agentPackageName = Config.AGENT_PACKAGE.getValue();
 				
 				String className = "NONE";
 				Class<?> curClass = obj.getClass(); 
@@ -107,7 +107,7 @@ public class Log {
 			.append("\t")
 			.append(elapsedTime)			//[수행시간(ms)]
 			.append("\t")
-			.append(RootConfig.SYSTEM_PID.getValue())	//[프로세스ID]
+			.append(Config.SYSTEM_PID.getValue())	//[프로세스ID]
 			.append("\t")
 			.append(ContentsApp.getTxId())	//[트랜잭션ID]
 			.append("\t")
@@ -136,10 +136,10 @@ public class Log {
 	private static String makeStackTraceMsg(final Thread t) {
 		
 		// 트레이싱 정보를 추가한다.
-		if(RootConfig.LOG_TRACE_PACKAGE.getValue() == null) return "";
+		if(Config.LOG_TRACE_PACKAGE.getValue() == null) return "";
 		
 		@SuppressWarnings("unchecked")
-		HashSet<String> loggingPackages = RootConfig.LOG_TRACE_PACKAGE.getValueObject(HashSet.class);
+		HashSet<String> loggingPackages = Config.LOG_TRACE_PACKAGE.getValueObject(HashSet.class);
 		
 		StringBuilder stackBuilder = new StringBuilder("");
 		StackTraceElement[] stacks = t.getStackTrace();
@@ -153,7 +153,7 @@ public class Log {
 				// LOG_TRACE_PACKAGE 설정값이 "*" 이면
 				// 로그를 남긴다.
 				if(stack.getClassName().startsWith(loggingPackage)
-					|| RootConfig.LOG_TRACE_PACKAGE.getValue().equals("*")) {
+					|| Config.LOG_TRACE_PACKAGE.getValue().equals("*")) {
 					
 					if(stackBuilder.length() != 0) {
 						stackBuilder.append(" > ");
@@ -163,7 +163,7 @@ public class Log {
 					
 					// 패키지명 축약 설정되어 있으면, 클래스명의 패키지명을 축약형으로 만든다.
 					// ex) com.epozen.Test -> c.e.Test
-					if(RootConfig.LOG_SHORT_PACKAGE_YN.getValueObject(Boolean.class) == true) {
+					if(Config.LOG_SHORT_PACKAGE_YN.getValueObject(Boolean.class) == true) {
 						
 						String[] packageNames = className.split("\\.");
 						StringBuilder classNameBuilder = new StringBuilder("");

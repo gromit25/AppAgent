@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.redeye.babe.config.RootConfig;
+import com.redeye.babe.config.Config;
 
 /**
  * 로그파일 관리자
@@ -78,7 +78,7 @@ public class LogFileManager extends Thread {
 				long logSize = this.getLogFile().length();
 				
 				// 로그 파일 최대 크기
-				long maxSize = RootConfig.LOG_FILE_MAXSIZE.getValueObject(Long.class);
+				long maxSize = Config.LOG_FILE_MAXSIZE.getValueObject(Long.class);
 				
 				// 파일의 크기가 설정된 MAX값을 초과하거나,
 				// 파일이 없는 경우 새로 만듦
@@ -92,7 +92,7 @@ public class LogFileManager extends Thread {
 				}
 				
 				// 로그 파일 검사 주기
-				long inspectionPeriod = RootConfig.LOG_FILE_INSPECTIONPERIOD.getValueObject(Long.class);
+				long inspectionPeriod = Config.LOG_FILE_INSPECTIONPERIOD.getValueObject(Long.class);
 				Thread.sleep(inspectionPeriod);
 			}
 			
@@ -110,7 +110,7 @@ public class LogFileManager extends Thread {
 		// 새로운 로그 파일명을 만든다.
 		// 로그파일 설정값에서
 		// 확장자와 확장자 앞부분을 추출
-		String logPath = RootConfig.LOG_FILE_PATH.getValue();
+		String logPath = Config.LOG_FILE_PATH.getValue();
 		int pointPos = logPath.lastIndexOf(".");
 		int separatorPos = logPath.lastIndexOf(File.separator);
 		
@@ -159,7 +159,7 @@ public class LogFileManager extends Thread {
 			
 			// 로그파일 설정값에서
 			// 확장자와 확장자 앞부분을 추출
-			String logPath = RootConfig.LOG_FILE_PATH.getValue();
+			String logPath = Config.LOG_FILE_PATH.getValue();
 			int pointPos = logPath.lastIndexOf(".");
 			int separatorPos = logPath.lastIndexOf(File.separator);
 			

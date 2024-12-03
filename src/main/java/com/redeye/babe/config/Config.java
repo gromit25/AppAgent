@@ -11,7 +11,7 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public enum RootConfig {
+public enum Config {
 	
 	/** agent 의 패키지명 */
 	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/babe"),
@@ -66,15 +66,15 @@ public enum RootConfig {
 			
 			if(splitedRuntimeName.length > 1) {
 				
-				RootConfig.SYSTEM_NAME.value = splitedRuntimeName[1];
-				RootConfig.SYSTEM_PID.value = splitedRuntimeName[0];
+				Config.SYSTEM_NAME.value = splitedRuntimeName[1];
+				Config.SYSTEM_PID.value = splitedRuntimeName[0];
 			}
 		}
 		
 		// 환경 변수에서 설정 값을 읽어옴
-		RootConfig[] configs = RootConfig.values();
+		Config[] configs = Config.values();
 		
-		for(RootConfig config: configs) {
+		for(Config config: configs) {
 			
 			String value = System.getenv(config.key);
 			
@@ -100,7 +100,7 @@ public enum RootConfig {
 	 * @param key 환경 변수 키
 	 * @param value 환경 변수 디폴트 값
 	 */
-	private RootConfig(String key, String defaultValue) {
+	private Config(String key, String defaultValue) {
 		this.key = key;
 		this.value = defaultValue;
 	}
