@@ -213,7 +213,7 @@ public class Log {
 					String className = stack.getClassName();
 					
 					// 패키지명 축약 설정되어 있으면, 클래스명의 패키지명을 축약형으로 만듦
-					// ex) com.epozen.Test -> c.e.Test
+					// ex) com.redeye.Test -> c.r.Test
 					if(isShortPackage == true) {
 						
 						String[] packageNames = className.split("\\.");
