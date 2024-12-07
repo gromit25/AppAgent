@@ -34,7 +34,7 @@ public enum Config {
 	/** 로그 타입 */
 	LOG_TYPE("LOG_TYPE", "FILE"),
 	
-	/** 스택 트레이스 정보를 남길 package 명*/
+	/** 스택 트레이스 정보를 남길 package 목록 */
 	LOG_TRACE_PACKAGES("LOG_TRACE_PACKAGES", ""),
 	
 	/** 패키지 명 줄임 여부 */
