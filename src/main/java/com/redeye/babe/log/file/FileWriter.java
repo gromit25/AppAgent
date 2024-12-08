@@ -23,6 +23,10 @@ public class FileWriter implements LogWriter {
 
 	@Override
 	public void write(String msg) throws Exception {
-		Files.write(this.logFile, msg.getBytes(), StandardOpenOption.APPEND);
+		Files.write(
+			this.logFile,
+			msg.getBytes(),
+			StandardOpenOption.CREATE, StandardOpenOption.APPEND
+		);
 	}
 }

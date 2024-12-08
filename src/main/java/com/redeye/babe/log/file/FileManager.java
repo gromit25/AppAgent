@@ -1,24 +1,46 @@
-package com.redeye.babe.log;
+package com.redeye.babe.log.file;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import com.redeye.babe.config.Config;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
- * 로그파일 관리자
+ * 로그 파일 관리자
  * 
  * @author jmsohn
  */
-public class LogFileManager extends Thread {
+class FileManager extends Thread {
 	
-	/** 로그파일 관리자 */
-	private static LogFileManager logFileManager;
+	/** 로그 파일 관리자 */
+	private static FileManager logFileManager;
+	
+	/**
+	 * 로그 파일 관리자의 수행 주기(단위: 밀리초)<br>
+	 * 설정(LOG_FILE_MGR_PERIOD)은 초단위 이지만 여기에서는 밀리초 단위로 관리
+	 */
+	private long period; 
+	
+	/**
+	 * 로그 파일 최대 크기(단위: 바이트)<br>
+	 * 설정(LOG_FILE_MGR_MAX_SIZE)은 MiB 단위 이지만 여기에서는 바이트 단위로 관리
+	 */
+	private long maxSize;
+	
+	/**
+	 * 로그 파일 최대 개수<br>
+	 * 로그 파일 최대 개수를 넘을 경우 오래된 파일 삭제 처리
+	 */
+	private int fileCount;
 	
 	/** 로그 파일 검사 중단 여부 */
+	@Getter
+	@Setter
 	private boolean isStop;
 	
 	/** 현재 로그 파일 */
@@ -26,43 +48,51 @@ public class LogFileManager extends Thread {
 	
 	//--------------------------------------
 	
-	static {
-		try {
-			
-			// 새로운 로그파일을 생성한다.
-			LogFileManager.getLogFileManager().makeNewLogFile();;
-			
-			// 로그 파일 검사 수행을 시작한다.
-			LogFileManager.getLogFileManager().start();
-			
-		} catch(Exception ex) {
-			//TODO
-			ex.printStackTrace();
-		}
-	}
-	
 	/**
-	 * 로그파일 관리자를 가져옴(싱글톤)
-	 * @return
+	 * 로그 파일 관리자 반환(싱글톤)
+	 * 
+	 * @return 로그 파일 관리자
 	 */
-	static LogFileManager getLogFileManager() {
+	static FileManager getLogFileManager() throws Exception {
 		
-		if(LogFileManager.logFileManager == null) {
+		if(FileManager.logFileManager == null) {
 			
-			LogFileManager.logFileManager = new LogFileManager();
-			
-			// main 프로그램 종료시, 같이 종료되도록 Daemon 으로 설정한다.
-			LogFileManager.logFileManager.setDaemon(true);
+			// 로그 파일 관리자 생성
+			FileManager.logFileManager = new FileManager();
 		}
 		
-		return LogFileManager.logFileManager;
+		return FileManager.logFileManager;
 	}
 	
 	/**
-	 * 생성자
+	 * 생성자<br>
 	 * 외부에서 생성하지 못하도록 함
 	 */
-	private LogFileManager() {
+	private FileManager() throws Exception {
+		
+		// 로그 파일
+		this.logFile = new File(Config.LOG_FILE_PATH.getValue());
+		
+		// 로그 파일 관리자의 수행 주기 설정
+		this.period = Long.parseLong(Config.LOG_FILE_MGR_PERIOD.getValue()) * 1000;
+		if(this.period < 1) {
+			throw new Exception("LOG_FILE_MGR_PERIOD must be greater than 0:" + Config.LOG_FILE_MGR_PERIOD.getValue());
+		}
+		
+		// 로그 파일 최대 개수 설정
+		this.maxSize = Long.parseLong(Config.LOG_FILE_MGR_MAXSIZE.getValue()) * 1024 * 1024;
+		if(this.maxSize < 1) {
+			throw new Exception("LOG_FILE_MGR_MAX must be greater than 0:" + Config.LOG_FILE_MGR_MAXSIZE.getValue());
+		}
+		
+		// 로그 파일 최대 개수 설정
+		this.fileCount = Integer.parseInt(Config.LOG_FILE_MGR_BACKUP_COUNT.getValue());
+		if(this.fileCount < 1) {
+			throw new Exception("LOG_FILE_MGR_BACKUP_COUNT must be greater than 0:" + Config.LOG_FILE_MGR_BACKUP_COUNT.getValue());
+		}
+		
+		// main 프로그램 종료시, 같이 종료되도록 Daemon 으로 설정
+		this.setDaemon(true);
 	}
 	
 	@Override
@@ -74,162 +104,98 @@ public class LogFileManager extends Thread {
 			
 			while(this.isStop() == false) {
 				
-				// 파일의 크기를 확인한다.
-				long logSize = this.getLogFile().length();
+				// 로그 파일 백업
+				this.backupLog();
 				
-				// 로그 파일 최대 크기
-				long maxSize = Config.LOG_FILE_MAXSIZE.getValueObject(Long.class);
+				// 백업된 로그 파일 정리
+				this.removeOldLogFiles();
 				
-				// 파일의 크기가 설정된 MAX값을 초과하거나,
-				// 파일이 없는 경우 새로 만듦
-				if(logSize > maxSize || this.getLogFile().exists() == false) {
-					
-					// 새로운 로그파일을 생성한다.
-					this.makeNewLogFile();
-					
-					// 기존 로그 파일 정리한다.
-					this.removeOldLogFiles();
-				}
-				
-				// 로그 파일 검사 주기
-				long inspectionPeriod = Config.LOG_FILE_INSPECTIONPERIOD.getValueObject(Long.class);
-				Thread.sleep(inspectionPeriod);
+				// 설정된 주기 만큼 대기
+				Thread.sleep(this.period);
 			}
 			
 		} catch(Exception ex) {
-			//TODO
 			ex.printStackTrace();
 		}
 	}
 	
 	/**
-	 * 새로운 로그 파일 생성
+	 * 현재 로그 파일 백업<br>
+	 * ex) agent.log -> agent.log.20241208.183000
 	 */
-	private void makeNewLogFile() throws Exception {
+	private void backupLog() throws Exception {
 		
-		// 새로운 로그 파일명을 만든다.
-		// 로그파일 설정값에서
-		// 확장자와 확장자 앞부분을 추출
-		String logPath = Config.LOG_FILE_PATH.getValue();
-		int pointPos = logPath.lastIndexOf(".");
-		int separatorPos = logPath.lastIndexOf(File.separator);
+		// ---- 파일 백업 실행 여부 확인
 		
-		if(pointPos < 0 || pointPos <= separatorPos) {
-			// 마지막포인트(.) 위치가 마지막 디렉토리 구분자 위치 보다 앞쪽이면
-			// 확장자는 없는 것임 -> 마지막포인트(.)의 위치를 가장 마지막으로 옮김
-			// ex) C:\test.out\log
-			pointPos = logPath.length();
+		// 로그 파일이 존재하지 않으면, 백업할 것이 없으므로 즉시 반환
+		if(this.logFile == null || this.logFile.exists() == false) {
+			return;
 		}
 		
-		// TODO Locale 설정값으로 설정하도록 변경 해야함
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd.HHmmssSSS", Locale.KOREA);
-		File newLogFile = null;
-		
-		for(int index = 0; index < 10; index ++) {
-			
-			// 새로운 로그 파일명 생성
-			StringBuilder newLogPathBuilder = new StringBuilder("");
-			newLogPathBuilder.append(logPath.substring(0, pointPos))
-				.append(".").append(dateFormat.format(new Date()))
-				.append(logPath.substring(pointPos));
-			
-			newLogFile = new File(newLogPathBuilder.toString());
-			if(newLogFile.exists() == false) {
-				// 파일이 존재하지 않으면 새로운 로그 파일 생성 후 
-				// 루프를 빠져나간다.
-				if(newLogFile.createNewFile() == true) {
-					// 현재로그 파일로 설정한다.
-					this.logFile = newLogFile;
-					break;
-				}
-			}
-			
-			// 파일이 기존에 이미 있거나, 파일생성에 실패하면 
-			// 다시 파일명을 만들어 파일생성을 시도한다.
-			// 최대 10회
-		}
-	}
+		// 로그 파일 크기 획득
+		long logSize = this.logFile.length();
 
+		// 로그 파일 사이즈가 최대 크기를 넘지 않으면, 백업하지 않고 즉시 반환
+		if(logSize < this.maxSize) {
+			return;
+		}
+		
+		// ---- 파일 백업 실행
+		
+		// 백업 파일명 생성
+		StringBuilder logBackupFileName = new StringBuilder(
+			Config.LOG_FILE_PATH.getValue()
+		);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd.HHmmss");
+		logBackupFileName.append(".").append(dateFormat.format(new Date()));
+
+		// 파일 백업 수행
+		this.logFile.renameTo(new File(logBackupFileName.toString()));
+	}
+	
 	/**
 	 * 오래된 로그 파일 삭제
 	 */
-	private void removeOldLogFiles() {
+	private void removeOldLogFiles() throws Exception {
 		
-		try {
-			
-			// 로그파일 설정값에서
-			// 확장자와 확장자 앞부분을 추출
-			String logPath = Config.LOG_FILE_PATH.getValue();
-			int pointPos = logPath.lastIndexOf(".");
-			int separatorPos = logPath.lastIndexOf(File.separator);
-			
-			if(pointPos < 0 || pointPos <= separatorPos) {
-				
-				// 마지막포인트(.) 위치가 마지막 디렉토리 구분자 위치 보다 앞쪽이면
-				// 확장자는 없는 것임 -> 마지막포인트(.)의 위치를 가장 마지막으로 옮김
-				// ex) C:\test.out\log
-				pointPos = logPath.length();
-			}
-			
-			String logPrefix = logPath.substring(separatorPos + 1, pointPos);
-			String logExt = logPath.substring(pointPos);
-		
-			Files
-				// 로그파일 목록 추출
-				.find(this.getLogFile().getParentFile().toPath(), 1
-					, (path, attr) -> {
-						String fileName = path.toFile().getName();
-						
-						if(this.getLogFile().getName().equals(fileName)) {
-							// 현재 로그 파일은 제외
-							return false;
-						}
-						
-						return fileName.startsWith(logPrefix) && fileName.endsWith(logExt);
-				})
-				// 파일명 오름차순 정렬
-				.sorted((path1, path2) -> {
-					return path2.toString().compareTo(path1.toString());
-				})
-				// 상위 2개만 남기고 나머지 삭제 
-				// TODO 몇개 남길건지 설정 변수화 해야함
-				.skip(2)
-				.forEach(path -> {
-					try {
-						Files.delete(path);
-					} catch(Exception ex) {
-						// TODO 
-						ex.printStackTrace();
-					}
-				});
-			
-		} catch(Exception ex) {
-			//TODO
-			ex.printStackTrace();
+		// 로그 파일이 설정되어 있지 않는 경우 즉시 반환
+		if(this.logFile == null) {
+			return;
 		}
-	}
-
-	/**
-	 * 로그 파일 검사 중단 여부
-	 * @return 로그 파일 검사 중단 여부
-	 */
-	boolean isStop() {
-		return this.isStop;
-	}
-
-	/**
-	 * 로그 파일 검사 중단 여부 설정
-	 * @param isStop 로그 파일 검사 중단 여부
-	 */
-	void setStop(boolean isStop) {
-		this.isStop = isStop;
-	}
-
-	/**
-	 * 현재 로그 파일
-	 * @return 현재 로그 파일
-	 */
-	File getLogFile() {
-		return this.logFile;
-	}
+		
+		// 백업 파일의 prefix 생성
+		String backupPrefix = this.logFile.getName() + ".";
+		
+		Files
+			// 로그파일 목록 추출
+			.find(
+				this.logFile.getParentFile().toPath(), // Start
+				1, // MaxDepth  
+				(path, attr) -> {
+					
+					String fileName = path.toFile().getName();
+					
+					// 현재 로그 파일은 제외
+					if(this.logFile.getName().equals(fileName)) {
+						return false;
+					}
+					
+					// 파일명이 로그 백업 파일인지 검사 및 반환 
+					return fileName.startsWith(backupPrefix);
+			})
+			// 파일명 오름차순 정렬
+			.sorted((path1, path2) -> {
+				return path2.toString().compareTo(path1.toString());
+			})
+			// 상위 file count 개수 만큼만 남기고 나머지 삭제 
+			.skip(this.fileCount)
+			.forEach(path -> {
+				try {
+					Files.delete(path);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			});
+	} // End of removeOldLogFiles method
 }

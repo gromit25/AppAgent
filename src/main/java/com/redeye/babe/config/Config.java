@@ -40,14 +40,22 @@ public enum Config {
 	/** 패키지 명 줄임 여부 */
 	LOG_SHORT_PACKAGE_YN("LOG_SHORT_PACKAGE", "N"),
 	
+	//--- 로그 타입: 파일 관련 설정
+	
 	/** 로그 파일 명 */
 	LOG_FILE_PATH("LOG_FILE_PATH", "./agent.log"),
 	
+	/** 로그 파일 관리자의 수행 주기(단위: 초) */
+	LOG_FILE_MGR_PERIOD("LOG_FILE_MGR_PERIOD", "10"),
+	
 	/**
-	 * 로그 파일의 최대치<br>
+	 * 로그 파일의 최대치(단위: MiB)<br>
 	 * 최대치가 넘을 경우 현재 로그 파일은 백업함
 	 */
-	LOG_FILE_MAXSIZE("LOG_MAX_SIZE", "1073741824"); // default 1GiB
+	LOG_FILE_MGR_MAXSIZE("LOG_FILE_MGR_MAX_SIZE", "1024"), // default 1GiB
+	
+	/** 유지할 백업 로그 파일의 개수 */
+	LOG_FILE_MGR_BACKUP_COUNT("LOG_FILE_MGR_BACKUP_COUNT", "2");
 	
 	//---------------------------
 	

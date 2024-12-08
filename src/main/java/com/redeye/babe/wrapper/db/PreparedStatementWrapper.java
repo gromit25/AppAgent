@@ -23,6 +23,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Hashtable;
+import java.util.Map;
 
 import com.redeye.babe.log.Log;
 
@@ -36,7 +37,7 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	private PreparedStatement pstmt;
 	private String sql;
 	private String sqlhash;
-	private Hashtable<Integer, String> params;
+	private Map<Integer, String> params;
 	
 	public PreparedStatementWrapper(PreparedStatement pstmt, String sql) {
 		this.pstmt = pstmt;
@@ -45,6 +46,7 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	
 	/**
 	 * 데이터베이스 쿼리 수행 정보(ContentsDB)에 파라미터 정보 추가
+	 * 
 	 * @param paramIndex 추가 파라미터의 순번 
 	 * @param value 추가할 파라미터값
 	 */
@@ -639,35 +641,5 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	@Override
 	public void setNClob(int parameterIndex, Reader reader) throws SQLException {
 		this.pstmt.setNClob(parameterIndex, reader);
-	}
-	
-	//-----------------------------------------
-
-	private String getSql() {
-		if(this.sql == null) {
-			return "";
-		}
-		
-		return this.sql;
-	}
-
-	private void setSql(String sql) {
-		this.sql = sql;
-	}
-
-	private String getSqlhash() {
-		if(this.sqlhash == null) {
-			return "";
-		}
-		
-		return this.sqlhash;
-	}
-
-	private Hashtable<Integer, String> getParams() {
-		if(this.params == null) {
-			this.params = new Hashtable<Integer, String>();
-		}
-		
-		return this.params;
 	}
 }
