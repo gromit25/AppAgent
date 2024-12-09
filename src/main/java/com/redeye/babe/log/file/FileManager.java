@@ -54,10 +54,9 @@ class FileManager extends Thread {
 	 * @return 로그 파일 관리자
 	 */
 	static FileManager getLogFileManager() throws Exception {
-		
+
+		// 로그 파일 관리자가 없을 경우 생성
 		if(FileManager.logFileManager == null) {
-			
-			// 로그 파일 관리자 생성
 			FileManager.logFileManager = new FileManager();
 		}
 		
