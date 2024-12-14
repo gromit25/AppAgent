@@ -1,7 +1,6 @@
 package com.redeye.babe.agent.transform;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -12,7 +11,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.redeye.babe.agent.exception.AgentException;
-import com.redeye.babe.config.Config;
 import com.redeye.babe.log.Log;
 
 import lombok.Data;
@@ -43,7 +41,7 @@ public class TransformMapConfigReader {
 		Map<String, TransformMap> transformMaps = new Hashtable<String, TransformMap>();
 		
 		// 파일에서 설정값들을 읽어옴
-		List<String> reads = Files.readAllLines(transformConfigFile.toPath(), Config.SYSTEM_CHARSET.getValueObject(Charset.class));
+		List<String> reads = Files.readAllLines(transformConfigFile.toPath());
 		
 		// 한줄씩 Parsing 하여 변환맵에 저장함
 		// 예외 발생시 중단 시킴
