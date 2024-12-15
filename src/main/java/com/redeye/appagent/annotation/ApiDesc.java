@@ -1,4 +1,4 @@
-package com.redeye.appagent.agent.annotation;
+package com.redeye.appagent.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
