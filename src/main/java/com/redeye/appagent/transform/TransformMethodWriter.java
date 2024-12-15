@@ -7,7 +7,7 @@ import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.Log;
 
 import lombok.AccessLevel;
 import lombok.Data;

@@ -6,8 +6,8 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.redeye.appagent.log.ApiType;
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.ApiType;
+import com.redeye.appagent.logger.Log;
 
 /**
  * 

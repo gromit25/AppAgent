@@ -11,7 +11,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.Log;
 import com.redeye.appagent.transform.TransformClassWriter;
 import com.redeye.appagent.transform.TransformMap;
 import com.redeye.appagent.transform.TransformMapConfigReader;

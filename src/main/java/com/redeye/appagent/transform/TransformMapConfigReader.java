@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.redeye.appagent.exception.AgentException;
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.Log;
 
 import lombok.Data;
 

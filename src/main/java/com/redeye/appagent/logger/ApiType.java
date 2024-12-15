@@ -1,4 +1,4 @@
-package com.redeye.appagent.log;
+package com.redeye.appagent.logger;
 
 import lombok.Getter;
 

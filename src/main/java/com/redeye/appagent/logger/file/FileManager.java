@@ -1,4 +1,4 @@
-package com.redeye.appagent.log.file;
+package com.redeye.appagent.logger.file;
 
 import java.io.File;
 import java.nio.file.Files;

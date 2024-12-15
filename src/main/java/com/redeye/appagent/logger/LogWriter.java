@@ -1,4 +1,4 @@
-package com.redeye.appagent.log;
+package com.redeye.appagent.logger;
 
 /**
  * 로그 저장 인터페이스

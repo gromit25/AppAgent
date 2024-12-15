@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-import com.redeye.appagent.log.ApiType;
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.ApiType;
+import com.redeye.appagent.logger.Log;
 import com.redeye.appagent.wrapper.io.InputStreamWrapper;
 
 class SocketInputStreamWrapper extends InputStreamWrapper {

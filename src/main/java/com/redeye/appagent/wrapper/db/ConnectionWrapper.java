@@ -19,8 +19,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import com.redeye.appagent.log.ApiType;
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.ApiType;
+import com.redeye.appagent.logger.Log;
 
 /**
  * 데이터베이스 연결(java.sql.Connection)의 Wrapper클래스

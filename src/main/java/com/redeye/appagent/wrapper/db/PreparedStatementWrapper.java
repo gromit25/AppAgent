@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.redeye.appagent.log.Log;
+import com.redeye.appagent.logger.Log;
 
 /**
  * 데이터베이스 PreparedStatement의  Wrapper클래스
