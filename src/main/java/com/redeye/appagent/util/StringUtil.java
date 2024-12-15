@@ -1,4 +1,4 @@
-package com.redeye.appagent.agent.util;
+package com.redeye.appagent.util;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
