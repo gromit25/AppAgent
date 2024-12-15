@@ -3,7 +3,7 @@ package com.redeye.appagent.log;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.redeye.appagent.config.Config;
+import com.redeye.appagent.Config;
 import com.redeye.appagent.wrapper.ContentsApp;
 
 /**

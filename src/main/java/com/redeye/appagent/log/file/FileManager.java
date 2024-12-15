@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.redeye.appagent.config.Config;
+import com.redeye.appagent.Config;
 
 import lombok.Getter;
 import lombok.Setter;

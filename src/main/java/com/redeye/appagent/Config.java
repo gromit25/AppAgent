@@ -1,4 +1,4 @@
-package com.redeye.appagent.config;
+package com.redeye.appagent;
 
 import java.lang.management.ManagementFactory;
 import java.nio.charset.Charset;

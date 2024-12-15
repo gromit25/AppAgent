@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
-import com.redeye.appagent.config.Config;
+import com.redeye.appagent.Config;
 import com.redeye.appagent.log.LogWriter;
 
 /**

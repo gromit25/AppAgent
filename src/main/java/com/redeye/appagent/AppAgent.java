@@ -2,8 +2,6 @@ package com.redeye.appagent;
 
 import java.lang.instrument.Instrumentation;
 
-import com.redeye.appagent.config.Config;
-
 /**
  * App Agent Main<br>
  * 설정값 로딩 수행 및 스레드 생성 및 동작
