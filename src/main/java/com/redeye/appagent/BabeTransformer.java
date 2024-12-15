@@ -1,4 +1,4 @@
-package com.redeye.appagent.agent;
+package com.redeye.appagent;
 
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
