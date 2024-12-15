@@ -21,7 +21,7 @@ import com.redeye.appagent.transform.TransformMapConfigReader;
  * 
  * @author jmsohn
  */
-public final class BabeTransformer implements ClassFileTransformer {
+public final class AppTransformer implements ClassFileTransformer {
 	
 	/** 전체 스킵 여부(테스트용) */
 	private boolean isSkip = false;
@@ -35,7 +35,7 @@ public final class BabeTransformer implements ClassFileTransformer {
 	 * 
 	 * @param configFile 클래스 변환 설정 파일 위치 문자열
 	 */
-	public BabeTransformer(String configFile) throws Exception {
+	public AppTransformer(String configFile) throws Exception {
 		this(new File(configFile));
 	}
 	
@@ -44,7 +44,7 @@ public final class BabeTransformer implements ClassFileTransformer {
 	 * 
 	 * @param configFile 클래스 변환 설정 파일
 	 */
-	public BabeTransformer(File configFile) throws Exception {
+	public AppTransformer(File configFile) throws Exception {
 
 		// 클래스 변환 설정을 읽어옴
 		this.transformMap = TransformMapConfigReader.readConfig(configFile);

@@ -28,7 +28,7 @@ public final class AppAgent {
 			
 			//-----------------------
 			// Transformer 등록하여 변환클래스 등록
-			BabeTransformer transformer = new BabeTransformer(
+			AppTransformer transformer = new AppTransformer(
 				Config.TRANSFORM_CONFIG_FILE.getValue()
 			);
 			
