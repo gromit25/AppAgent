@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.babe</groupId>
-  <artifactId>agent</artifactId>
+  <groupId>com.redeye.appagent</groupId>
+  <artifactId>appagent</artifactId>
   <version>0.1</version>
   
   <properties>
@@ -17,7 +17,7 @@
     <!--
        배포될 위치 설정 
     -->
-    <deploy.target.dir>C:/apps/BabeAgent</deploy.target.dir>
+    <deploy.target.dir>C:/apps/AppAgent</deploy.target.dir>
 
   </properties>
   
@@ -66,11 +66,14 @@
         <outputDirectory>${deploy.target.dir}</outputDirectory>
         <archive>
            <manifest>
-           	<mainClass>com.epozen.logfilter.agent.App</mainClass>
-           	<packageName>com.epozen</packageName>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix>lib/</classpathPrefix>
+             <addClasspath>true</addClasspath>
+             <classpathPrefix>lib/</classpathPrefix>
            </manifest>
+           <manifestEntries>
+             <Premain-Class>com.redeye.appagent.AppAgent</Premain-Class>
+             <Can-Redefine-Classes>true</Can-Redefine-Classes>
+             <Can-Retransform-Classes>true</Can-Retransform-Classes>
+           </manifestEntries>
         </archive>
       </configuration>
     </plugin>
