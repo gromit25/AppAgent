@@ -1,4 +1,4 @@
-package com.redeye.appagent.agent.exception;
+package com.redeye.appagent.exception;
 
 /**
  * Agent 에서 발생하는 예외

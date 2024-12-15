@@ -10,7 +10,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.redeye.appagent.agent.exception.AgentException;
+import com.redeye.appagent.exception.AgentException;
 import com.redeye.appagent.log.Log;
 
 import lombok.Data;
