@@ -10,7 +10,7 @@ import com.redeye.appagent.config.Config;
  *  
  * @author jmsohn
  */
-public final class BabeAgent {
+public final class AppAgent {
 	
 	/**
 	 * Java VM의 Agent에 Transformer 등록
