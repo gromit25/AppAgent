@@ -1,4 +1,4 @@
-package com.redeye.appagent.agent.transform;
+package com.redeye.appagent.transform;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -222,14 +222,14 @@ class BuilderConfig {
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있으면, 현재 변환 맵을 이용하여 변환 수행
-	 * @see com.redeye.appagent.agent.transform.TransformMap
+	 * @see com.redeye.appagent.transform.TransformMap
 	 */
 	private List<JoinPointInfo> joinPointIncludes;
 	
 	/**
 	 * 변환할 클래스인지 확인용 문자열 목록
 	 * 목록에 포함되어 있지 않으면, 현재 변환 맵을 이용하여 변환 수행
-	 * @see com.redeye.appagent.agent.transform.TransformMap
+	 * @see com.redeye.appagent.transform.TransformMap
 	 */
 	private List<JoinPointInfo> joinPointExcludes;
 
