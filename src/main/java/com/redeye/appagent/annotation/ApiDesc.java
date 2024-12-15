@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
+ * API 설명(Description)<br>
+ * API 관련 정보를 DB에 저장하지 위함
  * 
  * @author jmsohn
  */
