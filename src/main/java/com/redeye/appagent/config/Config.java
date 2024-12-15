@@ -6,7 +6,7 @@ import java.nio.charset.Charset;
 import lombok.Getter;
 
 /**
- * 설정 값 관리 클래스<br>
+ * AppAgent 설정 값<br>
  * 환경 변수에서 읽어와 설정함
  * 
  * @author jmsohn
