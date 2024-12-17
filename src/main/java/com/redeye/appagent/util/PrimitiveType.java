@@ -55,6 +55,21 @@ public enum PrimitiveType {
 		// name 에 해당하는 기본형 반환
 		return typeMap.get(name);
 	}
+	
+	/**
+	 * 주어진 타입명의 기본형 여부 반환
+	 * 
+	 * @param name 타입명
+	 * @return 기본형 여부
+	 */
+	public static boolean isPrimitive(String name) {
+		
+		// name-type map 이 없을 경우, false 를 반환
+		if(typeMap == null) return false;
+
+		// name-type 에 포함되어 있는지 여부 반환 
+		return typeMap.containsKey(name); 
+	}
 
 	// ----------------------------------------
 	
