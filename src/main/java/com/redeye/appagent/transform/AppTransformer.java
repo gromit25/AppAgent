@@ -1,5 +1,6 @@
-package com.redeye.appagent;
+package com.redeye.appagent.transform;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
@@ -7,10 +8,22 @@ import java.security.ProtectionDomain;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
+import org.apache.bcel.Const;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.ClassGen;
+import org.apache.bcel.generic.ConstantPoolGen;
+import org.apache.bcel.generic.INVOKEINTERFACE;
+import org.apache.bcel.generic.INVOKESTATIC;
+import org.apache.bcel.generic.Instruction;
+import org.apache.bcel.generic.InstructionHandle;
+import org.apache.bcel.generic.InstructionList;
+import org.apache.bcel.generic.InvokeInstruction;
+import org.apache.bcel.generic.MethodGen;
+import org.apache.bcel.generic.NOP;
 
+import com.redeye.appagent.Config;
 import com.redeye.appagent.logger.Log;
 import com.redeye.appagent.transform.TransformClassWriter;
 import com.redeye.appagent.transform.TransformMap;
@@ -28,7 +41,6 @@ public final class AppTransformer implements ClassFileTransformer {
 	
 	/** API 호출 변환 맵 */ 
 	private Map<String, TransformMap> transformMap;
-
 	
 	/**
 	 * 생성자
@@ -73,63 +85,56 @@ public final class AppTransformer implements ClassFileTransformer {
 			ProtectionDomain protectionDomain,
 			byte[] classfileBuffer
 	)throws IllegalClassFormatException {
-		
-		try {
 
-			// 클래스 스킵여부 확인
+		try {
+			
+			//
 			if(this.isSkip(className, protectionDomain) == true) {
 				return classfileBuffer;
 			}
 			
-			// 클래스 변환
-			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-			TransformClassWriter transformWriter = new TransformClassWriter(Opcodes.ASM5, cw, this.getTransformMap(), className);
+			//
+			JavaClass clazz = new ClassParser(new ByteArrayInputStream(classfileBuffer), null).parse();
+			//
+			ClassGen classGen = new ClassGen(clazz);
 			
-			ClassReader cr = new ClassReader(classfileBuffer);
-			cr.accept(transformWriter, 0);
-			
-			// 변환된 결과 리턴
-			return cw.toByteArray();
-
-		} catch(Exception ex) {
-			
-			// 예외발생시, 로깅 수행
-			StringBuilder msgBuilder = new StringBuilder("");
-			msgBuilder.append("*** Transform Exception occured at " + className);
-			if(protectionDomain != null) {
-				msgBuilder.append(" in " + protectionDomain.getCodeSource().getLocation().toString());
+			//
+			for(Method method : clazz.getMethods()) {
+				transformMethod(classGen, method);
 			}
 			
-			Log.writeAgentLog(msgBuilder.toString());
-			ex.printStackTrace();
-			
+	        // 변환된 바이트 코드 반환
+	        return classGen.getJavaClass().getBytes();
+
+		} catch(Exception ex) {
+
+			// 예외 발생시 원본 bytecode 반환
 			return classfileBuffer;
 		}
 	}
 	
 	/**
-	 * 현재 클래스의 변경여부를 결정
+	 * 주어진 클래스 변환 여부 반환
 	 * 
 	 * @param className
 	 * @param protectionDomain
-	 * @return 스킵여부(스킵시 true, 변경(transform)시 false)
+	 * @return 변경 여부(스킵시 true, 변환시 false)
 	 */
 	private boolean isSkip(final String className, final ProtectionDomain protectionDomain) {
 		
 		//---------------------
-		// 스킵 설정이 되어있으면 전체 스킵함
+		// 스킵 설정이 되어있으면 전체 스킵
 		if(this.isSkip == true) {
 			return true;
 		}
 		
-		// TODO
-		// 나중에 삭제 해야함.
-		if(className == null || className.startsWith("com/redeye/babe") == true) {
+		// class 명이 없거나 AppAgent의 클래스이면 스킵
+		if(className == null || className.startsWith(Config.AGENT_PACKAGE.getValue()) == true) {
 			return true;
 		}
 		
 		//---------------------
-		// protection domain이 null인 것은 boot library 이므로 스킵 처리
+		// protection domain이 null인 것은 boot library 이므로 스킵
 		// 아닐 경우 스킵하지 않도록 함
 		if(protectionDomain == null || protectionDomain.getCodeSource() == null ) {
 			return true;
@@ -137,20 +142,67 @@ public final class AppTransformer implements ClassFileTransformer {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 변환 규칙(transferConfigFile에 있는 내용) 반환<br>
-	 * ex) java/lang/Runtime.exec(Ljava/lang/String;)Ljava/lang/Process;<br>
-	 *     -> com/dave/wrapper/RuntimeWrapper.exec(Ljava/lang/Runtime;Ljava/lang/String;)Ljava/lang/Process;
-	 *     
-	 * @return 변환 규칙
+	 * 주어진 Method 의 ByteCode 를 변환
+	 * 
+	 * @param classGen 변환할 Method 의 클래스 
+	 * @param method 변환할 메소드
 	 */
-	private Map<String, TransformMap> getTransformMap() {
+	private static void transformMethod(
+		ClassGen classGen,
+		Method method
+	) throws Exception {
 		
-		if(this.transformMap == null) {
-			this.transformMap = new Hashtable<String, TransformMap>();
-		}
+		ConstantPoolGen cpg = classGen.getConstantPool();
 		
-		return this.transformMap;
+		MethodGen methodGen = new MethodGen(
+			method, classGen.getClassName(), cpg
+		);
+		
+		InstructionList il = methodGen.getInstructionList();
+		InstructionHandle ih = il.getStart();
+
+		while(ih != null) {
+			
+			Instruction inst = ih.getInstruction();
+			
+			if(inst.getOpcode() == Const.INVOKEINTERFACE) {
+				
+				INVOKEINTERFACE invoke = (INVOKEINTERFACE)inst;
+				
+				String invokeClassName = invoke.getClassName(cpg);
+				String invokeMethodName = invoke.getMethodName(cpg);
+				
+				if(
+					invokeClassName.equals("java.sql.PreparedStatement") == true
+					&& invokeMethodName.equals("executeQuery") == true
+				) {
+					
+					int methodRef = cpg.addMethodref("com.redeye.appagent.wrapper.StatementTestWrapper", "executeQuery", "(Ljava/sql/PreparedStatement;)Ljava/sql/ResultSet;");
+					
+					il.append(ih, new NOP());
+					il.append(ih, new NOP());
+					il.append(ih, new INVOKESTATIC(methodRef));
+					il.delete(ih);
+				}
+			}
+			
+			// method 내에 다음 명령어 획득
+			ih = ih.getNext();
+		} // End of while instruction handle
+		
+        // Set the InstructionList to the MethodGen
+        methodGen.setInstructionList(il);
+
+        // Update the constant pool and other method information
+        methodGen.setMaxLocals();
+        methodGen.setMaxStack();
+        
+        //methodGen.removeLineNumbers();
+        methodGen.removeLocalVariables();
+        
+        //
+        classGen.replaceMethod(method, methodGen.getMethod());
 	}
 }

@@ -14,7 +14,7 @@ import lombok.Getter;
 public enum Config {
 	
 	/** agent 의 패키지명 */
-	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/babe"),
+	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/appagent"),
 
 	/** system 구분자(id) */
 	SYSTEM_ID("SYSTEM_ID", "N/A"),
