@@ -81,9 +81,9 @@ public final class AppTransformer implements ClassFileTransformer {
 	 * @return 변환된 바이트 코드
 	 */
 	public byte[] transformAPI(
-			String className,
-			ProtectionDomain protectionDomain,
-			byte[] classfileBuffer
+		String className,
+		ProtectionDomain protectionDomain,
+		byte[] classfileBuffer
 	)throws IllegalClassFormatException {
 
 		try {
@@ -149,7 +149,7 @@ public final class AppTransformer implements ClassFileTransformer {
 	 * @param classGen 변환할 Method 의 클래스 
 	 * @param method 변환할 메소드
 	 */
-	private static void transformMethod(
+	private void transformMethod(
 		ClassGen classGen,
 		Method method
 	) throws Exception {

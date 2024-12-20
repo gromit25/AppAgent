@@ -72,4 +72,20 @@ public class StringUtil {
 		}
 		
 	} // End of splitLast
+	
+	/**
+	 * 문자열이 공란으로 이루어져 있는지 반환하는 메소드<br>
+	 * -> 주어진 문자열이 null이거나 "", "   ", "\t  " 등은 true를 반환함
+	 * 
+	 * @param str 문자열
+	 * @return 문자열이 공란으로 이루어져 있는지 여부
+	 */
+	public static boolean isBlank(String str) {
+		
+		if(str == null) {
+			return true;
+		}
+		
+		return str.isBlank();
+	}
 }
