@@ -5,20 +5,29 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.redeye.appagent.logger.ApiType;
+
 /**
- * Wrapper 클래스 어노테이션
+ * 대상 클래스 어노테이션
  * 
  * @author jmsohn
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Wrapper {
+public @interface TargetClass {
 	
 	/**
-	 * Wrapping 대상 클래스 명<br>
-	 * ex. com/redeye/Test 형태
+	 * 대상 클래스 타입
 	 * 
-	 * @return Wrapping 대상 클래스 명
+	 * @return 대상 클래스 타입
 	 */
-	String value();
+	ApiType type();
+	
+	/**
+	 * 대상 클래스 명<br>
+	 * ex) java/sql/PreparedStatement
+	 * 
+	 * @return 대상 클래스 명
+	 */
+	String cls();
 }

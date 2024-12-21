@@ -23,7 +23,8 @@ import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 
 /**
- * 데이터베이스 연결(java.sql.Connection)의 Wrapper클래스
+ * 데이터베이스 연결(java.sql.Connection) Wrapper
+ * 
  * @author jmsohn
  */
 public class ConnectionWrapper implements Connection {
@@ -56,7 +57,6 @@ public class ConnectionWrapper implements Connection {
 		PreparedStatementWrapper pstmtWrapper = new PreparedStatementWrapper(pstmt, sql);
 		
 		return pstmtWrapper;
-		
 	}
 
 	@Override
@@ -82,25 +82,25 @@ public class ConnectionWrapper implements Connection {
 	@Override
 	public void commit() throws SQLException {
 		
-		Log.writeLog(ApiType.DB.getApiTypeName(), this.conn, 0, "CMT ST");
+		Log.writeLog(ApiType.DB.getName(), this.conn, 0, "CMT ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.commit();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.DB.getApiTypeName(), this.conn, end - start, "CMT ED");
+		Log.writeLog(ApiType.DB.getName(), this.conn, end - start, "CMT ED");
 	}
 
 	@Override
 	public void rollback() throws SQLException {
 		
-		Log.writeLog(ApiType.DB.getApiTypeName(), this.conn, 0, "RBK ST");
+		Log.writeLog(ApiType.DB.getName(), this.conn, 0, "RBK ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.rollback();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.DB.getApiTypeName(), this.conn, end - start, "RBK ED");
+		Log.writeLog(ApiType.DB.getName(), this.conn, end - start, "RBK ED");
 	}
 
 	@Override

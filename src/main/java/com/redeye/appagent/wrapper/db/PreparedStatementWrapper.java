@@ -22,13 +22,15 @@ import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Hashtable;
 import java.util.Map;
 
+import com.redeye.appagent.annotation.TargetClass;
+import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
+import com.redeye.appagent.util.ByteUtil;
 
 /**
- * 데이터베이스 PreparedStatement의  Wrapper클래스
+ * PreparedStatement Wrapper
  * 
  * @author jmsohn
  */
@@ -41,7 +43,7 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	
 	public PreparedStatementWrapper(PreparedStatement pstmt, String sql) {
 		this.pstmt = pstmt;
-		this.setSql(sql);
+		this.sql = sql;
 	}
 	
 	/**
@@ -50,12 +52,12 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	 * @param paramIndex 추가 파라미터의 순번 
 	 * @param value 추가할 파라미터값
 	 */
-	private void addParamValue(int paramIndex, String value) {
+	private void addParamValue(int paramIndex, Object value) {
 		
 		if(value == null) {
-			this.getParams().put(paramIndex, "null");
+			this.params.put(paramIndex, "null");
 		} else {
-			this.getParams().put(paramIndex, value);
+			this.params.put(paramIndex, value.toString());
 		}
 	}
 	
@@ -282,36 +284,23 @@ public class PreparedStatementWrapper implements PreparedStatement{
 	@Override
 	public ResultSet executeQuery() throws SQLException {
 		
-		// 1. 메소드(executeQuery) 수행전 전처리 부
-		Log.writePreSqlLog(this.pstmt, this.getSql(), this.getSqlhash(), this.getParams());
-		
-		// 2. 메소드(executeQuery) 수행
+		// 메소드(executeQuery) 수행
 		long start = System.currentTimeMillis();
 		ResultSet rs = this.pstmt.executeQuery();
 		long end = System.currentTimeMillis();
 
-		// 3. 메소드(executeQuery) 수행 후 처리부
-		Log.writePostSqlLog(this.pstmt, this.getSql(), this.getSqlhash(), start, end);
-		
 		return rs;
 	}
 
 	@Override
 	public int executeUpdate() throws SQLException {
 		
-		// 1. 메소드(executeUpdate) 수행전 전처리 부
-		Log.writePreSqlLog(this.pstmt, this.getSql(), this.getSqlhash(), this.getParams());
-		
 		// 2. 메소드(executeUpdate) 수행
 		long start = System.currentTimeMillis();
 		int result = this.pstmt.executeUpdate();
 		long end = System.currentTimeMillis();
-
-		// 3. 메소드(executeQuery) 수행 후 처리부
-		Log.writePostSqlLog(this.pstmt, this.getSql(), this.getSqlhash(), start, end);
 		
 		return result;
-		
 	}
 
 	@Override
@@ -364,92 +353,114 @@ public class PreparedStatementWrapper implements PreparedStatement{
 
 	@Override
 	public void setBigDecimal(int parameterIndex, BigDecimal x) throws SQLException {
+		
 		if(x != null) {
 			addParamValue(parameterIndex, x.toString());
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setBigDecimal(parameterIndex, x);
 	}
 
 	@Override
 	public void setString(int parameterIndex, String x) throws SQLException {
+		
 		if(x != null) {
 			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setString(parameterIndex, x);
 	}
 
 	@Override
 	public void setBytes(int parameterIndex, byte[] x) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, "byte array : " + x.length);
+			try {
+				addParamValue(parameterIndex, ByteUtil.bytesToStr(x));
+			} catch(Exception ex) {
+				addParamValue(parameterIndex, "null");
+			}
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setBytes(parameterIndex, x);
 	}
 
 	@Override
 	public void setDate(int parameterIndex, Date x) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setDate(parameterIndex, x);
 	}
 
 	@Override
 	public void setTime(int parameterIndex, Time x) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setTime(parameterIndex, x);
 	}
 
 	@Override
 	public void setTimestamp(int parameterIndex, Timestamp x) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setTimestamp(parameterIndex, x);
 	}
 
 	@Override
 	public void setAsciiStream(int parameterIndex, InputStream x, int length) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setAsciiStream(parameterIndex, x);
 	}
 
 	@Override
 	@Deprecated
 	public void setUnicodeStream(int parameterIndex, InputStream x, int length) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setUnicodeStream(parameterIndex, x, length);
 	}
 
 	@Override
 	public void setBinaryStream(int parameterIndex, InputStream x, int length) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setBinaryStream(parameterIndex, x, length);
 	}
 
@@ -460,21 +471,25 @@ public class PreparedStatementWrapper implements PreparedStatement{
 
 	@Override
 	public void setObject(int parameterIndex, Object x, int targetSqlType) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setObject(parameterIndex, x, targetSqlType);
 	}
 
 	@Override
 	public void setObject(int parameterIndex, Object x) throws SQLException {
+		
 		if(x != null) {
-			addParamValue(parameterIndex, x.toString());
+			addParamValue(parameterIndex, x);
 		} else {
 			addParamValue(parameterIndex, "null");
 		}
+		
 		this.pstmt.setObject(parameterIndex, x);
 	}
 

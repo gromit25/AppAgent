@@ -1,5 +1,7 @@
 package com.redeye.appagent.transform;
 
+import org.objectweb.asm.Opcodes;
+
 import com.redeye.appagent.exception.AgentException;
 import com.redeye.appagent.util.PrimitiveType;
 
@@ -96,5 +98,24 @@ class Util {
     	
     	// 만들어진 바이트코드 타입 문자열을 반환
     	return bytecodeType.toString();
+	}
+	
+	/**
+	 * 함수 호출 명령어 여부 반환
+	 * 
+	 * @param opcode 명령어 코드
+	 * @return 함수 호출 명령어 여부
+	 */
+	static boolean isInvokeOp(int opcode) {
+		
+		if(opcode == Opcodes.INVOKESTATIC
+			|| opcode == Opcodes.INVOKEVIRTUAL
+			|| opcode == Opcodes.INVOKEINTERFACE
+			|| opcode == Opcodes.INVOKESPECIAL ) {
+			
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

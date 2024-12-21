@@ -5,8 +5,7 @@ import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.Hashtable;
-import java.util.Map;
+import java.sql.PreparedStatement;
 
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.ClassParser;
@@ -19,15 +18,11 @@ import org.apache.bcel.generic.INVOKESTATIC;
 import org.apache.bcel.generic.Instruction;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
-import org.apache.bcel.generic.InvokeInstruction;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.NOP;
 
 import com.redeye.appagent.Config;
-import com.redeye.appagent.logger.Log;
-import com.redeye.appagent.transform.TransformClassWriter;
-import com.redeye.appagent.transform.TransformMap;
-import com.redeye.appagent.transform.TransformMapConfigReader;
+import com.redeye.appagent.wrapper.db.PreparedStatementWrapper;
 
 /**
  * API 호출부를 모니터링 메소드 호출로 변환하는 클래스
@@ -39,27 +34,28 @@ public final class AppTransformer implements ClassFileTransformer {
 	/** 전체 스킵 여부(테스트용) */
 	private boolean isSkip = false;
 	
-	/** API 호출 변환 맵 */ 
-	private Map<String, TransformMap> transformMap;
+	/** 임시 변환 메소드 맵 */
+	AlterMethodMap alterMethodMap;
 	
 	/**
 	 * 생성자
-	 * 
-	 * @param configFile 클래스 변환 설정 파일 위치 문자열
 	 */
-	public AppTransformer(String configFile) throws Exception {
-		this(new File(configFile));
-	}
-	
-	/**
-	 * 생성자
-	 * 
-	 * @param configFile 클래스 변환 설정 파일
-	 */
-	public AppTransformer(File configFile) throws Exception {
-
-		// 클래스 변환 설정을 읽어옴
-		this.transformMap = TransformMapConfigReader.readConfig(configFile);
+	public AppTransformer() throws Exception {
+		
+		// TODO 테스트용 임시 초기화
+		AlterMethodMap alterMethodMap = new AlterMethodMap();
+		
+		// 대상 메소드 설정
+		alterMethodMap.setTargetMethod(
+			"java.sql.PreparedStatement",
+			"executeQuery",
+			"()Ljava/sql/ResultSet;"
+		);
+		
+		// 변경 대상 메소드 설정
+		Class<?> alterClass = PreparedStatementWrapper.class;
+		java.lang.reflect.Method alterMethod = alterClass.getDeclaredMethod("executeQuery", PreparedStatement.class);
+		alterMethodMap.setAlterMethod(alterMethod);
 	}
 
 	@Override
@@ -170,16 +166,11 @@ public final class AppTransformer implements ClassFileTransformer {
 			if(inst.getOpcode() == Const.INVOKEINTERFACE) {
 				
 				INVOKEINTERFACE invoke = (INVOKEINTERFACE)inst;
+				MethodSpec invokeMethodSpec = MethodSpec.create(invoke, cpg);
 				
-				String invokeClassName = invoke.getClassName(cpg);
-				String invokeMethodName = invoke.getMethodName(cpg);
-				
-				if(
-					invokeClassName.equals("java.sql.PreparedStatement") == true
-					&& invokeMethodName.equals("executeQuery") == true
-				) {
+				if(this.alterMethodMap.getTargetMethod().equals(invokeMethodSpec) == true) {
 					
-					int methodRef = cpg.addMethodref("com.redeye.appagent.wrapper.StatementTestWrapper", "executeQuery", "(Ljava/sql/PreparedStatement;)Ljava/sql/ResultSet;");
+					int methodRef = alterMethodMap.getAlterMethod().getMethodRef(cpg);
 					
 					il.append(ih, new NOP());
 					il.append(ih, new NOP());

@@ -12,12 +12,13 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface AlterMethod {
+public @interface TargetMethod {
 
 	/**
-	 * 변환 대상 메소드 시그니처 문자열 반환
+	 * 변환 대상 메소드명과 시그니처 문자열 반환<br>
+	 * ex) executeQuery()Ljava/sql/ResultSet;
 	 * 
-	 * @return 변환 대상 메소드 시그니처 문자열
+	 * @return 변환 대상 메소드명과 시그니처 문자열
 	 */
 	String value();
 }
