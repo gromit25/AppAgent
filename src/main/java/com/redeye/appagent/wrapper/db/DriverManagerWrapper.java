@@ -23,7 +23,7 @@ public class DriverManagerWrapper {
 	 * @param user 접속 사용자
 	 * @param password 접속 패스워드
 	 */
-	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/DriverManager;")
+	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url, String user, String password) throws SQLException {
 		
 		Connection conn = DriverManager.getConnection(url, user, password);
@@ -35,7 +35,7 @@ public class DriverManagerWrapper {
 	 * 
 	 * @param url 데이터베이스 연결 url
 	 */
-	@TargetMethod("getConnection(Ljava/lang/String;)Ljava/sql/DriverManager;")
+	@TargetMethod("getConnection(Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url) throws SQLException {
 		
 		Connection conn = DriverManager.getConnection(url);

@@ -19,17 +19,29 @@ class MethodSpec {
 	/** class 패턴 문자열(패키지 포함, ex javax/sql/DataSource) */
 	private static String CLASS_P = "(([A-Za-z_][A-Za-z0-9_]*)(\\/[A-Za-z_][A-Za-z0-9_]*)*)";
 	
+	/** method 패턴 문자열 */
+	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))";
+	
 	/** method 패턴 내의 타입 패턴 문자열 */
 	private static String TYPE_P = "([VZCBSIFJD])|(L" + CLASS_P + "\\;)";
 	
+	/** signature 패턴 문자열 */
+	private static String SIGNATURE_P = "(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
+	
 	/** method 패턴(signature 포함) 문자열 */
-	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
+	private static String METHOD_SIGNATURE_P = METHOD_P + SIGNATURE_P;
 	
 	/** class 패턴 객체 */
 	private static Pattern classP = Pattern.compile(CLASS_P);
 	
 	/** method 패턴 객체 */
 	private static Pattern methodP = Pattern.compile(METHOD_P);
+	
+	/** signature 패턴 객체 */
+	private static Pattern signatureP = Pattern.compile(SIGNATURE_P);
+	
+	/** method 패턴 객체 */
+	private static Pattern methodSignatureP = Pattern.compile(METHOD_SIGNATURE_P);
 	
 	/** 클래스 명(ex. javax/sql/DataSource) */
 	@Getter
@@ -67,8 +79,8 @@ class MethodSpec {
 			throw new AgentException("class name is not matched format: " + className);
 		}
 		
-		Matcher methodM = methodP.matcher(methodSignature);
-		if(methodM.matches() == false) {
+		Matcher methodSignatureM = methodSignatureP.matcher(methodSignature);
+		if(methodSignatureM.matches() == false) {
 			throw new AgentException("method signature is not matched format:" + methodSignature);
 		}
 		
@@ -77,8 +89,42 @@ class MethodSpec {
 		
 		// 메소드 스펙값 설정
 		spec.setClassName(className);
-		spec.setMethodName(methodM.group("method"));
-		spec.setSignature(methodM.group("signature"));
+		spec.setMethodName(methodSignatureM.group("method"));
+		spec.setSignature(methodSignatureM.group("signature"));
+		
+		return spec;
+	}
+	
+	/**
+	 * 메소드 스펙 생성 및 반환
+	 * 
+	 * @param className 클래스 명
+	 * @param methodName 메소드 명
+	 * @param signature 시그니처
+	 * @return 생성된 메소드 스펙
+	 */
+	static MethodSpec create(String className, String methodName, String signature) throws Exception {
+		
+		// 입력값 검증
+		if(classP.matcher(className).matches() == false) {
+			throw new AgentException("class name is not matched format: " + className);
+		}
+		
+		if(methodP.matcher(methodName).matches() == false) {
+			throw new AgentException("method name is not matched format:" + methodName);
+		}
+		
+		if(signatureP.matcher(signature).matches() == false) {
+			throw new AgentException("method signature is not matched format:" + signature);
+		}
+		
+		// 메소드 스펙 객체 생성
+		MethodSpec spec = new MethodSpec();
+		
+		// 메소드 스펙값 설정
+		spec.setClassName(className);
+		spec.setMethodName(methodName);
+		spec.setSignature(signature);
 		
 		return spec;
 	}

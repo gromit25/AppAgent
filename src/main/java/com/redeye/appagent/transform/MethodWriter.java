@@ -31,7 +31,6 @@ public class MethodWriter extends MethodVisitor {
 	private int line;
 	
 	/** */
-	@Getter
 	private Stack<String> newClsStack;
 	
 	/**
@@ -66,7 +65,7 @@ public class MethodWriter extends MethodVisitor {
 			return;
 		}
 		
-		// 로그를 남김
+		// 로깅
 		String logMsg = "REPLACE NEW:" + type + " in " + this.className + "." + this.methodName;
 		Log.writeAgentLog(logMsg);
 		
@@ -110,12 +109,12 @@ public class MethodWriter extends MethodVisitor {
 			return;
 		}
 		
-		// 변환 대상 메소드 명 및 변환 맵을 가져옴
-		String targetFullName = TransformMap.makeFullName(className, methodName, signature);
-		TransformMap transformMap = this.getTransformMaps().getMap(targetFullName);
+		// 변환 대상 메소드 스펙 획득
+		MethodSpec targetSpec = MethodSpec.create(className, methodName, signature);
+		MethodSpec altSpec = MethodMap.getAltMethod(targetSpec);
 		
-		// 변환할 메소드인지 검사
-		if(transformMap == null) {
+		// 변환 대상 메소드가 없는 경우 변환하지 않고 반환
+		if(altSpec == null) {
 			super.visitMethodInsn(opcode, className, methodName, signature, isInterface);
 			return;
 		}
@@ -123,31 +122,39 @@ public class MethodWriter extends MethodVisitor {
 		//---------------------------------------------------
 		// 변환 작업 수행
 		// - 변환 내용 로깅 
-		String logMsg = "REPLACE " + TransformMethodWriter.getInvokeName(opcode) + ":"
-				+ className + "." + methodName
-				+ " in " + this.className + "." + this.methodName;
+		String logMsg =
+			"REPLACE:"
+			+ targetSpec.toString()
+			+ " in "
+			+ this.className + "." + this.methodName;
 		Log.writeAgentLog(logMsg);
 		
 		if(opcode == Opcodes.INVOKESTATIC || opcode == Opcodes.INVOKEVIRTUAL) {
 			
-			// INVOKESTATIC/INVOKEVIRTUAL -> static 메소드로 변환 수행
-			super.visitMethodInsn(Opcodes.INVOKESTATIC
-					, transformMap.getAltClass(), transformMap.getAltMethod()
-					, transformMap.getAltSignature(), false);
+			// INVOKESTATIC/INVOKEVIRTUAL 변환
+			super.visitMethodInsn(
+				Opcodes.INVOKESTATIC,
+				altSpec.getClassName(),
+				altSpec.getMethodName(),
+				altSpec.getSignature(),
+				false
+			);
 		
 		} else if(opcode == Opcodes.INVOKEINTERFACE) {
 			
-			// INVOKEINTERFACE -> static 메소드로 변환 수행
-			super.visitMethodInsn(Opcodes.INVOKESTATIC
-					, transformMap.getAltClass(), transformMap.getAltMethod()
-					, transformMap.getAltSignature(), false);
+			// INVOKEINTERFACE
+			super.visitMethodInsn(
+				Opcodes.INVOKESTATIC,
+				altSpec.getClassName(),
+				altSpec.getMethodName(),
+				altSpec.getSignature(),
+				false
+			);
 			
-			// INVOKEINTERFACE 명령어가 INVOKESTATIC보다 2바이트 크기 때문에,
-			// 2바이트 만큼 NOP를 추가하여, while문이나 for문등의 메모리 번지에 영향을 주지 않도록 함
 			super.visitInsn(Opcodes.NOP);
 			super.visitInsn(Opcodes.NOP);
 			
-		} else if(opcode == Opcodes.INVOKESPECIAL && this.getTransformNewStack().isEmpty() == false) {
+		} else if(opcode == Opcodes.INVOKESPECIAL && this.newClsStack.isEmpty() == false) {
 			
 			// 생성자 호출시에만 변환을 수행
 			// new 명령어 변환 스택에서 최상단의 하나를 추출
@@ -172,42 +179,6 @@ public class MethodWriter extends MethodVisitor {
 			super.visitMethodInsn(opcode, className, methodName, signature, isInterface);
 			return;
 		}
-	}
-	
-	/**
-	 * 함수 호출 코드에 대해 호출 종류를 문자열로 변환하여 반환
-	 * 
-	 * @param opcode 함수 호출 코드
-	 * @return 변환된 문자열
-	 */
-	private static String getInvokeName(int opcode) {
-		
-		String invokeName = "N/A(" + opcode + ")";
-		
-		switch(opcode) {
-		
-		case Opcodes.INVOKESTATIC:
-			invokeName = "INVOKESTATIC";
-			break;
-			
-		case Opcodes.INVOKEVIRTUAL:
-			invokeName = "INVOKEVIRTUAL";
-			break;
-			
-		case Opcodes.INVOKEINTERFACE:
-			invokeName = "INVOKEINTERFACE";
-			break;
-			
-		case Opcodes.INVOKESPECIAL:
-			invokeName = "INVOKESPECIAL";
-			break;
-			
-		case Opcodes.INVOKEDYNAMIC:
-			invokeName = "INVOKEDYNAMIC";
-			break;
-		}
-		
-		return invokeName;
 	}
 	
 	@Override

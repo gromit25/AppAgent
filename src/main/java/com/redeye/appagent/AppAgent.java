@@ -5,6 +5,7 @@ import java.lang.instrument.Instrumentation;
 import com.redeye.appagent.transform.AppTransformer;
 import com.redeye.appagent.transform.MethodMap;
 import com.redeye.appagent.wrapper.db.DataSourceWrapper;
+import com.redeye.appagent.wrapper.db.DriverManagerWrapper;
 
 /**
  * App Agent Main<br>
@@ -30,6 +31,7 @@ public final class AppAgent {
 			
 			// 메소드 변환맵 초기화
 			MethodMap.init(
+				DriverManagerWrapper.class,
 				DataSourceWrapper.class
 			);
 			

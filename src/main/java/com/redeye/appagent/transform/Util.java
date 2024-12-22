@@ -118,4 +118,40 @@ class Util {
 			return false;
 		}
 	}
+	
+	/**
+	 * 함수 호출 코드에 대해 호출 종류를 문자열로 변환하여 반환
+	 * 
+	 * @param opcode 함수 호출 코드
+	 * @return 변환된 문자열
+	 */
+	static String getInvokeName(int opcode) {
+		
+		String invokeName = "N/A(" + opcode + ")";
+		
+		switch(opcode) {
+		
+		case Opcodes.INVOKESTATIC:
+			invokeName = "INVOKESTATIC";
+			break;
+			
+		case Opcodes.INVOKEVIRTUAL:
+			invokeName = "INVOKEVIRTUAL";
+			break;
+			
+		case Opcodes.INVOKEINTERFACE:
+			invokeName = "INVOKEINTERFACE";
+			break;
+			
+		case Opcodes.INVOKESPECIAL:
+			invokeName = "INVOKESPECIAL";
+			break;
+			
+		case Opcodes.INVOKEDYNAMIC:
+			invokeName = "INVOKEDYNAMIC";
+			break;
+		}
+		
+		return invokeName;
+	}
 }
