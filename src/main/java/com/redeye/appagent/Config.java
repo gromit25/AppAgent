@@ -28,6 +28,16 @@ public enum Config {
 	/** CHARACTER SET */
 	SYSTEM_CHARSET("SYSTEM_CHARSET", Charset.defaultCharset().name()),
 	
+	//--- 조인 방식
+	
+	/**
+	 * 조인할 패키지 명(, 로 나눔)
+	 * ex) com/redeye, com/prj
+	 */
+	JOIN_PACKAGE("JOIN_PACKAGE", ""),
+	
+	//--- 로그 관련
+	
 	/** 로그 타입 */
 	LOG_TYPE("LOG_TYPE", "FILE"),
 	

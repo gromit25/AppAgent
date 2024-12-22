@@ -1,7 +1,5 @@
 package com.redeye.appagent.transform;
 
-import java.util.Stack;
-
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -9,10 +7,9 @@ import org.objectweb.asm.Opcodes;
 import com.redeye.appagent.logger.Log;
 
 import lombok.Getter;
-import lombok.Setter;
 
 /**
- * 
+ * 메소드 변환 클래스
  * 
  * @author jmsohn
  */
@@ -30,8 +27,12 @@ public class MethodWriter extends MethodVisitor {
 	@Getter
 	private int line;
 	
-	/** */
-	private Stack<String> newClsStack;
+	/**
+	 * NEW 클래스 명<br>
+	 * NEW 명령어는 여러 줄로 실행되기 때문에 임시 저장용 변수<br>
+	 * 순서) NEW 객체 생성 -> 생성자 메소드(<init>) 호출
+	 */
+	private String newClassName;
 	
 	/**
 	 * 생성자
@@ -49,39 +50,41 @@ public class MethodWriter extends MethodVisitor {
 		this.methodName = methodName;
 		this.line = -1;
 		
-		this.newClsStack = new Stack<>();
+		this.newClassName = null;
 	}
 	
 	@Override
 	public void visitTypeInsn(int opcode, String type) {
 		
-		//
-		if(opcode != Opcodes.NEW
-			|| this.getTransformMaps().containsInNewClasses(type) == false
-			|| isJoinClass(type) == false
+		// NEW 명령어가 아니거나
+		// 변환 대상이 아닐 경우
+		// 변환하지 않고 반환
+		if(
+			opcode != Opcodes.NEW ||
+			MethodMap.isTargetNew(type) == false
 		) {
 			
 			super.visitTypeInsn(opcode, type);
 			return;
 		}
 		
-		// 로깅
+		// 변환 내용 로깅
 		String logMsg = "REPLACE NEW:" + type + " in " + this.className + "." + this.methodName;
 		Log.writeAgentLog(logMsg);
 		
-		// 3바이트 NEW 명령어 -> NOP 3개 명령문 치환
+		// 3바이트 NEW 명령어 -> NOP 3개 명령어 변환
 		super.visitInsn(Opcodes.NOP);
 		super.visitInsn(Opcodes.NOP);
 		super.visitInsn(Opcodes.NOP);
 		
-		// NEW 클래스 목록 추가
-		this.newClsStack.push(type);
+		// NEW 클래스 명 설정
+		this.newClassName = type;
 	}
 	
 	@Override
 	public void visitInsn(int opcode) {
 		
-		if(opcode == Opcodes.DUP && this.newClsStack.isEmpty() == false) {
+		if(opcode == Opcodes.DUP && this.newClassName != null) {
 			
 			// DUP 명령어 -> NOP 명령어 치환
 			super.visitInsn(Opcodes.NOP);
@@ -109,9 +112,8 @@ public class MethodWriter extends MethodVisitor {
 			return;
 		}
 		
-		// 변환 대상 메소드 스펙 획득
-		MethodSpec targetSpec = MethodSpec.create(className, methodName, signature);
-		MethodSpec altSpec = MethodMap.getAltMethod(targetSpec);
+		// 변환 메소드 스펙 획득
+		MethodSpec altSpec = MethodMap.getAltMethod(className, methodName, signature);
 		
 		// 변환 대상 메소드가 없는 경우 변환하지 않고 반환
 		if(altSpec == null) {
@@ -124,60 +126,32 @@ public class MethodWriter extends MethodVisitor {
 		// - 변환 내용 로깅 
 		String logMsg =
 			"REPLACE:"
-			+ targetSpec.toString()
+			+ className + "." + methodName + signature
 			+ " in "
 			+ this.className + "." + this.methodName;
 		Log.writeAgentLog(logMsg);
-		
-		if(opcode == Opcodes.INVOKESTATIC || opcode == Opcodes.INVOKEVIRTUAL) {
+
+		// 변환 메소드 호출로 변경
+		super.visitMethodInsn(
+			Opcodes.INVOKESTATIC,
+			altSpec.getClassName(),
+			altSpec.getMethodName(),
+			altSpec.getSignature(),
+			false
+		);
+
+		// 호출 명령어 별 후처리
+		if(opcode == Opcodes.INVOKEINTERFACE) {
 			
-			// INVOKESTATIC/INVOKEVIRTUAL 변환
-			super.visitMethodInsn(
-				Opcodes.INVOKESTATIC,
-				altSpec.getClassName(),
-				altSpec.getMethodName(),
-				altSpec.getSignature(),
-				false
-			);
-		
-		} else if(opcode == Opcodes.INVOKEINTERFACE) {
-			
-			// INVOKEINTERFACE
-			super.visitMethodInsn(
-				Opcodes.INVOKESTATIC,
-				altSpec.getClassName(),
-				altSpec.getMethodName(),
-				altSpec.getSignature(),
-				false
-			);
-			
+			// INVOKEINTERFACE 5바이트를 채우기 위해 NOP 추가
+			// INVOKESTATIC은 3바이트임
 			super.visitInsn(Opcodes.NOP);
 			super.visitInsn(Opcodes.NOP);
 			
-		} else if(opcode == Opcodes.INVOKESPECIAL && this.newClsStack.isEmpty() == false) {
+		} else if(opcode == Opcodes.INVOKESPECIAL && this.newClassName != null) {
 			
-			// 생성자 호출시에만 변환을 수행
-			// new 명령어 변환 스택에서 최상단의 하나를 추출
-			TransformNewInfo newInfo = this.getTransformNewStack().pop();
-			
-			if(newInfo != null && newInfo.getStatus() == TransformNewStatus.NEWDUP_INST) {
-				
-				// INVOKESTATIC으로 변환
-				super.visitMethodInsn(Opcodes.INVOKESTATIC
-						, transformMap.getAltClass(), transformMap.getAltMethod()
-						, transformMap.getAltSignature(), false);
-				
-			} else {
-				
-				// 변환작업을 수행하지 않아, 다시 new 명령어 변환 스택에 다시 넣음
-				this.getTransformNewStack().push(newInfo);
-			}
-			
-		} else {
-			
-			//
-			super.visitMethodInsn(opcode, className, methodName, signature, isInterface);
-			return;
+			// NEW 클래스 명 초기화 
+			this.newClassName = null;
 		}
 	}
 	

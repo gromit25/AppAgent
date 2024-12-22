@@ -1,7 +1,9 @@
 package com.redeye.appagent.transform;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.redeye.appagent.exception.AgentException;
 import com.redeye.appagent.util.StringUtil;
@@ -16,12 +18,15 @@ public class MethodMap {
 	/** 메소드 변환 Map 객체 */
 	private static Map<String, MethodPair> map;
 	
+	/** 변환 대상 NEW 클래스 셋 */
+	private static Set<String> targetNew;
+	
 	/**
 	 * Method Map 초기화
 	 * 
 	 * @param targetClasses
 	 */
-	public static void init(Class<?>... targetClasses) throws Exception {
+	public synchronized static void init(Class<?>... targetClasses) throws Exception {
 		
 		// 입력값 검증
 		if(targetClasses == null) {
@@ -31,11 +36,22 @@ public class MethodMap {
 		// Method Map 객체 생성
 		map = new HashMap<>();
 		
+		// NEW 클래스 목록 객체 생성
+		targetNew = new HashSet<>();
+		
 		// 각 클래스 로드
 		for(Class<?> targetClass: targetClasses) {
 			
 			for(MethodPair methodPair: MethodPair.load(targetClass)) {
+				
+				// Method Map에 저장
 				map.put(methodPair.getKey(), methodPair);
+				
+				// 만일 대상 메소드 명이 생성자("<init>") 메소드 이면
+				// NEW 클래스 목록에 추가
+				if(methodPair.getTargetMethod().getMethodName().equals("<init>") == true) {
+					targetNew.add(methodPair.getTargetMethod().getClassName());
+				}
 			}
 		}
 	}
@@ -72,11 +88,27 @@ public class MethodMap {
 	}
 	
 	/**
+	 * 주어진 클래스 명의 변환 대상 여부 반환
+	 * 
+	 * @param className 클래스 명
+	 * @return 변환 대상 여부
+	 */
+	public static boolean isTargetNew(String className) {
+		
+		// class 명이 blank 일 경우 false 반환
+		if(StringUtil.isBlank(className) == true) {
+			return false;
+		}
+		
+		return targetNew.contains(className);
+	}
+	
+	/**
 	 * 대상 메소드 스펙으로 변환할 메소드 스펙을 반환<br>
 	 * 없을 경우 null 을 반환
 	 * 
 	 * @param targetSpec 대상 메소드 스펙
-	 * @return 변환할 메소드 스펙
+	 * @return 변환 메소드 스펙
 	 */
 	public static MethodSpec getAltMethod(MethodSpec targetSpec) {
 		
@@ -94,6 +126,44 @@ public class MethodMap {
 		String key = targetSpec.toString();
 		if(map.containsKey(key) == true) {
 			return map.get(key).getAlterMethod();
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * 주어진 대상 메소드 정보로 변환할 메소드 스펙을 반환<br>
+	 * 없을 경우 null 을 반환
+	 * 
+	 * @param className 대상 클래스 명
+	 * @param methodName 대상 메소드 명
+	 * @param signature 대상 시그니처
+	 * @return 변환 메소드 스펙
+	 */
+	public static MethodSpec getAltMethod(String className, String methodName, String signature) {
+		
+		// 입력값 검증
+		if(StringUtil.isBlank(className) == true) {
+			return null;
+		}
+		
+		if(StringUtil.isBlank(methodName) == true) {
+			return null;
+		}
+		
+		if(StringUtil.isBlank(signature) == true) {
+			return null;
+		}
+		
+		// 맵이 초기화 되지 않았을 경우 null 반환
+		if(map == null) {
+			return null;
+		}
+		
+		// 맵에서 변환 메소드 반환
+		MethodPair methodPair = map.get(className + "." + methodName + signature);
+		if(methodPair != null) {
+			return methodPair.getAlterMethod();
 		} else {
 			return null;
 		}

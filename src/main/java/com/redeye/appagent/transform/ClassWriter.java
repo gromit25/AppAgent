@@ -6,13 +6,14 @@ import org.objectweb.asm.MethodVisitor;
 import lombok.Getter;
 
 /**
- * 
+ * 클래스 변환<br>
+ * 메소드 변환 클래스 호출 용도
  * 
  * @author jmsohn
  */
 public class ClassWriter extends ClassVisitor {
 	
-	/** 현재 클래스 명 */
+	/** 클래스 명 */
 	@Getter
 	private String className;
 	
