@@ -35,7 +35,7 @@ class Util {
     	StringBuilder typeNameBuilder = new StringBuilder("");
     	
     	// 배열일 경우, 배열 차원의 수 변수
-    	int dimensionCnt = 0;
+    	int dimCnt = 0;
 	    	
     	// 파싱 상태
     	//   0: 타입명 상태
@@ -61,14 +61,14 @@ class Util {
     				// ch가 '[' 일 경우 배열이 시작되므로,
     				// 상태를 배열상태(1)로 변경 및 차원수를 1 증가
     				state = 1;
-    				dimensionCnt++;
+    				dimCnt++;
     			}
     			
     		} else {
     			
     			// 배열 상태에서 '['이 들어올 경우 차원수를 1 증가
     			if(ch == '[') {
-    				dimensionCnt++;
+    				dimCnt++;
     			}
     		}
     	}
@@ -78,7 +78,7 @@ class Util {
     	StringBuffer bytecodeType = new StringBuffer("");
     	
     	// 배열 차원수 만큼 '['을 앞쪽에 채워줌
-    	for(int index = 0; index < dimensionCnt; index++) {
+    	for(int index = 0; index < dimCnt; index++) {
     		bytecodeType.append("[");
     	}
     	

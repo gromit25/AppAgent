@@ -28,9 +28,6 @@ public enum Config {
 	/** CHARACTER SET */
 	SYSTEM_CHARSET("SYSTEM_CHARSET", Charset.defaultCharset().name()),
 	
-	/** 변환 맵(TransformMap) 설정 파일명 */
-	TRANSFORM_CONFIG_FILE("TRANSFORM_CONFIF_FILE", "N/A"),
-	
 	/** 로그 타입 */
 	LOG_TYPE("LOG_TYPE", "FILE"),
 	

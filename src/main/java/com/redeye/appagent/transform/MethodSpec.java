@@ -1,9 +1,10 @@
 package com.redeye.appagent.transform;
 
 import java.lang.reflect.Method;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.redeye.appagent.exception.AgentException;
-import com.redeye.appagent.util.StringUtil;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,22 @@ import lombok.Setter;
  */
 class MethodSpec {
 	
-	/** 클래스 명(ex. com.redeye.appagent.AppAgent) */
+	/** class 패턴 문자열(패키지 포함, ex javax/sql/DataSource) */
+	private static String CLASS_P = "(([A-Za-z_][A-Za-z0-9_]*)(\\/[A-Za-z_][A-Za-z0-9_]*)*)";
+	
+	/** method 패턴 내의 타입 패턴 문자열 */
+	private static String TYPE_P = "([VZCBSIFJD])|(L" + CLASS_P + "\\;)";
+	
+	/** method 패턴(signature 포함) 문자열 */
+	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
+	
+	/** class 패턴 객체 */
+	private static Pattern classP = Pattern.compile(CLASS_P);
+	
+	/** method 패턴 객체 */
+	private static Pattern methodP = Pattern.compile(METHOD_P);
+	
+	/** 클래스 명(ex. javax/sql/DataSource) */
 	@Getter
 	@Setter
 	private String className;
@@ -41,23 +57,19 @@ class MethodSpec {
 	 * 메소드 스펙 생성 및 반환
 	 * 
 	 * @param className 클래스 명
-	 * @param methodName 메소드 명
-	 * @param signature 메소드 시그니처
+	 * @param methodSignature 메소드 시그니처
 	 * @return 생성된 메소드 스펙
 	 */
-	static MethodSpec create(String className, String methodName, String signature) throws Exception {
+	static MethodSpec create(String className, String methodSignature) throws Exception {
 		
 		// 입력값 검증
-		if(StringUtil.isBlank(className) == true) {
-			throw new AgentException("class name is null or blank.");
+		if(classP.matcher(className).matches() == false) {
+			throw new AgentException("class name is not matched format: " + className);
 		}
 		
-		if(StringUtil.isBlank(methodName) == true) {
-			throw new AgentException("method name is null or blank.");
-		}
-		
-		if(StringUtil.isBlank(signature) == true) {
-			throw new AgentException("method signature is null or blank.");
+		Matcher methodM = methodP.matcher(methodSignature);
+		if(methodM.matches() == false) {
+			throw new AgentException("method signature is not matched format:" + methodSignature);
 		}
 		
 		// 메소드 스펙 객체 생성
@@ -65,8 +77,8 @@ class MethodSpec {
 		
 		// 메소드 스펙값 설정
 		spec.setClassName(className);
-		spec.setMethodName(methodName);
-		spec.setSignature(signature);
+		spec.setMethodName(methodM.group("method"));
+		spec.setSignature(methodM.group("signature"));
 		
 		return spec;
 	}

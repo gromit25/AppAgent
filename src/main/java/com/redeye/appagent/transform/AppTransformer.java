@@ -1,25 +1,11 @@
 package com.redeye.appagent.transform;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
 import java.sql.PreparedStatement;
-
-import org.apache.bcel.Const;
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.classfile.Method;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.INVOKEINTERFACE;
-import org.apache.bcel.generic.INVOKESTATIC;
-import org.apache.bcel.generic.Instruction;
-import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.InstructionList;
-import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.NOP;
 
 import com.redeye.appagent.Config;
 import com.redeye.appagent.wrapper.db.PreparedStatementWrapper;
@@ -35,7 +21,7 @@ public final class AppTransformer implements ClassFileTransformer {
 	private boolean isSkip = false;
 	
 	/** 임시 변환 메소드 맵 */
-	AlterMethodMap alterMethodMap;
+	MethodPair alterMethodMap;
 	
 	/**
 	 * 생성자
@@ -43,7 +29,7 @@ public final class AppTransformer implements ClassFileTransformer {
 	public AppTransformer() throws Exception {
 		
 		// TODO 테스트용 임시 초기화
-		AlterMethodMap alterMethodMap = new AlterMethodMap();
+		MethodPair alterMethodMap = new MethodPair();
 		
 		// 대상 메소드 설정
 		alterMethodMap.setTargetMethod(
