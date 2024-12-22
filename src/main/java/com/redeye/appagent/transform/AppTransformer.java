@@ -1,16 +1,16 @@
 package com.redeye.appagent.transform;
 
-import java.io.ByteArrayInputStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import java.lang.reflect.Method;
 import java.security.ProtectionDomain;
-import java.sql.PreparedStatement;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
+
 import com.redeye.appagent.Config;
-import com.redeye.appagent.wrapper.db.PreparedStatementWrapper;
 
 /**
  * API 호출부를 모니터링 메소드 호출로 변환하는 클래스
@@ -68,8 +68,15 @@ public final class AppTransformer implements ClassFileTransformer {
 				return classfileBuffer;
 			}
 			
-	        // 변환된 바이트 코드 반환
-	        return classGen.getJavaClass().getBytes();
+			// 클래스 변환 수행
+			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			AppClassWriter appWriter = new AppClassWriter(Opcodes.ASM9, cw, className); 
+			
+			ClassReader cr = new ClassReader(classfileBuffer);
+			cr.accept(appWriter, 0);
+			
+			// 변환된 결과 리턴
+			return cw.toByteArray();
 
 		} catch(Exception ex) {
 

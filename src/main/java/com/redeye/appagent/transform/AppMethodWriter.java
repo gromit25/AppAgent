@@ -13,7 +13,7 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public class MethodWriter extends MethodVisitor {
+public class AppMethodWriter extends MethodVisitor {
 	
 	/** 클래스 명 */
 	@Getter
@@ -42,7 +42,7 @@ public class MethodWriter extends MethodVisitor {
 	 * @param className 현재 방문한 클래스 명
 	 * @param methodName 현재 방문한 메소드 명
 	 */
-	MethodWriter(int api, MethodVisitor mv, String className, String methodName) {
+	AppMethodWriter(int api, MethodVisitor mv, String className, String methodName) {
 		
 		super(api, mv);
 		

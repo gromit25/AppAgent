@@ -11,7 +11,7 @@ import lombok.Getter;
  * 
  * @author jmsohn
  */
-public class ClassWriter extends ClassVisitor {
+public class AppClassWriter extends ClassVisitor {
 	
 	/** 클래스 명 */
 	@Getter
@@ -24,7 +24,7 @@ public class ClassWriter extends ClassVisitor {
 	 * @param classVisitor
 	 * @param className
 	 */
-	public ClassWriter(int api, ClassVisitor classVisitor, String className) {
+	public AppClassWriter(int api, ClassVisitor classVisitor, String className) {
 		
 		super(api, classVisitor);
 		
@@ -41,7 +41,7 @@ public class ClassWriter extends ClassVisitor {
 	) {
 
         MethodVisitor mv = super.visitMethod(access, methodName, desc, signature, exceptions);
-        MethodWriter methodWriter = new MethodWriter(this.api, mv, className, methodName);
+        AppMethodWriter methodWriter = new AppMethodWriter(this.api, mv, className, methodName);
         
         return methodWriter;
     }
