@@ -1,5 +1,7 @@
 package com.redeye.appagent.transform;
 
+import java.util.Stack;
+
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -28,11 +30,60 @@ public class AppMethodWriter extends MethodVisitor {
 	private int line;
 	
 	/**
-	 * NEW 클래스 명<br>
-	 * NEW 명령어는 여러 줄로 실행되기 때문에 임시 저장용 변수<br>
-	 * 순서) NEW 객체 생성 -> 생성자 메소드(<init>) 호출
+	 * new 명령어 스택<br>
+	 * 만일 new 가 중첩되어 있는 경우 -> new A(new B()), A, B 모두 대상일 경우<br>
+	 * new 명령어는 중첩된 형태로 명령어가 나타나기 때문에 FIFO 구조인 스택을 이용해 처리함<br>
+	 * ex) new A(new B())의 byte code:<br>  
+	 * <pre>
+	 *   new #19 <com/test/A>
+	 *   dup
+	 *   new #21 <com/test/B>
+	 *   dup
+	 *   invokespecial #23 <com/test/B.<init> : ()V>
+	 *   invokespecial #24 <com/test/A.<init> : (Lcom/test/B;)V>
+	 *   astore_1
+	 *   return
+	 * </pre>
+	 * 
 	 */
-	private String newClassName;
+	private Stack<New> newStack;
+	
+	/**
+	 * new 명령어의 클래스명과 현재 실행 명령어
+	 * 
+	 * @author jmsohn
+	 */
+	class New {
+		
+		/** 클래스 명 */
+		String className;
+		
+		/** 현재 실행 명령어 */
+		NewInst inst;
+		
+		/**
+		 * 생성자
+		 * 
+		 * @param className 클래스 명
+		 */
+		New(String className) {
+			this.className = className;
+			this.inst = NewInst.NEW;
+		}
+	}
+	
+	/**
+	 * new 실행 명령어<br>
+	 * DUP 이후에 생성자 메소드가 나타나면
+	 * 즉시 스택에서 삭제 되므로 DUP 이후의 실행 상태는 필요 없음<br> 
+	 * 순서) NEW 객체 생성 -> DUP -> 매개변수 실행 -> 생성자 메소드(<init>) 호출
+	 * 
+	 * @author jmsohn
+	 */
+	enum NewInst {
+		NEW,
+		DUP;
+	}
 	
 	/**
 	 * 생성자
@@ -50,7 +101,7 @@ public class AppMethodWriter extends MethodVisitor {
 		this.methodName = methodName;
 		this.line = -1;
 		
-		this.newClassName = null;
+		this.newStack = new Stack<>();
 	}
 	
 	@Override
@@ -77,23 +128,44 @@ public class AppMethodWriter extends MethodVisitor {
 		super.visitInsn(Opcodes.NOP);
 		super.visitInsn(Opcodes.NOP);
 		
-		// NEW 클래스 명 설정
-		this.newClassName = type;
+		// NEW 클래스 생성 정보 추가
+		this.newStack.push(new New(type));
 	}
 	
 	@Override
 	public void visitInsn(int opcode) {
 		
-		if(opcode == Opcodes.DUP && this.newClassName != null) {
-			
-			// DUP 명령어 -> NOP 명령어 치환
-			super.visitInsn(Opcodes.NOP);
-			
-		} else {
-			
-			// 코드 치환하지 않음
+		// DUP 명령어가 아닐 경우 변환하지 않음
+		if(opcode != Opcodes.DUP) {
 			super.visitInsn(opcode);
+			return;
 		}
+
+		// new 스택이 비어 있을 경우 변환하지 않음
+		if(this.newStack.isEmpty() == false) {
+			super.visitInsn(opcode);
+			return;
+		}
+
+		// 최근 new 명령어 실행 상태가 NEW가 아닐 경우 변환하지 않음 
+		// 이미 DUP 을 변환한 상태임
+		New newInfo = this.newStack.pop();
+		if(newInfo.inst != NewInst.NEW) {
+			
+			this.newStack.push(newInfo);
+			
+			super.visitInsn(opcode);
+			return;
+		}
+		
+		// ----- 변환 작업 수행
+		
+		// DUP 명령어 -> NOP 명령어 치환
+		super.visitInsn(Opcodes.NOP);
+		
+		// DUP 명령어 상태로 변경하여 추가
+		newInfo.inst = NewInst.DUP;
+		this.newStack.push(newInfo);
 	}
 	
 	@Override
@@ -148,19 +220,19 @@ public class AppMethodWriter extends MethodVisitor {
 			super.visitInsn(Opcodes.NOP);
 			super.visitInsn(Opcodes.NOP);
 			
-		} else if(opcode == Opcodes.INVOKESPECIAL && this.newClassName != null) {
+		} else if(opcode == Opcodes.INVOKESPECIAL) {
 			
-			// NEW 클래스 명 초기화 
-			this.newClassName = null;
+			// New 스택에서 최상단 삭제 
+			this.newStack.pop();
 		}
 	}
 	
 	@Override
 	public void visitLineNumber(int line, Label start) {
-		
-		super.visitLineNumber(line, start);
-		
+
 		// 라인 설정 
 		this.line = line;
+		
+		super.visitLineNumber(line, start);
 	}
 }
