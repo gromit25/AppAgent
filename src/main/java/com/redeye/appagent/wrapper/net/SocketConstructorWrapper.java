@@ -23,7 +23,7 @@ public class SocketConstructorWrapper {
 	
 	public static Socket init(String host, int port) throws UnknownHostException, IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+		Log.writeLog(ApiType.TCP_SOCKET.getName()
 				, "CREATE", 0
 				, "TTC RIP=%s RPT=%d"
 				, host
@@ -33,7 +33,7 @@ public class SocketConstructorWrapper {
 		SocketWrapper socket = new SocketWrapper(host, port);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+		Log.writeLog(ApiType.TCP_SOCKET.getName()
 				, socket
 				, end - start
 				, "CNT " + SocketUtil.getSocketStatus(socket));
@@ -43,7 +43,7 @@ public class SocketConstructorWrapper {
 	
 	public static Socket init(InetAddress address, int port) throws UnknownHostException, IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+		Log.writeLog(ApiType.TCP_SOCKET.getName()
 				, "CREATE", 0
 				, "TTC RIP=%s RPT=%d"
 				, address.getHostName()
@@ -53,7 +53,7 @@ public class SocketConstructorWrapper {
 		SocketWrapper socket = new SocketWrapper(address, port);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+		Log.writeLog(ApiType.TCP_SOCKET.getName()
 				, socket
 				, end - start
 				, "CNT " + SocketUtil.getSocketStatus(socket));

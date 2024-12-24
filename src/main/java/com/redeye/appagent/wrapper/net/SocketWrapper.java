@@ -40,7 +40,7 @@ class SocketWrapper extends Socket {
 	public void connect(SocketAddress endpoint) throws IOException {
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+			Log.writeLog(ApiType.TCP_SOCKET.getName()
 					, this, 0
 					, "TTC RIP=%s RPT=%d"
 					, ((InetSocketAddress) endpoint).getHostName()
@@ -52,7 +52,7 @@ class SocketWrapper extends Socket {
 		long end = System.currentTimeMillis();
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+			Log.writeLog(ApiType.TCP_SOCKET.getName()
 					, this, end - start
 					, "CNT " + SocketUtil.getSocketStatus(this));
 		}
@@ -62,7 +62,7 @@ class SocketWrapper extends Socket {
 	public void connect(SocketAddress endpoint, int timeout) throws IOException {
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+			Log.writeLog(ApiType.TCP_SOCKET.getName()
 					, this, 0
 					, "TTC RIP=%s RPT=%d"
 					, ((InetSocketAddress) endpoint).getHostName()
@@ -74,7 +74,7 @@ class SocketWrapper extends Socket {
 		long end = System.currentTimeMillis();
 
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+			Log.writeLog(ApiType.TCP_SOCKET.getName()
 					, this
 					, end - start
 					, "CNT " + SocketUtil.getSocketStatus(this));
@@ -108,7 +108,7 @@ class SocketWrapper extends Socket {
 	
 	@Override
 	public void close() throws IOException {
-		Log.writeLog(ApiType.TCP_SOCKET.getApiTypeName()
+		Log.writeLog(ApiType.TCP_SOCKET.getName()
 				, this
 				, 0
 				, "CLS");
