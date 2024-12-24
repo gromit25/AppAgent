@@ -33,7 +33,7 @@ public class AppMethodWriter extends MethodVisitor {
 	 * new 명령어 스택<br>
 	 * 만일 new 가 중첩되어 있는 경우 -> new A(new B()), A, B 모두 대상일 경우<br>
 	 * new 명령어는 중첩된 형태로 명령어가 나타나기 때문에 FIFO 구조인 스택을 이용해 처리함<br>
-	 * ex) new A(new B())의 byte code:<br>  
+	 * ex) A a = new A(new B())의 byte code:<br>  
 	 * <pre>
 	 *   new #19 <com/test/A>
 	 *   dup
@@ -42,7 +42,6 @@ public class AppMethodWriter extends MethodVisitor {
 	 *   invokespecial #23 <com/test/B.<init> : ()V>
 	 *   invokespecial #24 <com/test/A.<init> : (Lcom/test/B;)V>
 	 *   astore_1
-	 *   return
 	 * </pre>
 	 * 
 	 */
