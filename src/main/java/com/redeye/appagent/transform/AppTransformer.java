@@ -68,8 +68,6 @@ public final class AppTransformer implements ClassFileTransformer {
 				return classfileBuffer;
 			}
 			
-			System.out.println("DEBUG 000:" + className);
-			
 			// 클래스 변환 수행
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 			AppClassWriter appWriter = new AppClassWriter(Opcodes.ASM9, cw, className); 

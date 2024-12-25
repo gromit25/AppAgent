@@ -164,10 +164,8 @@ public class MethodMap {
 		MethodPair methodPair = map.get(className + "." + methodName + signature);
 		
 		if(methodPair != null) {
-			System.out.println("### return " + methodPair.getAlterMethod() + " ###");
 			return methodPair.getAlterMethod();
 		} else {
-			System.out.println("### return null ###");
 			return null;
 		}
 	}

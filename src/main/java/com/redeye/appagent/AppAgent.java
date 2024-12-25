@@ -4,7 +4,6 @@ import java.lang.instrument.Instrumentation;
 
 import com.redeye.appagent.transform.AppTransformer;
 import com.redeye.appagent.transform.MethodMap;
-import com.redeye.appagent.wrapper.test.ClassAWrapper;
 
 /**
  * App Agent Main<br>
@@ -30,7 +29,7 @@ public final class AppAgent {
 			
 			// 메소드 변환맵 초기화
 			MethodMap.init(
-				ClassAWrapper.class
+				Class.forName("com.wrapper.ClassAWrapper")
 			);
 			
 			//-----------------------
