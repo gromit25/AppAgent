@@ -86,6 +86,6 @@ public class StringUtil {
 			return true;
 		}
 		
-		return str.isBlank();
+		return str.matches("\\s*");
 	}
 }

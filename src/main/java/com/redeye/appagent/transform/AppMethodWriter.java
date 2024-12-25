@@ -141,7 +141,7 @@ public class AppMethodWriter extends MethodVisitor {
 		}
 
 		// new 스택이 비어 있을 경우 변환하지 않음
-		if(this.newStack.isEmpty() == false) {
+		if(this.newStack.isEmpty() == true) {
 			super.visitInsn(opcode);
 			return;
 		}

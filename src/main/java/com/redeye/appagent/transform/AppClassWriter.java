@@ -39,6 +39,10 @@ public class AppClassWriter extends ClassVisitor {
 		String signature,
 		String[] exceptions
 	) {
+		
+		System.out.println("DEBUG 010:" + className);
+		System.out.println("DEBUG 011:" + methodName);
+		System.out.println("DEBUG 012:" + signature);
 
         MethodVisitor mv = super.visitMethod(access, methodName, desc, signature, exceptions);
         AppMethodWriter methodWriter = new AppMethodWriter(this.api, mv, className, methodName);

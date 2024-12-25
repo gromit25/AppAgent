@@ -150,7 +150,7 @@ public class MethodMap {
 		if(StringUtil.isBlank(methodName) == true) {
 			return null;
 		}
-		
+
 		if(StringUtil.isBlank(signature) == true) {
 			return null;
 		}
@@ -162,9 +162,12 @@ public class MethodMap {
 		
 		// 맵에서 변환 메소드 반환
 		MethodPair methodPair = map.get(className + "." + methodName + signature);
+		
 		if(methodPair != null) {
+			System.out.println("### return " + methodPair.getAlterMethod() + " ###");
 			return methodPair.getAlterMethod();
 		} else {
+			System.out.println("### return null ###");
 			return null;
 		}
 	}

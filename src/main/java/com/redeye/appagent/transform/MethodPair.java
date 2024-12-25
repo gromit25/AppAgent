@@ -66,6 +66,8 @@ class MethodPair {
 				targetMethod.value()
 			);
 			methodPair.alterMethod = MethodSpec.create(method);
+			
+			methodPairList.add(methodPair);
 		}
 		
 		return methodPairList;

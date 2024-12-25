@@ -42,7 +42,7 @@ public final class AppTransformer implements ClassFileTransformer {
 		ClassLoader loader, String className, Class<?> classBeingRedefined,
 		ProtectionDomain protectionDomain, byte[] classfileBuffer
 	) throws IllegalClassFormatException {
-		
+
 		// 클래스 변환 작업 수행 후 변환된 클래스 반환
 		return this.transformAPI(className, protectionDomain, classfileBuffer);
 	}
@@ -67,6 +67,8 @@ public final class AppTransformer implements ClassFileTransformer {
 			if(this.isSkip(className, protectionDomain) == true) {
 				return classfileBuffer;
 			}
+			
+			System.out.println("DEBUG 000:" + className);
 			
 			// 클래스 변환 수행
 			ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -119,11 +121,12 @@ public final class AppTransformer implements ClassFileTransformer {
 		//---------------------
 		// 클래스에 join 조인 여부 반환
 		for(String joinPackage: this.joinPackageSet) {
+			
 			if(className.startsWith(joinPackage) == true) {
-				return true;
+				return false;
 			}
 		}
 		
-		return false;
+		return true;
 	}
 }

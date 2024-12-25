@@ -34,7 +34,7 @@ public enum Config {
 	 * 조인할 패키지 명(, 로 나눔)
 	 * ex) com/redeye, com/prj
 	 */
-	JOIN_PACKAGE("JOIN_PACKAGE", ""),
+	JOIN_PACKAGE("JOIN_PACKAGE", "com/test"),
 	
 	//--- 로그 관련
 	

@@ -146,7 +146,8 @@ class MethodSpec {
 		MethodSpec methodSpec = new MethodSpec();
 		
 		// ---- 클래스 명 설정
-		methodSpec.setClassName(method.getDeclaringClass().getCanonicalName());
+		String className = method.getDeclaringClass().getCanonicalName().replaceAll("\\.", "/");
+		methodSpec.setClassName(className);
 		
 		// ---- 메소드 명 설정
 		methodSpec.setMethodName(method.getName());
@@ -168,6 +169,9 @@ class MethodSpec {
 		// 리턴 타입 추가
 		Class<?> rType = method.getReturnType();
 		signBuilder.append(Util.getType2ByteCode(rType));
+		
+		// 시그니쳐 설정
+		methodSpec.setSignature(signBuilder.toString());
 		
 		// ---- 생성된 메소드 스펙 반환
 		return methodSpec;
