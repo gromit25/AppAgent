@@ -294,7 +294,7 @@ public class Log {
 		StringBuilder stackBuilder = new StringBuilder("");
 		StackTraceElement[] stacks = t.getStackTrace();
 		
-		// 스택 목록의 스택을 하나씩 처리함
+		// 스택 목록의 스택 정보를 하나씩 추가함
 		for(StackTraceElement stack : stacks) {
 			
 			for(String tracePackage : tracePackages) {
@@ -302,13 +302,16 @@ public class Log {
 				// stack의 클래스 전체 이름이
 				// 설정된 trace package의 이름으로 시작되거나,
 				// LOG_TRACE_PACKAGES 설정값이 "*" 이면 트레이싱 정보 추가
-				if(stack.getClassName().startsWith(tracePackage)
-					|| Config.LOG_TRACE_PACKAGES.getValue().equals("*")) {
+				if(stack.getClassName().startsWith(tracePackage) == true
+					|| Config.LOG_TRACE_PACKAGES.getValue().equals("*") == true) {
 					
+					// 이전 스택 정보가 있으면,
+					// 꺽쇠(">") 추가
 					if(stackBuilder.length() != 0) {
 						stackBuilder.append(">");
 					}
 					
+					// 클래스명 획득
 					String className = stack.getClassName();
 					
 					// 패키지명 축약 설정되어 있으면, 클래스명의 패키지명을 축약형으로 만듦
@@ -329,7 +332,7 @@ public class Log {
 						className = classNameBuilder.toString();
 					}
 					
-					//
+					// 스택 클래스명과 메소드 명, 라인 수 추가
 					stackBuilder.append(className)
 						.append(".")
 						.append(stack.getMethodName())
