@@ -28,7 +28,7 @@ public enum Config {
 	/** CHARACTER SET */
 	SYSTEM_CHARSET("SYSTEM_CHARSET", Charset.defaultCharset().name()),
 	
-	//--- 조인 방식
+	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
 	/**
 	 * 조인할 패키지 명(, 로 나눔)
@@ -40,6 +40,12 @@ public enum Config {
 	
 	/** 로그 타입 */
 	LOG_TYPE("LOG_TYPE", "FILE"),
+	
+	/** 로그 Writer(Logger 1개당 로그 Writer 1개임) 의 개수 */
+	LOG_WRITER_COUNT("LOG_WRITER_COUNT", "5"),
+	
+	/** 로그 큐의 최대 개수 - 주의) 최대 개수 이상이 큐에 있을 경우 로그가 쌓이지 않음 */
+	LOG_MAX_QUEUE_COUNT("LOG_MAX_QUEUE_COUNT", "1000"),
 	
 	/** 스택 트레이스 정보를 남길 package 목록 */
 	LOG_TRACE_PACKAGES("LOG_TRACE_PACKAGES", ""),
