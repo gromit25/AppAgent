@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 
 import com.redeye.appagent.Config;
-import com.redeye.appagent.wrapper.ContentsApp;
+import com.redeye.appagent.builtins.ContentsApp;
 
 /**
  * 로깅 클래스
