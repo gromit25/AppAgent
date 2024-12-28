@@ -36,7 +36,7 @@ public class Log {
 		// --- 로깅 객체 생성 ---
 		
 		// LogWriter를 생성할 빌더 객체 생성
-		LogWriterBuilder writerBuilder = new LogWriterBuilder();
+		LogWriterBuilder writerBuilder = new LogWriterBuilder(Config.LOG_TYPE.getValue());
 		
 		// Logger 목록 객체 생성
 		loggers = new ArrayList<>();
