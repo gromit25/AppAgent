@@ -6,14 +6,13 @@ import java.sql.SQLException;
 
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
-import com.redeye.appagent.logger.ApiType;
 
 /**
  * JDBC 드라이버 관리자(java/sql/DriverManager) Wrapper
  * 
  * @author jmsohn
  */
-@TargetClass(type = ApiType.DB, cls = "java/sql/DriverManager")
+@TargetClass(type = "DB", cls = "java/sql/DriverManager")
 public class DriverManagerWrapper {
 	
 	/**

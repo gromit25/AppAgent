@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Map;
 
 import com.redeye.appagent.annotation.TargetClass;
-import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 import com.redeye.appagent.util.ByteUtil;
 

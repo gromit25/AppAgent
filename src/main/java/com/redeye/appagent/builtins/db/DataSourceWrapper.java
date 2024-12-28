@@ -7,14 +7,13 @@ import javax.sql.DataSource;
 
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
-import com.redeye.appagent.logger.ApiType;
 
 /**
  * 
  * 
  * @author jmsohn
  */
-@TargetClass(type = ApiType.DB, cls = "javax/sql/DataSource")
+@TargetClass(type = "DB", cls = "javax/sql/DataSource")
 public class DataSourceWrapper {
 
 	/**

@@ -11,7 +11,6 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 
 /**
@@ -40,11 +39,14 @@ class SocketWrapper extends Socket {
 	public void connect(SocketAddress endpoint) throws IOException {
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getName()
-					, this, 0
-					, "TTC RIP=%s RPT=%d"
-					, ((InetSocketAddress) endpoint).getHostName()
-					, ((InetSocketAddress) endpoint).getPort());
+			
+			Log.writeLog(Constants.SCK_CON,
+				this,
+				0,
+				"%s:%d",
+				((InetSocketAddress) endpoint).getHostName(),
+				((InetSocketAddress) endpoint).getPort()
+			);
 		}
 		
 		long start = System.currentTimeMillis();
@@ -52,9 +54,13 @@ class SocketWrapper extends Socket {
 		long end = System.currentTimeMillis();
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getName()
-					, this, end - start
-					, "CNT " + SocketUtil.getSocketStatus(this));
+			
+			Log.writeLog(
+				Constants.SCK_CON,
+				this,
+				end - start,
+				SocketUtil.getSocketStatus(this)
+			);
 		}
 	}
 	
@@ -62,11 +68,14 @@ class SocketWrapper extends Socket {
 	public void connect(SocketAddress endpoint, int timeout) throws IOException {
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getName()
-					, this, 0
-					, "TTC RIP=%s RPT=%d"
-					, ((InetSocketAddress) endpoint).getHostName()
-					, ((InetSocketAddress) endpoint).getPort());
+			Log.writeLog(
+				Constants.SCK_CON,
+				this,
+				0,
+				"%s:%d", 
+				((InetSocketAddress) endpoint).getHostName(),
+				((InetSocketAddress) endpoint).getPort()
+			);
 		}
 		
 		long start = System.currentTimeMillis();
@@ -74,10 +83,12 @@ class SocketWrapper extends Socket {
 		long end = System.currentTimeMillis();
 
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(ApiType.TCP_SOCKET.getName()
-					, this
-					, end - start
-					, "CNT " + SocketUtil.getSocketStatus(this));
+			Log.writeLog(
+				Constants.SCK_CON,
+				this,
+				end - start,
+				SocketUtil.getSocketStatus(this)
+			);
 		}
 	}
 	
@@ -108,10 +119,14 @@ class SocketWrapper extends Socket {
 	
 	@Override
 	public void close() throws IOException {
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
-				, this
-				, 0
-				, "CLS");
+		
+		Log.writeLog(
+			Constants.SCK_CLS, 
+			this,
+			0,
+			"CLS"
+		);
+		
 		super.close();
 	}
 }

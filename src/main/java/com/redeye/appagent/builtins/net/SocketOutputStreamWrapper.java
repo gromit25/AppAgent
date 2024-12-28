@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 import com.redeye.appagent.builtins.io.OutputStreamWrapper;
-import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 
 class SocketOutputStreamWrapper extends OutputStreamWrapper {
@@ -20,7 +19,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	@Override
 	public void write(int b) throws IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
 				, 0
 				, "WTS " + SocketUtil.getSocketStatus(this.socket));
@@ -29,7 +28,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 		super.write(b);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
 				, end - start
 				, "WCT 1");
@@ -38,7 +37,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	@Override
 	public void write(byte b[]) throws IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
 				, 0
 				, "WTS " + SocketUtil.getSocketStatus(this.socket));
@@ -47,7 +46,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 		super.write(b);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
 				, end - start
 				, "WCT " + b.length);
@@ -55,18 +54,18 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	
 	@Override
 	public void write(byte b[], int off, int len) throws IOException {
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
 				, 0
-				, "WTS " + SocketUtil.getSocketStatus(this.socket));
+				, SocketUtil.getSocketStatus(this.socket));
 		
 		long start = System.currentTimeMillis();
 		super.write(b, off, len);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_SND
 				, this.os
-				, end - start, "WCT " + len);
+				, end - start, Integer.toString(len));
 	}
 
 }

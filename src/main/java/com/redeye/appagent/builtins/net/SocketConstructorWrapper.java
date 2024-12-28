@@ -6,7 +6,6 @@ import java.net.Proxy;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 
 /**
@@ -23,9 +22,9 @@ public class SocketConstructorWrapper {
 	
 	public static Socket init(String host, int port) throws UnknownHostException, IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_CON
 				, "CREATE", 0
-				, "TTC RIP=%s RPT=%d"
+				, "%s:%d"
 				, host
 				, port);
 		
@@ -33,17 +32,17 @@ public class SocketConstructorWrapper {
 		SocketWrapper socket = new SocketWrapper(host, port);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_CON
 				, socket
 				, end - start
-				, "CNT " + SocketUtil.getSocketStatus(socket));
+				, SocketUtil.getSocketStatus(socket));
 		
 		return socket;
 	}
 	
 	public static Socket init(InetAddress address, int port) throws UnknownHostException, IOException {
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_CON
 				, "CREATE", 0
 				, "TTC RIP=%s RPT=%d"
 				, address.getHostName()
@@ -53,7 +52,7 @@ public class SocketConstructorWrapper {
 		SocketWrapper socket = new SocketWrapper(address, port);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.TCP_SOCKET.getName()
+		Log.writeLog(Constants.SCK_CON
 				, socket
 				, end - start
 				, "CNT " + SocketUtil.getSocketStatus(socket));

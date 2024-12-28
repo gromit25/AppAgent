@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
-import com.redeye.appagent.logger.ApiType;
 import com.redeye.appagent.logger.Log;
 
 /**
@@ -82,25 +81,25 @@ public class ConnectionWrapper implements Connection {
 	@Override
 	public void commit() throws SQLException {
 		
-		Log.writeLog(ApiType.DB.getName(), this.conn, 0, "CMT ST");
+		Log.writeLog(Constants.DB_CMT, this.conn, 0, "CMT ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.commit();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.DB.getName(), this.conn, end - start, "CMT ED");
+		Log.writeLog(Constants.DB_CMT, this.conn, end - start, "CMT ED");
 	}
 
 	@Override
 	public void rollback() throws SQLException {
 		
-		Log.writeLog(ApiType.DB.getName(), this.conn, 0, "RBK ST");
+		Log.writeLog(Constants.DB_RBK, this.conn, 0, "RBK ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.rollback();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(ApiType.DB.getName(), this.conn, end - start, "RBK ED");
+		Log.writeLog(Constants.DB_RBK, this.conn, end - start, "RBK ED");
 	}
 
 	@Override

@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.redeye.appagent.logger.ApiType;
-
 /**
  * 대상 클래스 어노테이션
  * 
@@ -21,7 +19,7 @@ public @interface TargetClass {
 	 * 
 	 * @return 대상 클래스 타입
 	 */
-	ApiType type();
+	String type();
 	
 	/**
 	 * 대상 클래스 명<br>

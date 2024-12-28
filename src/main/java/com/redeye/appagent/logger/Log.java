@@ -116,7 +116,7 @@ public class Log {
 	public static void writeAgentLog(String logFormat, Object... params) {
 		
 		writeLog(
-			ApiType.AGENT.getName(), ApiType.AGENT.getName(),
+			"AGENT", "AGENT",
 			(long)0,
 			logFormat, params
 		);
