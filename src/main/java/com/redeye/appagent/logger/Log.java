@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.redeye.appagent.Config;
 import com.redeye.appagent.builtins.ContentsApp;
@@ -16,7 +17,7 @@ import com.redeye.appagent.builtins.ContentsApp;
  */
 public class Log {
 	
-	/** Logger 에게 로그메시지를 전달할 큐 객체 */
+	/** 로그 메시지 큐 - Logger 에게 로그메시지를 전달할 큐 객체 */
 	private static BlockingQueue<String> outQ;
 	
 	/** Logger 목록 - Logger: 실제 로그를 저장 작업 수행 */
@@ -34,6 +35,9 @@ public class Log {
 	static {
 		
 		// --- 로깅 객체 생성 ---
+		
+		// 로그 메시지 큐 생성
+		outQ = new LinkedBlockingQueue<String>();
 		
 		// LogWriter를 생성할 빌더 객체 생성
 		LogWriterBuilder writerBuilder = new LogWriterBuilder(Config.LOG_TYPE.getValue());
