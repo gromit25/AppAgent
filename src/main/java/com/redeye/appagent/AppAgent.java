@@ -70,6 +70,6 @@ public final class AppAgent {
 	 * @return 시스템 환경 정보
 	 */
 	private static String getSysInfo() {
-		return Config.SYSTEM_PID.getValue() + "@" + Config.SYSTEM_ID.getValue();
+		return Config.SYSTEM_PID.getValue() + "@" + Config.SYSTEM_NAME.getValue();
 	}
 }
