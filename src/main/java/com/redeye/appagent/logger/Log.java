@@ -350,4 +350,18 @@ public class Log {
 		
 		return stackBuilder.toString();
 	}
+	
+	/**
+	 * 출력 큐가 비어 있는지 여부 반환
+	 * 
+	 * @return 출력 큐가 비어 있는지 여부
+	 */
+	public static boolean isEmpty() {
+		
+		if(outQ == null) {
+			return true;
+		}
+		
+		return outQ.isEmpty();
+	}
 }

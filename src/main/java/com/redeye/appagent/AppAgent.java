@@ -37,10 +37,19 @@ public final class AppAgent {
 			Log.write("APP_START", 0, getSysInfo());
 			
 			// App 종료 로깅
-			// -> Shutdown 될때 호출됨
 			Runtime.getRuntime().addShutdownHook(new Thread() {
+				
 				public void run() {
+					
+					// App 종료 메시지 출력
 					Log.write("APP_END", 0, getSysInfo());
+					
+					// 출력큐가 비어 있지 않으면 잠시 대기 후 종료
+					if(Log.isEmpty() == false) {
+						try {
+							Thread.sleep(500);
+						} catch(Exception ex) {}
+					}
 				}
 			});
 			
