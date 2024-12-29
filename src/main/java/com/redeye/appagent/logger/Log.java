@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import com.redeye.appagent.Config;
 import com.redeye.appagent.builtins.ContentsApp;
+import com.redeye.appagent.util.StringUtil;
 
 /**
  * 로깅 클래스
@@ -60,6 +61,7 @@ public class Log {
 			System.out.println("Invalid Value(LOG_WRITER_COUNT):" + Config.LOG_WRITER_COUNT.getValue());
 			System.out.println("set default LOG_WRITER_COUNT = 5");
 			
+			// default 값 설정
 			loggerCount = 5;
 		}
 		
@@ -97,10 +99,13 @@ public class Log {
 		
 		// 스택 트레이스 정보를 남길 package 목록 초기화
 		tracePackages = new HashSet<>();
-		String[] tracePackageAry = Config.LOG_TRACE_PACKAGES.getValue().split("[ \\t]*,[ \\t]*");
 		
-		for(String tracePackage: tracePackageAry) {
-			tracePackages.add(tracePackage);
+		if(StringUtil.isBlank(Config.LOG_TRACE_PACKAGES.getValue()) == false) {
+			String[] tracePackageAry = Config.LOG_TRACE_PACKAGES.getValue().split("[ \\t]*,[ \\t]*");
+			
+			for(String tracePackage: tracePackageAry) {
+				tracePackages.add(tracePackage);
+			}
 		}
 		
 		// 패키지 명 줄임 여부 설정
