@@ -81,25 +81,25 @@ public class ConnectionWrapper implements Connection {
 	@Override
 	public void commit() throws SQLException {
 		
-		Log.writeLog(Constants.DB_CMT, this.conn, 0, "CMT ST");
+		Log.write(Constants.DB_CMT, this.conn, 0, "CMT ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.commit();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.DB_CMT, this.conn, end - start, "CMT ED");
+		Log.write(Constants.DB_CMT, this.conn, end - start, "CMT ED");
 	}
 
 	@Override
 	public void rollback() throws SQLException {
 		
-		Log.writeLog(Constants.DB_RBK, this.conn, 0, "RBK ST");
+		Log.write(Constants.DB_RBK, this.conn, 0, "RBK ST");
 		
 		long start = System.currentTimeMillis();
 		this.conn.rollback();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.DB_RBK, this.conn, end - start, "RBK ED");
+		Log.write(Constants.DB_RBK, this.conn, end - start, "RBK ED");
 	}
 
 	@Override

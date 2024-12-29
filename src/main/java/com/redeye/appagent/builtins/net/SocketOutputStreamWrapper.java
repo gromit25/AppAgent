@@ -19,7 +19,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	@Override
 	public void write(int b) throws IOException {
 		
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, 0
 				, "WTS " + SocketUtil.getSocketStatus(this.socket));
@@ -28,7 +28,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 		super.write(b);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, end - start
 				, "WCT 1");
@@ -37,7 +37,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	@Override
 	public void write(byte b[]) throws IOException {
 		
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, 0
 				, "WTS " + SocketUtil.getSocketStatus(this.socket));
@@ -46,7 +46,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 		super.write(b);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, end - start
 				, "WCT " + b.length);
@@ -54,7 +54,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 	
 	@Override
 	public void write(byte b[], int off, int len) throws IOException {
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, 0
 				, SocketUtil.getSocketStatus(this.socket));
@@ -63,7 +63,7 @@ class SocketOutputStreamWrapper extends OutputStreamWrapper {
 		super.write(b, off, len);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_SND
+		Log.write(Constants.SCK_SND
 				, this.os
 				, end - start, Integer.toString(len));
 	}

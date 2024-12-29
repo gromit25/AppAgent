@@ -49,11 +49,14 @@ class Logger implements Runnable {
 				
 				// 큐에서 로그 메시지 획득
 				while(logMsg == null) {
-					logMsg = this.inQ.poll(1000, TimeUnit.MILLISECONDS);
+					logMsg = this.inQ.poll(10, TimeUnit.MILLISECONDS);
 				}
 				
 				// 로그 메시지 write
 				this.writer.write(logMsg);
+				
+				// 초기화
+				logMsg = null;
 				
 			} catch(Exception ex) {
 				ex.printStackTrace();

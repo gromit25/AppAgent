@@ -19,7 +19,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 	@Override
 	public int read() throws IOException {
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, 0
 				, SocketUtil.getSocketStatus(this.socket));
@@ -28,7 +28,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 		int read = super.read();
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, end - start
 				, Integer.toString(read));
@@ -39,7 +39,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 	@Override
 	public int read(byte[] b) throws IOException {
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, 0
 				, SocketUtil.getSocketStatus(this.socket));
@@ -48,7 +48,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 		int readCnt = super.read(b);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, end - start
 				, "RCT " + readCnt);
@@ -59,7 +59,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 	@Override
 	public int read(byte[] b, int off, int len) throws IOException {
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, 0
 				, SocketUtil.getSocketStatus(this.socket));
@@ -68,7 +68,7 @@ class SocketInputStreamWrapper extends InputStreamWrapper {
 		int readCnt = super.read(b, off, len);
 		long end = System.currentTimeMillis();
 		
-		Log.writeLog(Constants.SCK_RCV
+		Log.write(Constants.SCK_RCV
 				, this.is
 				, end - start
 				, Integer.toString(readCnt));

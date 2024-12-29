@@ -119,7 +119,7 @@ public class Log {
 	 */
 	public static void writeAgentLog(String logFormat, Object... params) {
 		
-		writeLog(
+		write(
 			"AGENT", "AGENT",
 			(long)0,
 			logFormat, params
@@ -134,14 +134,14 @@ public class Log {
 	 * @param logFormat 로그 형식
 	 * @param params 로그 파라미터
 	 */
-	public static void writeLog(
+	public static void write(
 		String apiType,
 		Object obj,
 		String logFormat,
 		Object... params
 	) {
 		
-		writeLog(
+		write(
 			apiType, obj,
 			(long)0,
 			logFormat, params
@@ -157,14 +157,14 @@ public class Log {
 	 * @param logFormat 로그 형식
 	 * @param params 로그 파라미터
 	 */
-	public static void writeLog(
+	public static void write(
 		String apiType,
 		Object obj,
 		long elapsedTime,
 		String logFormat,
 		Object... params
 	) {
-
+		
 		// 입력값 검사
 		if(logFormat == null) return;
 		
