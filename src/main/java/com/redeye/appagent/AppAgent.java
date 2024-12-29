@@ -2,6 +2,7 @@ package com.redeye.appagent;
 
 import java.lang.instrument.Instrumentation;
 
+import com.redeye.appagent.logger.Log;
 import com.redeye.appagent.transform.AppTransformer;
 import com.redeye.appagent.transform.MethodMap;
 
@@ -32,6 +33,17 @@ public final class AppAgent {
 				Class.forName("com.wrapper.ClassAWrapper")
 			);
 			
+			// App 기동 로깅
+			Log.write("APP_START", 0, getSysInfo());
+			
+			// App 종료 로깅
+			// -> Shutdown 될때 호출됨
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				public void run() {
+					Log.write("APP_END", 0, getSysInfo());
+				}
+			});
+			
 			//-----------------------
 			// Transformer 등록하여 변환클래스 등록
 			AppTransformer transformer = new AppTransformer();
@@ -41,5 +53,14 @@ public final class AppAgent {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 시스템 환경 정보 반환
+	 * 
+	 * @return 시스템 환경 정보
+	 */
+	private static String getSysInfo() {
+		return Config.SYSTEM_PID.getValue() + "@" + Config.SYSTEM_ID.getValue();
 	}
 }

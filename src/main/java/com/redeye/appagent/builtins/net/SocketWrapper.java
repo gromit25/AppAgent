@@ -40,7 +40,7 @@ class SocketWrapper extends Socket {
 		
 		if(endpoint instanceof InetSocketAddress) {
 			
-			Log.writeLog(Constants.SCK_CON,
+			Log.write(Constants.SCK_CON,
 				this,
 				0,
 				"%s:%d",
@@ -55,7 +55,7 @@ class SocketWrapper extends Socket {
 		
 		if(endpoint instanceof InetSocketAddress) {
 			
-			Log.writeLog(
+			Log.write(
 				Constants.SCK_CON,
 				this,
 				end - start,
@@ -68,7 +68,7 @@ class SocketWrapper extends Socket {
 	public void connect(SocketAddress endpoint, int timeout) throws IOException {
 		
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(
+			Log.write(
 				Constants.SCK_CON,
 				this,
 				0,
@@ -83,7 +83,7 @@ class SocketWrapper extends Socket {
 		long end = System.currentTimeMillis();
 
 		if(endpoint instanceof InetSocketAddress) {
-			Log.writeLog(
+			Log.write(
 				Constants.SCK_CON,
 				this,
 				end - start,
@@ -120,7 +120,7 @@ class SocketWrapper extends Socket {
 	@Override
 	public void close() throws IOException {
 		
-		Log.writeLog(
+		Log.write(
 			Constants.SCK_CLS, 
 			this,
 			0,
