@@ -31,7 +31,7 @@ public class Log {
 	private static Set<String> tracePackages;
 	
 	/** 패키지 명 줄임 여부 */
-	private static boolean isShortPackage; 
+	private static boolean isShortPackage;
 	
 	static {
 		

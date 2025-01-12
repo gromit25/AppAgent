@@ -17,16 +17,16 @@ public enum Config {
 	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/appagent"),
 
 	/** system 구분자(id) */
-	SYSTEM_ID("SYSTEM_ID", "N/A"),
+	SYSTEM_ID("AGENT_SYSTEM_ID", "N/A"),
 
 	/** system server name */
-	SYSTEM_NAME("SYSTEM_NAME", "N/A"),
+	SYSTEM_NAME("AGENT_SYSTEM_NAME", "N/A"),
 	
 	/** system process id */
-	SYSTEM_PID("SYSTEM_PID", "N/A"),
+	SYSTEM_PID("AGENT_SYSTEM_PID", "N/A"),
 	
 	/** CHARACTER SET */
-	SYSTEM_CHARSET("SYSTEM_CHARSET", Charset.defaultCharset().name()),
+	SYSTEM_CHARSET("AGENT_SYSTEM_CHARSET", Charset.defaultCharset().name()),
 	
 	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
@@ -34,41 +34,44 @@ public enum Config {
 	 * 조인할 패키지 명(, 로 나눔)
 	 * ex) com/redeye, com/prj
 	 */
-	JOIN_PACKAGE("JOIN_PACKAGE", "com/test"),
+	JOIN_PACKAGE("AGENT_JOIN_PACKAGE", "com/test"),
 	
 	//--- 로그 관련
 	
 	/** 로그 타입 */
-	LOG_TYPE("LOG_TYPE", "FILE"),
+	LOG_TYPE("AGENT_LOG_TYPE", "FILE"),
+	
+	/** 출력 로그 포맷 */
+	LOG_FORMAT("AGENT_LOG_FORMAT", ""),
 	
 	/** 로그 Writer(Logger 1개당 로그 Writer 1개임) 의 개수 */
-	LOG_WRITER_COUNT("LOG_WRITER_COUNT", "5"),
+	LOG_WRITER_COUNT("AGENT_LOG_WRITER_COUNT", "5"),
 	
 	/** 로그 큐의 최대 개수 - 주의) 최대 개수 이상이 큐에 있을 경우 로그가 쌓이지 않음 */
-	LOG_MAX_QUEUE_COUNT("LOG_MAX_QUEUE_COUNT", "1000"),
+	LOG_MAX_QUEUE_COUNT("AGENT_LOG_MAX_QUEUE_COUNT", "1000"),
 	
 	/** 스택 트레이스 정보를 남길 package 목록 */
-	LOG_TRACE_PACKAGES("LOG_TRACE_PACKAGES", ""),
+	LOG_TRACE_PACKAGES("AGENT_LOG_TRACE_PACKAGES", ""),
 	
 	/** 패키지 명 줄임 여부 */
-	LOG_SHORT_PACKAGE_YN("LOG_SHORT_PACKAGE", "N"),
+	LOG_SHORT_PACKAGE_YN("AGENT_LOG_SHORT_PACKAGE", "N"),
 	
 	//--- 로그 타입: 파일 관련 설정
 	
 	/** 로그 파일 명 */
-	LOG_FILE_PATH("LOG_FILE_PATH", "./agent.log"),
+	LOG_FILE_PATH("AGENT_LOG_FILE_PATH", "./agent.log"),
 	
 	/** 로그 파일 관리자의 수행 주기(단위: 초) */
-	LOG_FILE_MGR_PERIOD("LOG_FILE_MGR_PERIOD", "10"),
+	LOG_FILE_MGR_PERIOD("AGENT_LOG_FILE_MGR_PERIOD", "10"),
 	
 	/**
 	 * 로그 파일의 최대치(단위: MiB)<br>
 	 * 최대치가 넘을 경우 현재 로그 파일은 백업함
 	 */
-	LOG_FILE_MGR_MAXSIZE("LOG_FILE_MGR_MAX_SIZE", "1024"), // default 1GiB
+	LOG_FILE_MGR_MAXSIZE("AGENT_LOG_FILE_MGR_MAX_SIZE", "1024"), // default 1GiB
 	
 	/** 유지할 백업 로그 파일의 개수 */
-	LOG_FILE_MGR_BACKUP_COUNT("LOG_FILE_MGR_BACKUP_COUNT", "2");
+	LOG_FILE_MGR_BACKUP_COUNT("AGENT_LOG_FILE_MGR_BACKUP_COUNT", "2");
 	
 	//---------------------------
 	

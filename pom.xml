@@ -147,6 +147,14 @@
       <scope>provided</scope>
     </dependency>
     
+	<dependency>
+		<groupId>com.redeye</groupId>
+		<artifactId>TextGen</artifactId>
+		<version>0.1</version>
+		<scope>system</scope>
+		<systemPath>C:/apps/textgen/TextGen-0.1.jar</systemPath>
+	</dependency>
+
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
