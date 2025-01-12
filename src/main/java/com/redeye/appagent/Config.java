@@ -14,16 +14,16 @@ import lombok.Getter;
 public enum Config {
 	
 	/** agent 의 패키지명 */
-	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/appagent"),
+	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/appagent", false),
 
 	/** system 구분자(id) */
 	SYSTEM_ID("AGENT_SYSTEM_ID", "N/A"),
 
-	/** system server name */
-	SYSTEM_NAME("AGENT_SYSTEM_NAME", "N/A"),
+	/** system server name: 시스템에 설정되어 있는 값 */
+	SYSTEM_NAME("AGENT_SYSTEM_NAME", "N/A", false),
 	
 	/** system process id */
-	SYSTEM_PID("AGENT_SYSTEM_PID", "N/A"),
+	SYSTEM_PID("AGENT_SYSTEM_PID", "N/A", false),
 	
 	/** CHARACTER SET */
 	SYSTEM_CHARSET("AGENT_SYSTEM_CHARSET", Charset.defaultCharset().name()),
@@ -95,11 +95,17 @@ public enum Config {
 			}
 		}
 		
-		// 환경 변수에서 설정 값을 읽어옴
+		// 환경 변수에서 설정 값을 읽어와 값을 설정
 		Config[] configs = Config.values();
 		
 		for(Config config: configs) {
 			
+			// 환경 변수로 설정 불가인 변수인 경우 스킵함
+			if(config.isConfigurable() == false) {
+				continue;
+			}
+			
+			// 환경 변수의 값을 가져옴
 			String value = System.getenv(config.key);
 			
 			// 설정된 값이 있을 경우에만 설정
@@ -118,14 +124,30 @@ public enum Config {
 	@Getter
 	protected String value;
 	
+	/** 환경 변수 설정 가능 여부 */
+	@Getter
+	protected boolean configurable;
+
 	/**
-	 * 설정 생성자
+	 * 생성자
+	 * 
+	 * @param key 환경 변수 키
+	 * @param value 환경 변수 디폴트 값
+	 * @param configurable 환경 변수 설정 가능 여부
+	 */
+	private Config(String key, String defaultValue, boolean configurable) {
+		this.key = key;
+		this.value = defaultValue;
+		this.configurable = configurable;
+	}
+
+	/**
+	 * 생성자
 	 * 
 	 * @param key 환경 변수 키
 	 * @param value 환경 변수 디폴트 값
 	 */
 	private Config(String key, String defaultValue) {
-		this.key = key;
-		this.value = defaultValue;
+		this(key, defaultValue, true);
 	}
 }
