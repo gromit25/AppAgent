@@ -21,6 +21,38 @@
 
   </properties>
   
+ <dependencies>
+  
+    <dependency>
+      <groupId>org.ow2.asm</groupId>
+      <artifactId>asm</artifactId>
+      <version>9.7.1</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.28</version>
+      <scope>provided</scope>
+    </dependency>
+    
+	<dependency>
+		<groupId>com.redeye</groupId>
+		<artifactId>TextGen</artifactId>
+		<version>0.1</version>
+		<scope>system</scope>
+		<systemPath>C:/apps/textgen/TextGen-0.1.jar</systemPath>
+	</dependency>
+
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    
+  </dependencies>
+  
   <build>
   <plugins>
     
@@ -131,36 +163,5 @@
     
   </plugins>
   </build>
-  
-  <dependencies>
-  
-    <dependency>
-      <groupId>org.ow2.asm</groupId>
-      <artifactId>asm</artifactId>
-      <version>9.7.1</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.28</version>
-      <scope>provided</scope>
-    </dependency>
-    
-	<dependency>
-		<groupId>com.redeye</groupId>
-		<artifactId>TextGen</artifactId>
-		<version>0.1</version>
-		<scope>system</scope>
-		<systemPath>C:/apps/textgen/TextGen-0.1.jar</systemPath>
-	</dependency>
-
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-    
-  </dependencies>
+ 
 </project>
