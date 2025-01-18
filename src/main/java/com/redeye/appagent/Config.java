@@ -14,19 +14,42 @@ import lombok.Getter;
 public enum Config {
 	
 	/** agent 의 패키지명 */
-	AGENT_PACKAGE("AGENT_PACKAGE", "com/redeye/appagent", "agent의 패키지명", false),
+	AGENT_PACKAGE(
+		"AGENT_PACKAGE",
+		"com/redeye/appagent",
+		"agent의 패키지명",
+		false
+	),
 
 	/** system 구분자(id) */
-	SYSTEM_ID("AGENT_SYSTEM_ID", "N/A", "system 구분자"),
+	SYSTEM_ID(
+		"AGENT_SYSTEM_ID",
+		"N/A",
+		"system 구분자"
+	),
 
 	/** system server name: 시스템에 설정되어 있는 값 */
-	SYSTEM_NAME("AGENT_SYSTEM_NAME", "N/A", "system server name", false),
+	SYSTEM_NAME(
+		"AGENT_SYSTEM_NAME",
+		"N/A",
+		"system server name",
+		false
+	),
 	
 	/** system process id */
-	SYSTEM_PID("AGENT_SYSTEM_PID", "N/A", "system process id", false),
+	SYSTEM_PID(
+		"AGENT_SYSTEM_PID",
+		"N/A",
+		"system process id",
+		false
+	),
 	
 	/** CHARACTER SET */
-	SYSTEM_CHARSET("AGENT_SYSTEM_CHARSET", Charset.defaultCharset().name(), "character set"),
+	SYSTEM_CHARSET(
+		"AGENT_SYSTEM_CHARSET",
+		Charset.defaultCharset().name(),
+		"character set"
+	),
 	
 	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
@@ -34,7 +57,11 @@ public enum Config {
 	 * 조인할 패키지 명(, 로 나눔)
 	 * ex) com/redeye, com/prj
 	 */
-	JOIN_PACKAGE("AGENT_JOIN_PACKAGE", "com/test", "조인할 패키지 명(, 로 나눔)"),
+	JOIN_PACKAGE(
+		"AGENT_JOIN_PACKAGE",
+		"com/test",
+		"조인할 패키지 명(, 로 나눔)"
+	),
 	
 	//--- 로그 관련
 	
@@ -42,39 +69,86 @@ public enum Config {
 	LOG_TYPE("AGENT_LOG_TYPE", "FILE", "로그 타입"),
 	
 	/** 출력 로그 템플릿 */
-	LOG_TEMPLATE("AGENT_LOG_TEMPLATE", "", "출력 로그 템플릿"),
+	LOG_TEMPLATE(
+		"AGENT_LOG_TEMPLATE",
+		"${curTime}"
+		+ "\t${elapsedTime}"
+		+ "\t${pid}"
+		+ "\t${txId}"
+		+ "\t${apiType}"
+		+ "\t${objId}"
+		+ "\t${message}"
+		+ "\t${stackTrace}",
+		"출력 로그 템플릿"
+	),
 	
 	/** 출력 로그 생성 실패시 로그 메시지 */
-	LOG_TEMPLATE_FAIL_MESSAGE("AGENT_LOG_TEMPLATE_FAIL_MESSAGE", "can't generate log message.", "Template 로그 생성 실패시 로그 메시지"),
+	LOG_TEMPLATE_FAIL_MESSAGE(
+		"AGENT_LOG_TEMPLATE_FAIL_MESSAGE",
+		"can't generate log message.",
+		"Template 로그 생성 실패시 로그 메시지"
+	),
 	
 	/** 로그 Writer(Logger 1개당 로그 Writer 1개임) 의 개수 */
-	LOG_WRITER_COUNT("AGENT_LOG_WRITER_COUNT", "5", "로그 Writer(Logger 1개당 로그 Writer 1개임) 의 개수"),
+	LOG_WRITER_COUNT(
+		"AGENT_LOG_WRITER_COUNT",
+		"5",
+		"로그 Writer(Logger 1개당 로그 Writer 1개임) 의 개수"
+	),
 	
 	/** 로그 큐의 최대 개수 - 주의) 최대 개수 이상이 큐에 있을 경우 로그가 쌓이지 않음 */
-	LOG_MAX_QUEUE_COUNT("AGENT_LOG_MAX_QUEUE_COUNT", "1000", "로그 큐의 최대 개수 - 주의) 최대 개수 이상이 큐에 있을 경우 로그가 쌓이지 않음"),
+	LOG_MAX_QUEUE_COUNT(
+		"AGENT_LOG_MAX_QUEUE_COUNT",
+		"1000",
+		"로그 큐의 최대 개수 - 주의) 최대 개수 이상이 큐에 있을 경우 로그가 쌓이지 않음"
+	),
 	
 	/** 스택 트레이스 정보를 남길 package 목록 */
-	LOG_TRACE_PACKAGES("AGENT_LOG_TRACE_PACKAGES", "", "스택 트레이스 정보를 남길 package 목록"),
+	LOG_TRACE_PACKAGES(
+		"AGENT_LOG_TRACE_PACKAGES",
+		"",
+		"스택 트레이스 정보를 남길 package 목록"
+	),
 	
 	/** 패키지 명 줄임 여부 */
-	LOG_SHORT_PACKAGE_YN("AGENT_LOG_SHORT_PACKAGE", "N", "패키지 명 줄임 여부"),
+	LOG_SHORT_PACKAGE_YN(
+		"AGENT_LOG_SHORT_PACKAGE",
+		"N",
+		"패키지 명 줄임 여부"
+	),
 	
 	//--- 로그 타입: 파일 관련 설정
 	
 	/** 로그 파일 명 */
-	LOG_FILE_PATH("AGENT_LOG_FILE_PATH", "./agent.log", "로그 파일 명"),
+	LOG_FILE_PATH(
+		"AGENT_LOG_FILE_PATH",
+		"./agent.log",
+		"로그 파일 명"
+	),
 	
 	/** 로그 파일 관리자의 수행 주기(단위: 초) */
-	LOG_FILE_MGR_PERIOD("AGENT_LOG_FILE_MGR_PERIOD", "10", "로그 파일 관리자의 수행 주기(단위: 초)"),
+	LOG_FILE_MGR_PERIOD(
+		"AGENT_LOG_FILE_MGR_PERIOD",
+		"10",
+		"로그 파일 관리자의 수행 주기(단위: 초)"
+	),
 	
 	/**
 	 * 로그 파일의 최대치(단위: MiB)<br>
 	 * 최대치가 넘을 경우 현재 로그 파일은 백업함
 	 */
-	LOG_FILE_MGR_MAXSIZE("AGENT_LOG_FILE_MGR_MAX_SIZE", "1024", "로그 파일의 최대치(단위: MiB)"),
+	LOG_FILE_MGR_MAXSIZE(
+		"AGENT_LOG_FILE_MGR_MAX_SIZE",
+		"1024",
+		"로그 파일의 최대치(단위: MiB)"
+	),
 	
 	/** 유지할 백업 로그 파일의 개수 */
-	LOG_FILE_MGR_BACKUP_COUNT("AGENT_LOG_FILE_MGR_BACKUP_COUNT", "2", "유지할 백업 로그 파일의 개수");
+	LOG_FILE_MGR_BACKUP_COUNT(
+		"AGENT_LOG_FILE_MGR_BACKUP_COUNT",
+		"2",
+		"유지할 백업 로그 파일의 개수"
+	);
 	
 	//---------------------------
 	
