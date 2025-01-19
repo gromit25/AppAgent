@@ -1,8 +1,10 @@
 package com.redeye.appagent.logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -10,6 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.redeye.appagent.Config;
 import com.redeye.appagent.builtins.ContentsApp;
 import com.redeye.appagent.util.StringUtil;
+import com.redeye.textgen.TextGen;
 
 /**
  * 로깅 클래스
@@ -23,6 +26,9 @@ public class Log {
 	
 	/** Logger 목록 - Logger: 실제 로그를 저장 작업 수행 */
 	private static List<Logger> loggers;
+	
+	/** log 생성 포맷 */
+	private static TextGen logTemplate;
 	
 	/** 큐의 최대 로그 메시지 개수 */
 	private static int maxLogCount;
@@ -58,6 +64,7 @@ public class Log {
 			
 		} catch(Exception ex) {
 			
+			System.out.println("AGENT MESSAGE:");
 			System.out.println("Invalid Value(LOG_WRITER_COUNT):" + Config.LOG_WRITER_COUNT.getValue());
 			System.out.println("set default LOG_WRITER_COUNT = 5");
 			
@@ -89,6 +96,7 @@ public class Log {
 			
 		} catch(Exception ex) {
 			
+			System.out.println("AGENT MESSAGE:");
 			System.out.println("Invalid Value(LOG_MAX_QUEUE_COUNT):" + Config.LOG_MAX_QUEUE_COUNT.getValue());
 			System.out.println("set default LOG_MAX_QUEUE_COUNT = 1000");
 			
@@ -96,6 +104,19 @@ public class Log {
 		}
 		
 		// --- 로그 메시지 생성 관련 설정 --- 
+		
+		// 로그 템플릿 객체 생성
+		try {
+			
+			logTemplate = TextGen.compile(Config.LOG_TEMPLATE.getValue());
+			
+		} catch(Exception ex) {
+			
+			System.out.println("AGENT MESSAGE:");
+			System.out.println("Invalid Value(LOG_TEMPLATE):" + Config.LOG_TEMPLATE.getValue());
+			
+			logTemplate = null;
+		}
 		
 		// 스택 트레이스 정보를 남길 package 목록 초기화
 		tracePackages = new HashSet<>();
@@ -218,23 +239,67 @@ public class Log {
 		
 		// 트랜잭션 ID가 없으면 만듦
 		if(ContentsApp.getTxId() == null) {
-			String newTxId = "TX_" + System.currentTimeMillis() + "_" + Thread.currentThread().getId();
+			String newTxId = System.currentTimeMillis() + "_" + Thread.currentThread().getId();
 			ContentsApp.setTxId(newTxId);
 		}
 		
 		// 호출API별메시지 조립
-		String log = logFormat;
+		String logMsg = logFormat;
 		if(params != null && params.length > 0) {
-			log = String.format(log, params);
+			logMsg = String.format(logMsg, params);
 		}
 		
 		// 객체식별자를 만듦
-		// 객체식별자 = 객체해시값@클래스명
-		// 클래스명은 패키지명을 포함하지 않음
-		// 만일 객체가 스트링 타입일 경우 그냥 그대로 사용 : STATIC, CREATE 등의 경우
-		// 만일 객체가 null 일 경우 NA로 표시
-		// 만일 클래스가 Agent의 Class일 경우(ex. Wrapper), Agent 클래스가 아닌 상위 클래스를 표기
-		//    최상위까지 왔는데 클래스가 없는 경우 NONE으로 표시
+		String objId = makeObjId(obj);
+		
+		// 스택트레이스를 가져옴
+		String stackTraceMsg = makeStackTraceMsg(Thread.currentThread());
+		
+		// 로그 템플릿에서 사용할 데이터 설정
+		Map<String, Object> valueMap = new HashMap<>();
+		
+		valueMap.put("curTime", (Long)curTime);
+		valueMap.put("elapsedTime", (Long)elapsedTime);
+		valueMap.put("pid", Config.SYSTEM_PID.getValue());
+		valueMap.put("txId", ContentsApp.getTxId());
+		valueMap.put("apiType", apiType);
+		valueMap.put("objId", objId);
+		valueMap.put("message", logMsg);
+		valueMap.put("stackTrace", stackTraceMsg);
+		
+		// 로그 템플릿을 통해 로그 메시지 생성
+		String log = null;
+		
+		try {
+			
+			log = logTemplate.gen(valueMap);
+			
+		} catch(Exception ex) {
+			
+			// 오류 발생시 표시할 메시지
+			log = Config.LOG_TEMPLATE_FAIL_MESSAGE.getValue();
+		}
+		
+		// 로그 종료 문자열([ASCII 코드 RS(Record Separator)] + "\r\n") 추가
+		log += "\u001E\r\n";
+		
+		return log;
+	}
+	
+	/**
+	 * 객체식별자 생성 및 반환<br>
+	 * 객체식별자 = 객체해시값@클래스명<br>
+	 * 클래스명은 패키지명을 포함하지 않음<br>
+	 * 만일 객체가 스트링 타입일 경우 그냥 그대로 사용 : STATIC, CREATE 등의 경우<br>
+	 * 만일 객체가 null 일 경우 N/A로 표시<br>
+	 * 만일 클래스가 Agent의 Class일 경우(ex. Wrapper), Agent 클래스가 아닌 상위 클래스를 표기<br>
+	 *    최상위까지 왔는데 클래스가 없는 경우 NONE으로 표시
+	 *    
+	 * @param obj 객체식별자를 생성할 객체
+	 * @return 객체 아이디
+	 */
+	private static String makeObjId(Object obj) {
+		
 		String objId = "N/A";
 		if(obj != null) {
 			
@@ -259,33 +324,7 @@ public class Log {
 			}
 		}
 		
-		// 스택트레이스를 가져옴
-		String stackTraceMsg = makeStackTraceMsg(Thread.currentThread());
-		
-		// 추가 정보를 이용해 로그 생성
-		// format)
-		// [시간(long값)]\t[수행시간(ms)]\t[프로세스ID]\t[트랜잭션ID]\t[호출API종류]\t[객체식별자]\t[스택트레이스]\t[[호출API별메시지]\u001E]
-		StringBuilder logBuilder = new StringBuilder("");
-		logBuilder
-			.append(curTime)				//[시간(long값)]
-			.append("\t")
-			.append(elapsedTime)			//[수행시간(ms)]
-			.append("\t")
-			.append(Config.SYSTEM_PID.getValue())	//[프로세스ID]
-			.append("\t")
-			.append(ContentsApp.getTxId())	//[트랜잭션ID]
-			.append("\t")
-			.append(apiType)				//[호출API종류]
-			.append("\t")
-			.append(objId)					//[객체hash값]
-			.append("\t")
-			.append(log)					//[[호출API별메시지]]
-			.append("\t")
-			.append(stackTraceMsg)			//[스택트레이스] <-- 임시로 뒤로뺌
-			.append("\u001E")				//[ASCII 코드 RS(Record Separator)]
-			.append("\r\n");
-		
-		return logBuilder.toString();
+		return objId;
 	}
 	
 	/**
