@@ -77,8 +77,8 @@ public enum Config {
 		+ "\t${txId}"
 		+ "\t${apiType}"
 		+ "\t${objId}"
-		+ "\t${message}"
-		+ "\t${stackTrace}",
+		+ "\t${stackTrace}"
+		+ "\t${message}",
 		"출력 로그 템플릿"
 	),
 	
