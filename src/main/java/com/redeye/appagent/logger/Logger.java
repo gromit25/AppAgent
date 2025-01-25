@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
+ * 입력 큐의 로그 메시지를 LogWriter에게 전달
  * 
  * @author jmsohn
  */

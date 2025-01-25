@@ -64,9 +64,9 @@ public class Log {
 			
 		} catch(Exception ex) {
 			
-			System.out.println("AGENT MESSAGE:");
-			System.out.println("Invalid Value(LOG_WRITER_COUNT):" + Config.LOG_WRITER_COUNT.getValue());
-			System.out.println("set default LOG_WRITER_COUNT = 5");
+			System.err.println("AGENT MESSAGE:");
+			System.err.println("Invalid Value(LOG_WRITER_COUNT):" + Config.LOG_WRITER_COUNT.getValue());
+			System.err.println("set default LOG_WRITER_COUNT = 5");
 			
 			// default 값 설정
 			loggerCount = 5;
@@ -96,9 +96,9 @@ public class Log {
 			
 		} catch(Exception ex) {
 			
-			System.out.println("AGENT MESSAGE:");
-			System.out.println("Invalid Value(LOG_MAX_QUEUE_COUNT):" + Config.LOG_MAX_QUEUE_COUNT.getValue());
-			System.out.println("set default LOG_MAX_QUEUE_COUNT = 1000");
+			System.err.println("AGENT MESSAGE:");
+			System.err.println("Invalid Value(LOG_MAX_QUEUE_COUNT):" + Config.LOG_MAX_QUEUE_COUNT.getValue());
+			System.err.println("set default LOG_MAX_QUEUE_COUNT = 1000");
 			
 			maxLogCount = 1000;
 		}
@@ -112,8 +112,8 @@ public class Log {
 			
 		} catch(Exception ex) {
 			
-			System.out.println("AGENT MESSAGE:");
-			System.out.println("Invalid Value(LOG_TEMPLATE):" + Config.LOG_TEMPLATE.getValue());
+			System.err.println("AGENT MESSAGE:");
+			System.err.println("Invalid Value(LOG_TEMPLATE):" + Config.LOG_TEMPLATE.getValue());
 			
 			logTemplate = null;
 		}
@@ -258,7 +258,7 @@ public class Log {
 		// 로그 템플릿에서 사용할 데이터 설정
 		Map<String, Object> valueMap = new HashMap<>();
 		
-		valueMap.put("curTime", (Long)curTime);
+		valueMap.put("curTime", Long.toString(curTime));
 		valueMap.put("elapsedTime", (Long)elapsedTime);
 		valueMap.put("pid", Config.SYSTEM_PID.getValue());
 		valueMap.put("txId", ContentsApp.getTxId());
