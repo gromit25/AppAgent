@@ -183,11 +183,12 @@ public class AppMethodWriter extends MethodVisitor {
 			return;
 		}
 		
-		// 변환 메소드 스펙 획득
-		MethodSpec altSpec = MethodMap.getAltMethod(className, methodName, signature);
+		// 변환 메소드 짝 정보 획득
+		MethodPair methodPair = MethodMap.getMethodPair(className, methodName, signature);
 		
-		// 변환 대상 메소드가 없는 경우 변환하지 않고 반환
-		if(altSpec == null) {
+		// 변환 대상 메소드가 없거나
+		// 변환 대상이 아닌 경우 변환하지 않고 반환
+		if(methodPair == null || methodPair.isJoin(className, methodName) == false) {
 			super.visitMethodInsn(opcode, className, methodName, signature, isInterface);
 			return;
 		}
@@ -201,6 +202,9 @@ public class AppMethodWriter extends MethodVisitor {
 			+ " in "
 			+ this.className + "." + this.methodName;
 		Log.writeAgentLog(logMsg);
+		
+		// 변환 메소드 정보 획득
+		MethodSpec altSpec = methodPair.getAltMethod();
 
 		// 변환 메소드 호출로 변경
 		super.visitMethodInsn(

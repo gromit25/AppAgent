@@ -16,11 +16,32 @@ import java.lang.annotation.Target;
 public @interface ApiDesc {
 	
 	/**
+	 * API 아이디 반환
+	 * 
+	 * @return API ID
+	 */
+	String id();
+	
+	/**
 	 * API 명(rc_api.api_nm) 반환
 	 * 
 	 * @return API 명
 	 */
-	String value();
+	String name();
+	
+	/**
+	 * 입력값 타입 반환
+	 * 
+	 * @return 입력값 타입
+	 */
+	String inType();
+	
+	/**
+	 * 출력값 타입 반환
+	 * 
+	 * @return 출력값 타입
+	 */
+	String outType();
 	
 	/**
 	 * API 설명(rc_api.api_desc) 반환
@@ -37,16 +58,9 @@ public @interface ApiDesc {
 	boolean certYn() default false;
 	
 	/**
-	 * 요청자 명(rc_api.req_usr_nm) 반환
-	 * 
-	 * @return 요청자 명
-	 */
-	String requestor() default "N/A";
-	
-	/**
 	 * 개발자 이메일(rc_usr.usr_email) 
 	 * 
 	 * @return 개발자 이메일
 	 */
-	String developer() default "";
+	String author() default "";
 }

@@ -16,32 +16,17 @@ import lombok.Setter;
  */
 class MethodSpec {
 	
-	/** class 패턴 문자열(패키지 포함, ex javax/sql/DataSource) */
-	private static String CLASS_P = "(([A-Za-z_][A-Za-z0-9_]*)(\\/[A-Za-z_][A-Za-z0-9_]*)*)";
-	
-	/** method 패턴 문자열 */
-	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))";
-	
-	/** method 패턴 내의 타입 패턴 문자열 */
-	private static String TYPE_P = "([VZCBSIFJD])|(L" + CLASS_P + "\\;)";
-	
-	/** signature 패턴 문자열 */
-	private static String SIGNATURE_P = "(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
-	
-	/** method 패턴(signature 포함) 문자열 */
-	private static String METHOD_SIGNATURE_P = METHOD_P + SIGNATURE_P;
-	
 	/** class 패턴 객체 */
-	private static Pattern classP = Pattern.compile(CLASS_P);
+	private static Pattern classP = Util.newClassPattern();
 	
-	/** method 패턴 객체 */
-	private static Pattern methodP = Pattern.compile(METHOD_P);
+	/** method 명 패턴 객체 */
+	private static Pattern methodP = Util.newMethodPattern();
 	
 	/** signature 패턴 객체 */
-	private static Pattern signatureP = Pattern.compile(SIGNATURE_P);
+	private static Pattern signatureP = Util.newSignaturePattern();
 	
-	/** method 패턴 객체 */
-	private static Pattern methodSignatureP = Pattern.compile(METHOD_SIGNATURE_P);
+	/** method 명과 signature 패턴 객체 */
+	private static Pattern methodSignatureP = Util.newMethodSignaturePattern();
 	
 	/** 클래스 명(ex. javax/sql/DataSource) */
 	@Getter

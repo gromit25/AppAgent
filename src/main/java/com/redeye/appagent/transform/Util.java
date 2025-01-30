@@ -1,5 +1,7 @@
 package com.redeye.appagent.transform;
 
+import java.util.regex.Pattern;
+
 import org.objectweb.asm.Opcodes;
 
 import com.redeye.appagent.exception.AgentException;
@@ -12,13 +14,64 @@ import com.redeye.appagent.util.PrimitiveType;
  */
 class Util {
 	
+	/** class 패턴 문자열(패키지 포함, ex javax/sql/DataSource) */
+	private static String CLASS_P = "(([A-Za-z_][A-Za-z0-9_]*)(\\/[A-Za-z_][A-Za-z0-9_]*)*)";
+	
+	/** method 명 패턴 문자열 */
+	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))";
+	
+	/** method 패턴 내의 타입 패턴 문자열 */
+	private static String TYPE_P = "([VZCBSIFJD])|(L" + CLASS_P + "\\;)";
+	
+	/** signature 패턴 문자열 */
+	private static String SIGNATURE_P = "(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
+	
+	/** method 명과 signature 패턴 문자열 */
+	private static String METHOD_SIGNATURE_P = METHOD_P + SIGNATURE_P;
+	
+	/**
+	 * class 패턴 객체 생성 후 반환
+	 * 
+	 * @return class 패턴 객체
+	 */
+	static Pattern newClassPattern() {
+		return Pattern.compile(CLASS_P);
+	}
+	
+	/**
+	 * method 명 패턴 객체 생성 후 반환
+	 * 
+	 * @return method 명 패턴 객체
+	 */
+	static Pattern newMethodPattern() {
+		return Pattern.compile(METHOD_P);
+	}
+
+	/**
+	 * signature 패턴 객체 생성 후 반환
+	 * 
+	 * @return signature 패턴 객체
+	 */
+	static Pattern newSignaturePattern() {
+		return Pattern.compile(SIGNATURE_P);
+	}
+	
+	/**
+	 * method 명과 signature 패턴 객체 생성 후 반환
+	 * 
+	 * @return method 명과 signature 패턴 객체
+	 */
+	static Pattern newMethodSignaturePattern() {
+		return Pattern.compile(METHOD_SIGNATURE_P);
+	}
+	
 	/**
 	 * 주어진 클래스를 바이트 코드 형식 문자열로 변환하여 반환
 	 * 
 	 * @param type 변환할 타입
 	 * @return 바이트 코드 문자열
 	 */
-	public static String getType2ByteCode(Class<?> type) throws Exception {
+	static String getType2ByteCode(Class<?> type) throws Exception {
 		
 		// 입력값 검증
 		if(type == null) {

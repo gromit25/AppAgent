@@ -3,8 +3,6 @@ package com.redeye.appagent.transform;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -22,25 +20,19 @@ public final class AppTransformer implements ClassFileTransformer {
 	/** 전체 스킵 여부(테스트용) */
 	private boolean isSkip = false;
 	
-	/** 조인 패키지 목록 */
-	private Set<String> joinPackageSet;
-	
 	/**
 	 * 생성자
 	 */
 	public AppTransformer() throws Exception {
-		
-		// 조인 패키지 목록 설정
-		this.joinPackageSet = new HashSet<>();
-		for(String joinPackage: Config.JOIN_PACKAGE.getValue().split(",")) {
-			this.joinPackageSet.add(joinPackage.trim());
-		}
 	}
 
 	@Override
 	public byte[] transform(
-		ClassLoader loader, String className, Class<?> classBeingRedefined,
-		ProtectionDomain protectionDomain, byte[] classfileBuffer
+		ClassLoader loader,
+		String className,
+		Class<?> classBeingRedefined,
+		ProtectionDomain protectionDomain,
+		byte[] classfileBuffer
 	) throws IllegalClassFormatException {
 
 		// 클래스 변환 작업 수행 후 변환된 클래스 반환
@@ -63,7 +55,7 @@ public final class AppTransformer implements ClassFileTransformer {
 
 		try {
 			
-			//
+			// 스킵 여부 검사
 			if(this.isSkip(className, protectionDomain) == true) {
 				return classfileBuffer;
 			}
@@ -92,7 +84,10 @@ public final class AppTransformer implements ClassFileTransformer {
 	 * @param protectionDomain
 	 * @return 변경 여부(스킵시 true, 변환시 false)
 	 */
-	private boolean isSkip(final String className, final ProtectionDomain protectionDomain) {
+	private boolean isSkip(
+		String className,
+		ProtectionDomain protectionDomain
+	) {
 		
 		//---------------------
 		// isSkip 이 설정되어 있으면 전체 스킵
@@ -112,19 +107,6 @@ public final class AppTransformer implements ClassFileTransformer {
 		//---------------------
 		// protection domain이 null인 것은 boot library 이므로 스킵
 		// 아닐 경우 스킵하지 않도록 함
-		if(protectionDomain == null || protectionDomain.getCodeSource() == null ) {
-			return true;
-		}
-
-		//---------------------
-		// 클래스에 join 조인 여부 반환
-		for(String joinPackage: this.joinPackageSet) {
-			
-			if(className.startsWith(joinPackage) == true) {
-				return false;
-			}
-		}
-		
-		return true;
+		return (protectionDomain == null || protectionDomain.getCodeSource() == null);
 	}
 }
