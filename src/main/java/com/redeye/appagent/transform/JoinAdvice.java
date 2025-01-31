@@ -40,7 +40,7 @@ class JoinAdvice {
 		for(String adviceStr: adviceStrs.split(",")) {
 		
 			// 클래스 명 과 메소드 명 어드바이스 분리
-			String[] classAndMethodAdvice = StringUtil.splitLast(adviceStr, ".");
+			String[] classAndMethodAdvice = StringUtil.splitLast(adviceStr, "\\.");
 			if(classAndMethodAdvice.length != 2) {
 				throw new Exception("advice is invalid:" + adviceStr);
 			}
@@ -55,6 +55,7 @@ class JoinAdvice {
 			advices.add(advice);
 		}
 		
+		// 어드바이스 목록 반환
 		return advices;
 	}
 	

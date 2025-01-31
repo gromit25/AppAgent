@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 조인 위치
+ * 조인 어드바이스 어노테이션
  * 
  * @author jmsohn
  */
@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 public @interface JoinAdvice {
 	
 	/**
-	 * 조인 위치 패턴<br>
+	 * 조인 어드바이스 문자열<br>
 	 * ex) com/test/Test.test(Ljava/lang/String;), com/test/*
 	 */
 	String value();
