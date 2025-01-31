@@ -59,7 +59,7 @@ public enum Config {
 	 */
 	GLOBAL_JOIN_ADVICE(
 		"AGENT_JOIN_ADVICE",
-		"com/test",
+		"",
 		"조인 정보(, 로 나눔)"
 	),
 	
