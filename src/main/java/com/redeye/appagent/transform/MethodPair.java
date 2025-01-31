@@ -60,7 +60,7 @@ class MethodPair {
 
 		String adviceStrs = Config.GLOBAL_JOIN_ADVICE.getValue();
 		if(adviceAnnotation != null) {
-			adviceStrs = adviceAnnotation.pattern();
+			adviceStrs = adviceAnnotation.value();
 		}
 		
 		List<JoinAdvice> advices = JoinAdvice.create(adviceStrs);

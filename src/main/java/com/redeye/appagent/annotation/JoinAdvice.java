@@ -18,5 +18,5 @@ public @interface JoinAdvice {
 	 * 조인 위치 패턴<br>
 	 * ex) com/test/Test.test(Ljava/lang/String;), com/test/*
 	 */
-	String pattern();
+	String value();
 }
