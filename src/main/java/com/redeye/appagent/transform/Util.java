@@ -21,7 +21,7 @@ class Util {
 	private static String METHOD_P = "(?<method>([A-Za-z_][A-Za-z0-9_]*))";
 	
 	/** method 패턴 내의 타입 패턴 문자열 */
-	private static String TYPE_P = "([VZCBSIFJD])|(L" + CLASS_P + "\\;)";
+	private static String TYPE_P = "(\\[)*(([VZCBSIFJD])|(L" + CLASS_P + "\\;))";
 	
 	/** signature 패턴 문자열 */
 	private static String SIGNATURE_P = "(?<signature>\\((" + TYPE_P + ")*\\)(" + TYPE_P + "))";
