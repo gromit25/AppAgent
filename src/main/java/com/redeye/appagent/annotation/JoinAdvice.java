@@ -16,7 +16,7 @@ public @interface JoinAdvice {
 	
 	/**
 	 * 조인 어드바이스 문자열<br>
-	 * ex) com/test/Test.test(Ljava/lang/String;), com/test/*
+	 * ex) "com/test/Test.test??", "com/test/*"
 	 */
-	String value();
+	String[] value();
 }

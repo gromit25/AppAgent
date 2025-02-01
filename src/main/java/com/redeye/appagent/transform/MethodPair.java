@@ -5,7 +5,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.redeye.appagent.Config;
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.exception.AgentException;
@@ -54,20 +53,12 @@ class MethodPair {
 			return methodPairList;
 		}
 		
-		// 조인 어드바이스 객체 생성, 없을 경우 환경 변수의 조인 어드바이스를 사용
-		com.redeye.appagent.annotation.JoinAdvice adviceAnnotation =
-				cls.getDeclaredAnnotation(com.redeye.appagent.annotation.JoinAdvice.class);
-
-		String adviceStrs = Config.GLOBAL_JOIN_ADVICE.getValue();
-		if(adviceAnnotation != null) {
-			adviceStrs = adviceAnnotation.value();
-		}
-		
-		List<JoinAdvice> advices = JoinAdvice.create(adviceStrs);
-		
 		// 각 메소드 별 변환 대상 메소드 목록 획득
 		Method[] methods = cls.getDeclaredMethods();
 		for(Method method: methods) {
+			
+			// 메소드의 조인 어드바이스 객체 생성
+			List<JoinAdvice> advices = JoinAdvice.create(method);
 			
 			// TargetMethod 어노테이션이 있는 경우에만 처리
 			TargetMethod targetMethod = method.getDeclaredAnnotation(TargetMethod.class);

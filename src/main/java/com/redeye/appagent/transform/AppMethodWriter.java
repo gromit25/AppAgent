@@ -188,7 +188,7 @@ public class AppMethodWriter extends MethodVisitor {
 		
 		// 변환 대상 메소드가 없거나
 		// 변환 대상이 아닌 경우 변환하지 않고 반환
-		if(methodPair == null || methodPair.isJoin(className, methodName) == false) {
+		if(methodPair == null || methodPair.isJoin(this.className, this.methodName) == false) {
 			super.visitMethodInsn(opcode, className, methodName, signature, isInterface);
 			return;
 		}

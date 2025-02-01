@@ -39,7 +39,7 @@ public class MethodMap {
 		// NEW 클래스 목록 객체 생성
 		targetNew = new HashSet<>();
 		
-		// 각 클래스 로드
+		// 각 클래스별 변환 메소드 로드
 		for(Class<?> targetClass: targetClasses) {
 			
 			for(MethodPair methodPair: MethodPair.load(targetClass)) {
