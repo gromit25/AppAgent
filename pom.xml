@@ -44,12 +44,19 @@
 		<systemPath>C:/apps/textgen/TextGen-0.1.jar</systemPath>
 	</dependency>
 
-    <dependency>
-      <groupId>jakarta.servlet</groupId>
-      <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.1.0</version>
-      <scope>provided</scope>
-    </dependency>
+	<dependency>
+		<groupId>jakarta.servlet</groupId>
+		<artifactId>jakarta.servlet-api</artifactId>
+		<version>6.1.0</version>
+		<scope>provided</scope>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+		<version>3.4.2</version>
+		<scope>provided</scope>
+	</dependency>
     
   </dependencies>
   
@@ -133,6 +140,7 @@
             <excludeArtifactIds>
                 lombok, junit
             </excludeArtifactIds>
+            <excludeScope>provided</excludeScope>
           </configuration>
         </execution>
       </executions>
