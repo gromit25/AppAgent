@@ -32,7 +32,7 @@ public final class AppAgent {
 			MethodMap.init(
 				//Class.forName("com.wrapper.ClassAWrapper"),
 				Class.forName("com.redeye.appagent.builtins.was.ServletWrapper"),
-				Class.forName("com.redeye.appagent.builtins.spring.MethodWrapper")
+				Class.forName("com.redeye.appagent.builtins.spring.ApiInvokeWrapper")
 			);
 			
 			// App 기동 로깅

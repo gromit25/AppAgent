@@ -48,7 +48,7 @@ class LogWriterBuilder {
 				throw new Exception("can't load log class:" + typeStr);
 			}
 			
-			if(type.isAssignableFrom(LogWriter.class) == false) {
+			if(LogWriter.class.isAssignableFrom(type) == false) {
 				throw new Exception("log class is not LogWriter type:" + typeStr);
 			}
 			
