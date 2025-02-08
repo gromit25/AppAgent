@@ -65,8 +65,12 @@ public enum Config {
 	
 	//--- 로그 관련
 	
-	/** 로그 타입 */
-	LOG_TYPE("AGENT_LOG_TYPE", "FILE", "로그 타입"),
+	/** 로그 Writer */
+	LOG_WRITER(
+		"AGENT_LOG_WRITER",
+		"com.redeye.appagent.logger.file.FileWriter",
+		"로그 Writer(전체 클래스 명)"
+	),
 	
 	/** 출력 로그 템플릿 */
 	LOG_TEMPLATE(

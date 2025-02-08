@@ -46,9 +46,6 @@ public class Log {
 		// 로그 메시지 큐 생성
 		outQ = new LinkedBlockingQueue<String>();
 		
-		// LogWriter를 생성할 빌더 객체 생성
-		LogWriterBuilder writerBuilder = new LogWriterBuilder(Config.LOG_TYPE.getValue());
-		
 		// Logger 목록 객체 생성
 		loggers = new ArrayList<>();
 
@@ -71,19 +68,33 @@ public class Log {
 			// default 값 설정
 			loggerCount = 5;
 		}
-		
-		for(int index = 0; index < loggerCount; index++) {
+
+		// 로그 writer 생성
+		try {
 			
-			// Logger 객체 생성
-			Logger logger = new Logger(outQ, writerBuilder.create());
+			// 로그 writer 를 생성할 빌더 객체 생성
+			LogWriterBuilder writerBuilder = new LogWriterBuilder(Config.LOG_WRITER.getValue());
 			
-			// Logger 스레드 생성 및 수행
-			Thread loggerThread = new Thread(logger);
-			loggerThread.setDaemon(true);	// 메인 프로그램 종료시 스레드 종료 설정
-			loggerThread.start();
+			for(int index = 0; index < loggerCount; index++) {
+				
+				// Logger 객체 생성
+				Logger logger = new Logger(outQ, writerBuilder.create());
+				
+				// Logger 스레드 생성 및 수행
+				Thread loggerThread = new Thread(logger);
+				loggerThread.setDaemon(true);	// 메인 프로그램 종료시 스레드 종료 설정
+				loggerThread.start();
+				
+				// Logger 목록에 추가
+				loggers.add(logger);
+			}
 			
-			// Logger 목록에 추가
-			loggers.add(logger);
+		} catch(Exception ex) {
+			
+			ex.printStackTrace();
+			
+			// 실패시 모든 로그 객체 제거
+			loggers.clear();
 		}
 		
 		// 로그 큐의 최대 개수 설정

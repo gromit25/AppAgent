@@ -1,5 +1,6 @@
 package com.redeye.appagent.logger;
 
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 입력 큐의 로그 메시지를 LogWriter에게 전달
+ * 입력 큐의 로그 메시지를 로그 writer 에게 전달
  * 
  * @author jmsohn
  */
@@ -16,8 +17,8 @@ class Logger implements Runnable {
 	/** 로그 메시지 입력 큐 */
 	private BlockingQueue<String> inQ;
 	
-	/** 로그 Writer */
-	private LogWriter writer;
+	/** 로그 writer */
+	private List<LogWriter> writers;
 	
 	/** 중단 여부 */
 	@Getter
@@ -28,12 +29,12 @@ class Logger implements Runnable {
 	 * 생성자
 	 *
 	 * @param inQ 로그 메시지 입력 큐
-	 * @param writer 로그 Writer
+	 * @param writers 로그 Writer 목록
 	 */
-	Logger(BlockingQueue<String> inQ, LogWriter writer) {
+	Logger(BlockingQueue<String> inQ, List<LogWriter> writers) {
 		
 		this.inQ = inQ;
-		this.writer = writer;
+		this.writers = writers;
 	}
 
 	@Override
@@ -53,7 +54,9 @@ class Logger implements Runnable {
 				}
 				
 				// 로그 메시지 write
-				this.writer.write(logMsg);
+				for(LogWriter writer: this.writers) { 
+					writer.write(logMsg);
+				}
 				
 				// 초기화
 				logMsg = null;

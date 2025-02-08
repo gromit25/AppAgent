@@ -1,55 +1,96 @@
 package com.redeye.appagent.logger;
 
-import com.redeye.appagent.logger.file.FileWriter;
-import com.redeye.appagent.util.StringUtil;
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Vector;
+
+import com.redeye.StringUtil;
+
+import lombok.Getter;
 
 /**
- * 로그 Writer 빌더
+ * 로그 writer 빌더
  * 
  * @author jmsohn
  */
 class LogWriterBuilder {
 	
-	/** 생성할 로그 Writer 타입명 */
-	private String type;
+	/** 생성할 로그 writer 타입명 */
+	@Getter
+	private String types;
 	
-	/** 로그 Writer 타입명이 유효한 지 여부 */
-	private boolean isValidType;
+	/** 로그 writer 생성자 목록 */
+	private List<Constructor<?>> writerConstructors;
 	
 	/**
 	 * 생성자
 	 * 
-	 * @param type 로그 Writer 타입 명
+	 * @param types 로그 Writer 클래스명 들(, 로 분리)
 	 */
-	LogWriterBuilder(String type) {
+	LogWriterBuilder(String types) throws Exception {
 		
-		// 로그 Writer 타입 설정
-		this.type = type;
+		this.types = types;
+		this.writerConstructors = new Vector<>();
 		
-		// 타입 명이 유효한지 여부 설정
-		this.isValidType = (StringUtil.isBlank(this.type) == false);
+		// 로그 Writer 클래스명이 비어 있을 경우 종료
+		if(StringUtil.isEmpty(types) == true) {
+			return;
+		}
+		
+		// 로그 Writer type 생성
+		for(String typeStr: types.split("[ \\t]*\\,[ \\t]*")) {
+			
+			// LogWriter class 로딩
+			Class<?> type = Class.forName(typeStr);
+			
+			// LogWriter type 검사
+			if(type == null) {
+				throw new Exception("can't load log class:" + typeStr);
+			}
+			
+			if(type.isAssignableFrom(LogWriter.class) == false) {
+				throw new Exception("log class is not LogWriter type:" + typeStr);
+			}
+			
+			// 디폴트 생성자 획득
+			Constructor<?> writerConstructor = type.getDeclaredConstructor();
+			if(writerConstructor == null) {
+				throw new Exception("log class's default constructor is not found:" + typeStr);
+			}
+			
+			// LogWriter 생성자 추가
+			this.writerConstructors.add(writerConstructor);
+		}
 	}
 	
 	/**
-	 * 로그 Writer 타입 명에 따라 로그 Writer 생성 및 반환<br>
-	 * 로그 Writer 타입 명이 유효하지 않거나 일치하는 로그 Writer 가 없으면 null 을 반환
+	 * 로그 writer 타입 명에 따라 로그 writer 생성 및 반환
 	 * 
-	 * @return 생성된 로그 Writer
+	 * @return 생성된 로그 writer 목록
 	 */
-	LogWriter create() {
+	List<LogWriter> create() throws Exception {
 		
-		// 타입 명이 유효하지 않을 경우 null 반환
-		if(this.isValidType == false) {
-			return null;
+		// 로그 writer 목록 객체 생성 
+		List<LogWriter> writers = new Vector<>();
+		
+		// 설정된 로그 writer type 이 없으면, 빈 목록 반환
+		if(this.writerConstructors == null) {
+			return writers;
 		}
 		
-		// 타입 별로 로그 Writer 객체를 생성하여 반환
-		if(this.type.equals("FILE") == true) {
+		// 설정된 로그 writer type 별로 생성하여 반환
+		for(Constructor<?> writerConstructor: this.writerConstructors) {
 			
-			// 파일 형 로그 Writer
-			return new FileWriter();
+			// 로그 writer 생성
+			Object obj = writerConstructor.newInstance();
+			
+			// 로그 writer 추가, LogWriter 클래스일 경우에만
+			if(obj instanceof LogWriter) {
+				writers.add((LogWriter)obj);
+			}
 		}
 		
-		return null;
+		// 로그 writer 목록 반환
+		return writers;
 	}
 }
