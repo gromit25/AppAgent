@@ -2,9 +2,9 @@ package com.redeye.appagent;
 
 import java.lang.instrument.Instrumentation;
 
+import com.redeye.appagent.appwriter.AppTransformer;
+import com.redeye.appagent.appwriter.MethodMap;
 import com.redeye.appagent.logger.Log;
-import com.redeye.appagent.rewriter.AppTransformer;
-import com.redeye.appagent.rewriter.MethodMap;
 
 /**
  * App Agent Main<br>

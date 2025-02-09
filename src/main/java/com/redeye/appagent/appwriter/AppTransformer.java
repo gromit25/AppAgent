@@ -1,4 +1,4 @@
-package com.redeye.appagent.rewriter;
+package com.redeye.appagent.appwriter;
 
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;

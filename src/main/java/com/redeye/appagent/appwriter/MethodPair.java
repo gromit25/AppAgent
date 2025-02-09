@@ -1,4 +1,4 @@
-package com.redeye.appagent.rewriter;
+package com.redeye.appagent.appwriter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

@@ -1,4 +1,4 @@
-package com.redeye.appagent.rewriter;
+package com.redeye.appagent.appwriter;
 
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
