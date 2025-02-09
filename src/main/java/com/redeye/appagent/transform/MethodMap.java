@@ -1,7 +1,9 @@
 package com.redeye.appagent.transform;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,28 +18,52 @@ import com.redeye.appagent.util.StringUtil;
 public class MethodMap {
 	
 	/** 메소드 변환 Map 객체 */
-	private static Map<String, MethodPair> map;
+	private static Map<String, MethodPair> map = new HashMap<>();
 	
 	/** 변환 대상 NEW 클래스 셋 */
-	private static Set<String> targetNew;
+	private static Set<String> targetNew = new HashSet<>();
+	
+	/**
+	 * 변환 Map 초기화
+	 * 
+	 * @param targetClassesStr 변환 클래스 목록 문자열
+	 */
+	public static void init(String targetClassesStr) throws Exception {
+		
+		// 대상 클래스 목록이 없는 경우 반환
+		if(StringUtil.isEmpty(targetClassesStr) == true) {
+			return;
+		}
+		
+		// 변환 클래스 목록 로딩
+		List<Class<?>> targetClasses = new ArrayList<>();
+		for(String targetClassStr: targetClassesStr.split("[ \\t]*//,[ \\t]*")) {
+			
+			Class<?> targetClass = Class.forName(targetClassStr);
+			targetClasses.add(targetClass);
+		}
+		
+		// 로딩된 클래스 목록으로 초기화 수행
+		init(targetClasses);
+	}
 	
 	/**
 	 * Method Map 초기화
 	 * 
 	 * @param targetClasses
 	 */
-	public synchronized static void init(Class<?>... targetClasses) throws Exception {
+	public synchronized static void init(List<Class<?>> targetClasses) throws Exception {
 		
 		// 입력값 검증
 		if(targetClasses == null) {
 			throw new AgentException("target classes is null.");
 		}
 		
-		// Method Map 객체 생성
-		map = new HashMap<>();
+		// Method Map 초기화
+		map.clear();
 		
-		// NEW 클래스 목록 객체 생성
-		targetNew = new HashSet<>();
+		// NEW 클래스 목록 초기화
+		targetNew.clear();
 		
 		// 각 클래스별 변환 메소드 로드
 		for(Class<?> targetClass: targetClasses) {

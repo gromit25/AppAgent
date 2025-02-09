@@ -51,6 +51,8 @@ public enum Config {
 		"character set"
 	),
 	
+	//--- 변환 맵 설정 관련
+	
 	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
 	/**

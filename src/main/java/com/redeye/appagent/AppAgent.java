@@ -29,11 +29,7 @@ public final class AppAgent {
 			Config.init();
 			
 			// 메소드 변환맵 초기화
-			MethodMap.init(
-				//Class.forName("com.wrapper.ClassAWrapper"),
-				Class.forName("com.redeye.appagent.builtins.was.ServletWrapper"),
-				Class.forName("com.redeye.appagent.builtins.spring.ApiInvokeWrapper")
-			);
+			MethodMap.init();
 			
 			// App 기동 로깅
 			Log.write("APP_START", 0, getSysInfo());
