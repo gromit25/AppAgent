@@ -53,6 +53,13 @@ public enum Config {
 	
 	//--- 변환 맵 설정 관련
 	
+	APP_WRITER(
+		"AGENT_APP_WRITER",
+		"com.redeye.appagent.builtins.was.ServletWrapper,"
+		+ "com.redeye.appagent.builtins.spring.ApiInvokeWrapper",
+		"app writer classes(divide by comma(,))"
+	),
+	
 	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
 	/**

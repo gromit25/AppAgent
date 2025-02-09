@@ -37,7 +37,7 @@ public class MethodMap {
 		
 		// 변환 클래스 목록 로딩
 		List<Class<?>> targetClasses = new ArrayList<>();
-		for(String targetClassStr: targetClassesStr.split("[ \\t]*//,[ \\t]*")) {
+		for(String targetClassStr: targetClassesStr.split("[ \\t]*\\,[ \\t]*")) {
 			
 			Class<?> targetClass = Class.forName(targetClassStr);
 			targetClasses.add(targetClass);

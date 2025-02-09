@@ -29,7 +29,7 @@ public final class AppAgent {
 			Config.init();
 			
 			// 메소드 변환맵 초기화
-			MethodMap.init();
+			MethodMap.init(Config.APP_WRITER.getValue());
 			
 			// App 기동 로깅
 			Log.write("APP_START", 0, getSysInfo());
