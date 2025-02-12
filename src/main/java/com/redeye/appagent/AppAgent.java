@@ -1,10 +1,13 @@
 package com.redeye.appagent;
 
 import java.lang.instrument.Instrumentation;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 
 import com.redeye.appagent.appwriter.AppTransformer;
 import com.redeye.appagent.appwriter.MethodMap;
 import com.redeye.appagent.logger.Log;
+import com.redeye.appagent.util.CronJob;
 
 /**
  * App Agent Main<br>
@@ -13,6 +16,8 @@ import com.redeye.appagent.logger.Log;
  * @author jmsohn
  */
 public final class AppAgent {
+	
+	private static CronJob threadCounter;
 	
 	/**
 	 * Java VM의 Agent에 Transformer 등록
@@ -33,6 +38,30 @@ public final class AppAgent {
 			
 			// App 기동 로깅
 			Log.write("APP_START", 0, getSysInfo());
+			
+			// 스레드 카운터 기동
+			try {
+				
+				threadCounter = new CronJob(
+					Config.THREAD_COUNTER_PERIOD.getValue(),
+					new Runnable() {
+						
+						private ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+						
+						@Override
+						public void run() {
+							int threadCnt = this.threadMXBean.getThreadCount();
+							System.out.println("current thread count:" + threadCnt);
+							//Log.write("THRD_CNT", null, "");
+						}
+					}
+				);
+				
+				threadCounter.run();
+				
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
 			
 			// App 종료 로깅
 			Runtime.getRuntime().addShutdownHook(new Thread() {
