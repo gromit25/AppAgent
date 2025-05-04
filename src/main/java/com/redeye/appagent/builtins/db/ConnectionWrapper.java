@@ -48,6 +48,11 @@ public class ConnectionWrapper implements Connection {
 	public Statement createStatement() throws SQLException {
 		return this.conn.createStatement();
 	}
+	
+	@Override
+	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
+		return this.conn.createStatement(resultSetType, resultSetConcurrency);
+	}
 
 	@Override
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
@@ -57,10 +62,20 @@ public class ConnectionWrapper implements Connection {
 		
 		return pstmtWrapper;
 	}
+	
+	@Override
+	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+		return this.conn.prepareStatement(sql, resultSetType, resultSetConcurrency);
+	}
 
 	@Override
 	public CallableStatement prepareCall(String sql) throws SQLException {
 		return this.conn.prepareCall(sql);
+	}
+	
+	@Override
+	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
+		return this.conn.prepareCall(sql, resultSetType, resultSetConcurrency);
 	}
 
 	@Override
@@ -155,21 +170,6 @@ public class ConnectionWrapper implements Connection {
 	@Override
 	public void clearWarnings() throws SQLException {
 		this.conn.clearWarnings();
-	}
-
-	@Override
-	public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException {
-		return this.conn.createStatement(resultSetType, resultSetConcurrency);
-	}
-
-	@Override
-	public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-		return this.conn.prepareStatement(sql, resultSetType, resultSetConcurrency);
-	}
-
-	@Override
-	public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException {
-		return this.conn.prepareCall(sql, resultSetType, resultSetConcurrency);
 	}
 
 	@Override
