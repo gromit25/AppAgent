@@ -1,4 +1,4 @@
-# BABEAgent
+# AppAgent
 Java 프로그램의 수정 없이, 외부자원에 대한 Java 메소드 호출 성능을 측정할 수 있는 javaagent 프로그램     
 > Java 프로그램은 DB, file, network등 다양한 외부 자원에 접근하여 데이터를 처리함     
 > 안정적인 운영을 위해서는 외부 자원 접근에 대한 성능 모니터링이 필수적임    
