@@ -41,7 +41,7 @@ class FileManager extends Thread {
 	/** 로그 파일 검사 중단 여부 */
 	@Getter
 	@Setter
-	private boolean isStop;
+	private volatile boolean isStop;
 	
 	/** 현재 로그 파일 */
 	private File logFile;
