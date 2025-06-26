@@ -16,7 +16,8 @@ import com.redeye.appagent.util.CronJob;
  * @author jmsohn
  */
 public final class AppAgent {
-	
+
+	/** 스레드의 개수를 확인하는 Counter (일정 시간 간격으로 수행)*/
 	private static CronJob threadCounter;
 	
 	/**
@@ -52,7 +53,6 @@ public final class AppAgent {
 						public void run() {
 							int threadCnt = this.threadMXBean.getThreadCount();
 							System.out.println("current thread count:" + threadCnt);
-							//Log.write("THRD_CNT", null, "");
 						}
 					}
 				);
