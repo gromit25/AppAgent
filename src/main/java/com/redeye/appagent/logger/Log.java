@@ -15,7 +15,9 @@ import com.redeye.appagent.util.StringUtil;
 import com.redeye.textgen.TextGen;
 
 /**
- * 로깅 클래스
+ * 로깅 클래스<br>
+ * log4j 같은 외부라이브러리를 사용하면<br>
+ * 측정하려는 어플리케이션에서 사용하는 log4j와 충돌이 일어날 수 있음
  * 
  * @author jmsohn
  */
