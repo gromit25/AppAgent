@@ -170,7 +170,7 @@ class FileManager extends Thread {
 			// 로그파일 목록 추출
 			.find(
 				this.logFile.getParentFile().toPath(), // Start
-				1, // MaxDepth  
+				1, // MaxDepth, 현재 디렉토리의 파일만 정리함, 하위 디렉토리는 하지 않음
 				(path, attr) -> {
 					
 					String fileName = path.toFile().getName();
