@@ -12,7 +12,7 @@ import com.redeye.appagent.exception.AgentException;
 import lombok.Getter;
 
 /**
- * 메소드 변환 짝<br>
+ * 메소드 변환 관계 쌍<br>
  * 대상 메소드 - 변환 메소드
  * 
  * @author jmsohn
