@@ -9,7 +9,7 @@ public enum CRUDType {
 	INSERT("C"),
 	UPDATE("U"),
 	DELETE("D"),
-	MERGE("CUD"),
+	MERGE("CU"),
 	UPSERT("CU"),
 	SELECT("R");
 	

@@ -17,25 +17,6 @@ import com.redeye.appagent.annotation.TargetMethod;
  */
 @TargetClass(cls="java/lang/reflect/Method", type="SPR")
 public class ApiInvokeWrapper {
-
-	/**
-	 * 
-	 * 
-	 * @param method
-	 * @param obj
-	 * @param args
-	 * @return
-	 */
-	@TargetMethod("invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;")
-	@JoinAdvice("org/springframework/web/method/support/InvocableHandlerMethod.doInvoke")
-    public static Object invoke(Method method, Object obj, Object... args)
-    		throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
-		logging(method);
-    	Object result = method.invoke(obj, args);
-    	
-    	return result;
-	}
 	
 	/**
 	 * 
@@ -59,5 +40,24 @@ public class ApiInvokeWrapper {
 				System.out.println("url:" + urlStr);
 			}
 		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @param method
+	 * @param obj
+	 * @param args
+	 * @return
+	 */
+	@TargetMethod("invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;")
+	@JoinAdvice("org/springframework/web/method/support/InvocableHandlerMethod.doInvoke")
+    public static Object invoke(Method method, Object obj, Object... args)
+    		throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+
+		logging(method);
+    	Object result = method.invoke(obj, args);
+    	
+    	return result;
 	}
 }

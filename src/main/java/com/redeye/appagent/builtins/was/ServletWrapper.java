@@ -14,7 +14,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * 
+ * Servlet Wrapper
  * 
  * @author jmsohn
  */
@@ -28,7 +28,7 @@ public class ServletWrapper {
 	 * @param req 사용자 요청 객체
 	 * @param res 서버 응답 객체
 	 */
-	@TargetMethod("service(Ljakarta/servlet/ServletRequest;Ljakarta/servlet/ServletResponse;)V")
+	@TargetMethod( "service(Ljakarta/servlet/ServletRequest;Ljakarta/servlet/ServletResponse;)V")
 	@JoinAdvice("org/apache/catalina/core*")
 	public static void service(
 		Servlet servlet,
@@ -36,13 +36,13 @@ public class ServletWrapper {
 		ServletResponse res
 	) throws ServletException, IOException {
 		
-		Log.write("WAS", servlet, 0, makeLogMsg(req));
+		Log.write("SVL", servlet, 0, makeLogMsg(req));
 
 		long start = System.currentTimeMillis();
 		servlet.service(req, res);
 		long end = System.currentTimeMillis();
 		
-		Log.write("WAS", servlet, end - start, "");
+		Log.write("SVL", servlet, end - start, "");
 	}
 	
 	/**
