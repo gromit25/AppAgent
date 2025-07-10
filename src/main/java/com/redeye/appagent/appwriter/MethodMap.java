@@ -73,7 +73,7 @@ public class MethodMap {
 				// Method Map에 저장
 				map.put(methodPair.getKey(), methodPair);
 				
-				// 만일 대상 메소드 명이 생성자("<init>") 메소드 이면
+				// 만일 대상 메소드 명이 생성자("<init>") 메소드 즉 생성자 이면
 				// NEW 클래스 목록에 추가
 				if(methodPair.getTargetMethod().getMethodName().equals("<init>") == true) {
 					targetNew.add(methodPair.getTargetMethod().getClassName());
