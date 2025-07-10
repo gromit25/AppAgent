@@ -16,6 +16,7 @@ public class ContentsDB {
 	/** 파라미터 */
 	private static ThreadLocal<String> params = new ThreadLocal<String>();
 	
+	
 	/**
 	 * 설정된값 전체 삭제
 	 */

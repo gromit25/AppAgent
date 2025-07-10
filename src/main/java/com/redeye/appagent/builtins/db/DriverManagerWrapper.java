@@ -6,6 +6,7 @@ import java.sql.SQLException;
 
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
+import com.redeye.appagent.logger.Log;
 
 /**
  * JDBC 드라이버 관리자(java/sql/DriverManager) Wrapper
@@ -14,6 +15,20 @@ import com.redeye.appagent.annotation.TargetMethod;
  */
 @TargetClass(type = "DB", cls = "java/sql/DriverManager")
 public class DriverManagerWrapper {
+	
+	/**
+	 * 
+	 * 
+	 * @param conn
+	 */
+	private static void logConn(Connection conn, String url) {
+		
+		Log.write(
+			ActionType.DB_CON.name(),
+			conn,
+			"\"url\":\"%s\"", url
+		);
+	}
 	
 	/**
 	 *  getConnection Wrapper 메소드
@@ -26,6 +41,8 @@ public class DriverManagerWrapper {
 	public static Connection getConnection(String url, String user, String password) throws SQLException {
 		
 		Connection conn = DriverManager.getConnection(url, user, password);
+		logConn(conn, url);
+		
 		return conn;
 	}
 	
@@ -38,6 +55,8 @@ public class DriverManagerWrapper {
 	public static Connection getConnection(String url) throws SQLException {
 		
 		Connection conn = DriverManager.getConnection(url);
+		logConn(conn, url);
+		
 		return conn;
 	}
 }
