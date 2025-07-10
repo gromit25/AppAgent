@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
+import com.redeye.appagent.logger.Log;
 
 /**
  * 
@@ -15,6 +16,20 @@ import com.redeye.appagent.annotation.TargetMethod;
  */
 @TargetClass(type = "DB", cls = "javax/sql/DataSource")
 public class DataSourceWrapper {
+	
+	/**
+	 * 
+	 * 
+	 * @param conn
+	 */
+	private static void logConn(Connection conn, String username) {
+		
+		Log.write(
+			ActionType.DB_CON.name(),
+			conn,
+			"\"username\":\"%s\"", username
+		);
+	}
 
 	/**
 	 * 
@@ -24,7 +39,11 @@ public class DataSourceWrapper {
 	 */
 	@TargetMethod("getConnection()Ljava/sql/Connection;")
 	public static Connection getConnection(DataSource ds) throws SQLException {
-		return getConnectionWrapper(ds.getConnection());
+		
+		Connection conn = ds.getConnection();
+		logConn(conn, "N/A");
+		
+		return conn;
 	}
 	
 	/**
@@ -37,6 +56,10 @@ public class DataSourceWrapper {
 	 */
 	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(DataSource ds, String username, String password) throws SQLException {
-		return getConnectionWrapper(ds.getConnection(username, password));
+		
+		Connection conn = ds.getConnection(username, password);
+		logConn(conn, username);
+		
+		return conn;
 	}
 }

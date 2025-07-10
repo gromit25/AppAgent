@@ -22,7 +22,7 @@ public class SocketChannelWrapper {
 	 * 
 	 * @param addr 접속 주소 
 	 */
-	private static void loggingAddr(SocketAddress addr) {
+	private static void logAddr(SocketAddress addr) {
 		
 		if(addr != null) {
 			
@@ -45,7 +45,7 @@ public class SocketChannelWrapper {
 	@TargetMethod("open(Ljava/net/SocketAddress;)Ljava/nio/channels/SocketChannel;")
 	public static SocketChannel open(SocketAddress addr) throws IOException {
 		
-		loggingAddr(addr);
+		logAddr(addr);
 		
 		SocketChannel channel = SocketChannel.open();
 		return channel;
@@ -61,7 +61,7 @@ public class SocketChannelWrapper {
 	@TargetMethod("connect(Ljava/net/SocketAddress;)Z")
 	public static boolean connect(SocketChannel channel, SocketAddress addr) throws IOException {
 		
-		loggingAddr(addr);
+		logAddr(addr);
 		
 		boolean result = channel.connect(addr);
 		return result;

@@ -22,7 +22,7 @@ public class ApiInvokeWrapper {
 	 * 
 	 * @param method
 	 */
-	private static void logging(Method method) {
+	private static void logInvoke(Method method) {
 		
 		ApiDesc apiDesc = method.getAnnotation(ApiDesc.class);
 		if(apiDesc == null) {
@@ -55,7 +55,7 @@ public class ApiInvokeWrapper {
     public static Object invoke(Method method, Object obj, Object... args)
     		throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-		logging(method);
+		logInvoke(method);
     	Object result = method.invoke(obj, args);
     	
     	return result;
