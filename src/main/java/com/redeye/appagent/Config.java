@@ -74,9 +74,9 @@ public enum Config {
 	
 	//--- 스레드 카운터 검출 관련
 	
-	/** 스레드 카운터 검출 시간 간격 */
-	THREAD_COUNTER_PERIOD(
-		"AGENT_THREAD_COUNTER_PERIOD",
+	/** 시스템 metrics 정보를 수집하는 크론잡 스케쥴 */
+	METRICS_ACQUISITOR_SCHEDULE(
+		"AGENT_METRICS_ACQUISITOR_SCHEDULE",
 		"*/5 * * * * *",
 		"스레드 수 검출 시간 간격 설정, 디폴트: 5초 간격(*/5 * * * * *)"
 	),

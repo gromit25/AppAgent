@@ -1,8 +1,6 @@
 package com.redeye.appagent;
 
 import java.lang.instrument.Instrumentation;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadMXBean;
 
 import com.redeye.appagent.appwriter.AppTransformer;
 import com.redeye.appagent.appwriter.MethodMap;
@@ -17,8 +15,8 @@ import com.redeye.appagent.util.CronJob;
  */
 public final class AppAgent {
 
-	/** 스레드의 개수를 확인하는 Counter (일정 시간 간격으로 수행)*/
-	private static CronJob threadCounter;
+	/** 시스템 metrics 정보를 수집하는 크론잡 */
+	private static CronJob metricsAcquisitorCronJob;
 	
 	/**
 	 * Java VM의 Agent에 Transformer 등록
@@ -40,24 +38,15 @@ public final class AppAgent {
 			// App 기동 로깅
 			Log.write("APP_START", 0, getSysInfo());
 			
-			// 스레드 카운터 기동
+			// 시스템 metrics 정보를 수집하는 크론잡 기동
 			try {
 				
-				threadCounter = new CronJob(
-					Config.THREAD_COUNTER_PERIOD.getValue(),
-					new Runnable() {
-						
-						private ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-						
-						@Override
-						public void run() {
-							int threadCnt = this.threadMXBean.getThreadCount();
-							System.out.println("current thread count:" + threadCnt);
-						}
-					}
+				metricsAcquisitorCronJob = new CronJob(
+					Config.METRICS_ACQUISITOR_SCHEDULE.getValue(),
+					new MetricsAcquisitor()
 				);
 				
-				threadCounter.run();
+				metricsAcquisitorCronJob.run();
 				
 			} catch(Exception ex) {
 				ex.printStackTrace();
