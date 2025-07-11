@@ -58,19 +58,19 @@ class JoinAdvice {
 	 * @param adviceStrs 어드바이스 문자열
 	 * @return 생성된 어드바이스 객체
 	 */
-	public static List<JoinAdvice> create(String[] adviceStrs) throws Exception {
+	public static List<JoinAdvice> create(String[] adviceStrArr) throws Exception {
 		
 		// 어드바이스 목록
-		List<JoinAdvice> advices = new ArrayList<>();
+		List<JoinAdvice> adviceList = new ArrayList<>();
 		
 		// 어드바이스 문자열이 없을 경우 목록 추가 없이 반환
-		if(adviceStrs == null || adviceStrs.length == 0) {
+		if(adviceStrArr == null || adviceStrArr.length == 0) {
 			return advices;
 		}
 		
 		// 어드바이스 문자열 별로
 		// 각 어드바이스 객체를 생성하여 목록에 저장
-		for(String adviceStr: adviceStrs) {
+		for(String adviceStr: adviceStrArr) {
 		
 			// 클래스 명 과 메소드 명 어드바이스 분리
 			String[] classAndMethodAdvice = StringUtil.splitLast(adviceStr, "\\.");
@@ -96,11 +96,11 @@ class JoinAdvice {
 			advice.methodAdvice = StringUtil.WildcardPattern.create(methodAdvice);
 			
 			// 어드바이스 목록에 추가
-			advices.add(advice);
+			adviceList.add(advice);
 		}
 		
 		// 어드바이스 목록 반환
-		return advices;
+		return adviceList;
 	}
 	
 	/**
