@@ -63,8 +63,8 @@ public enum Config {
 	//--- 조인(어느 위치에 메소드를 변경할 것인지) 방식
 	
 	/**
-	 * 조인 어드바이스(, 로 나눔)
-	 * ex) com/redeye, com/prj
+	 * 조인 어드바이스(, 로 나눔)<br>
+	 * ex) com/redeye/*, com/prj/*
 	 */
 	GLOBAL_JOIN_ADVICE(
 		"AGENT_JOIN_ADVICE",
