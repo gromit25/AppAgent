@@ -65,7 +65,7 @@ class JoinAdvice {
 		
 		// 어드바이스 문자열이 없을 경우 목록 추가 없이 반환
 		if(adviceStrArr == null || adviceStrArr.length == 0) {
-			return advices;
+			return adviceList;
 		}
 		
 		// 어드바이스 문자열 별로
