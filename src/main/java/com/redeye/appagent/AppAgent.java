@@ -36,7 +36,7 @@ public final class AppAgent {
 			MethodMap.init(Config.APP_WRITER.getValue());
 			
 			// App 기동 로깅
-			Log.write("APP_START", 0, getSysInfo());
+			Log.write("APP_START", 0, getSysName());
 			
 			// 시스템 metrics 정보를 수집하는 크론잡 기동
 			try {
@@ -58,7 +58,7 @@ public final class AppAgent {
 				public void run() {
 					
 					// App 종료 메시지 출력
-					Log.write("APP_END", 0, getSysInfo());
+					Log.write("APP_END", 0, getSysName());
 					
 					// 출력큐가 비어 있지 않으면 잠시 대기 후 종료
 					if(Log.isEmpty() == false) {
@@ -81,11 +81,11 @@ public final class AppAgent {
 	}
 	
 	/**
-	 * 시스템 환경 정보 반환
+	 * 시스템 명칭 반환
 	 * 
 	 * @return 시스템 환경 정보
 	 */
-	private static String getSysInfo() {
+	private static String getSysName() {
 		return Config.SYSTEM_PID.getValue() + "@" + Config.SYSTEM_NAME.getValue();
 	}
 }
