@@ -5,6 +5,7 @@ import java.lang.instrument.Instrumentation;
 import com.redeye.appagent.appwriter.AppTransformer;
 import com.redeye.appagent.appwriter.MethodMap;
 import com.redeye.appagent.logger.Log;
+import com.redeye.appagent.util.AppAgentUtil;
 import com.redeye.appagent.util.CronJob;
 
 /**
@@ -17,6 +18,7 @@ public final class AppAgent {
 
 	/** 시스템 metrics 정보를 수집하는 크론잡 */
 	private static CronJob metricsAcquisitorCronJob;
+	
 	
 	/**
 	 * Java VM의 Agent에 Transformer 등록
@@ -36,17 +38,20 @@ public final class AppAgent {
 			MethodMap.init(Config.APP_WRITER.getValue());
 			
 			// App 기동 로깅
-			Log.write("APP_START", 0, getSysName());
+			Log.write("APP_START", 0, AppAgentUtil.getSysName());
 			
 			// 시스템 metrics 정보를 수집하는 크론잡 기동
 			try {
 				
-				metricsAcquisitorCronJob = new CronJob(
-					Config.METRICS_ACQUISITOR_SCHEDULE.getValue(),
-					new MetricsAcquisitor()
-				);
-				
-				metricsAcquisitorCronJob.run();
+				if("true".equalsIgnoreCase(Config.METRICS_ACQUISITOR_USE.getValue()) == true) {
+					
+					metricsAcquisitorCronJob = new CronJob(
+						Config.METRICS_ACQUISITOR_SCHEDULE.getValue(),	// 크론잡 스케쥴
+						new MetricsAcquisitor()							// 실행할 잡
+					);
+					
+					metricsAcquisitorCronJob.run();
+				}
 				
 			} catch(Exception ex) {
 				ex.printStackTrace();
@@ -58,7 +63,7 @@ public final class AppAgent {
 				public void run() {
 					
 					// App 종료 메시지 출력
-					Log.write("APP_END", 0, getSysName());
+					Log.write("APP_END", 0, AppAgentUtil.getSysName());
 					
 					// 출력큐가 비어 있지 않으면 잠시 대기 후 종료
 					if(Log.isEmpty() == false) {
@@ -78,14 +83,5 @@ public final class AppAgent {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-	/**
-	 * 시스템 명칭 반환
-	 * 
-	 * @return 시스템 환경 정보
-	 */
-	private static String getSysName() {
-		return Config.SYSTEM_PID.getValue() + "@" + Config.SYSTEM_NAME.getValue();
 	}
 }

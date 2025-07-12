@@ -64,21 +64,28 @@ public enum Config {
 	
 	/**
 	 * 조인 어드바이스(, 로 나눔)<br>
-	 * ex) com/redeye/*, com/prj/*
+	 * ex) com/redeye/*, com/prj*.execut*
 	 */
 	GLOBAL_JOIN_ADVICE(
 		"AGENT_JOIN_ADVICE",
 		"",
-		"조인 어드바이스(, 로 나눔), 디폴트 값은 어디에도 조인하지 않음"
+		"조인 어드바이스(, 로 나눔), 디폴트는 조인하지 않음\n"
+		+ "ex) com/redeye/*, com/prj*.execut*"
 	),
 	
-	//--- 스레드 카운터 검출 관련
+	//--- 성능 정보(JVM, 시스템) 수집 관련
 	
-	/** 시스템 metrics 정보를 수집하는 크론잡 스케쥴 */
+	METRICS_ACQUISITOR_USE(
+		"AGENT_METRICS_ACQUISITOR_USE",
+		"true",
+		"성능 정보 수집 여부(true/false), 디폴트: true"
+	),
+	
+	/** 성능 정보를 수집 크론잡의 스케쥴 */
 	METRICS_ACQUISITOR_SCHEDULE(
 		"AGENT_METRICS_ACQUISITOR_SCHEDULE",
 		"*/5 * * * * *",
-		"스레드 수 검출 시간 간격 설정, 디폴트: 5초 간격(*/5 * * * * *)"
+		"성능 정보 수집 주기 설정, 디폴트: 5초 간격(*/5 * * * * *)"
 	),
 	
 	//--- 로그 관련

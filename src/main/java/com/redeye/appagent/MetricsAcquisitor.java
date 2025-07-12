@@ -5,41 +5,41 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.lang.management.ThreadMXBean;
 
+import com.redeye.appagent.logger.Log;
+
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
-import oshi.hardware.HWDiskStore;
-import oshi.hardware.NetworkIF;
 
 /**
- *
+ * JVM 및 시스템 정보 수집기
  * 
  * @author jmsohn
  */
 class MetricsAcquisitor implements Runnable {
 	
-	/** */
+	/** 시스템 정보 객체(OSHI) */
 	private SystemInfo sysInfo = new SystemInfo();
 	
-	/** */
+	/** JVM 메모리 정보 객체 */
 	private MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 	
-	/** */
+	/** JVM 스레드 정보 객체 */
 	private ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
 	
 	
 	@Override
 	public void run() {
 		
-		//
+		// JVM 성능 정보 수집 로깅
 		this.logJVMMetrics();
 		
-		//
+		// 시스템 정보 수집 및 로깅
 		this.logSysMetrics();
 	}
 
 	/**
-	 * 
+	 * JVM 정보 수집 및 로깅
 	 */
 	private void logJVMMetrics() {
 		
@@ -48,51 +48,48 @@ class MetricsAcquisitor implements Runnable {
 		long max = heapMemoryUsage.getMax();
 		long used = heapMemoryUsage.getUsed();
 		
-		System.out.println("memory max: " + max);
-		System.out.println("memory used: " + used);
+		Log.write("JVM_MTRC", "MEM", "\"max\": %d, \"used\": %d", max, used);
 		
 		// JVM의 스레드 개수
 		int threadCnt = this.threadMXBean.getThreadCount();
-		System.out.println("thread count: " + threadCnt);
+		
+		Log.write("JVM_MTRC", "THRD", "\"count\": %d", threadCnt);
 	}
 	
 	/**
-	 * 
+	 * 시스템 정보 수집 및 로깅
 	 */
 	private void logSysMetrics() {
-		
-		// CPU
+
+		// ---- CPU
 		CentralProcessor cpu = this.sysInfo.getHardware().getProcessor();
-
-		System.out.println("Logical CPU count: " + cpu.getLogicalProcessorCount());
-		System.out.println("System CPU load: " + cpu.getSystemCpuLoadTicks());
 		
-		// Memory
-		GlobalMemory memory = this.sysInfo.getHardware().getMemory();
-
-		System.out.println("Total memory: " + memory.getTotal());
-		System.out.println("Available memory: " + memory.getAvailable());
-		
-		// Disk
-		for (HWDiskStore disk : this.sysInfo.getHardware().getDiskStores()) {
-			
-			// 최신 정보로 갱신
-		    disk.updateAttributes();
-		    
-		    System.out.println("Disk: " + disk.getName());
-		    System.out.println("Read bytes: " + disk.getReadBytes());
-		    System.out.println("Write bytes: " + disk.getWriteBytes());
+		long[][] prevTicks = cpu.getProcessorCpuLoadTicks();
+		try {
+			// 대기 시간 (예: 1초)
+			Thread.sleep(1000);
+		} catch(Exception ex) {
+			// Do nothing
 		}
-		
-		// Network
-		for (NetworkIF net : this.sysInfo.getHardware().getNetworkIFs()) {
-			
-			// 최신 상태 반영
-		    net.updateAttributes();
-		    
-		    System.out.println("Interface: " + net.getName());
-		    System.out.println("Bytes sent: " + net.getBytesSent());
-		    System.out.println("Bytes received: " + net.getBytesRecv());
+
+		// CPU별 사용률 계산
+		double[] cpuLoads = cpu.getProcessorCpuLoadBetweenTicks(prevTicks);
+
+		// 전체 평균 사용률 계산
+		double totalLoad = 0;
+		for (double load : cpuLoads) {
+			totalLoad += load;
 		}
+
+		double avgLoad = totalLoad / cpuLoads.length;
+		Log.write("SYS_MTRC", "CPU",
+				"\"usage\": %d",
+				avgLoad * 100);
+		
+		// ---- Memory
+		GlobalMemory mem = this.sysInfo.getHardware().getMemory();
+		Log.write("SYS_MTRC", "MEM",
+				"\"total\": %d, \"available\": %d",
+				mem.getTotal(), mem.getAvailable());
 	}
 }
