@@ -17,6 +17,9 @@ import com.redeye.appagent.logger.Log;
 @TargetClass(type="SOCKET_CHANNEL", cls="java/nio/channels/SocketChannel")
 public class SocketChannelWrapper {
 	
+	/** 채널 타입 */
+	private static final String API_TYPE = "SCH";
+	
 	/**
 	 * 접속 주소 로깅
 	 * 
@@ -31,8 +34,22 @@ public class SocketChannelWrapper {
 				String hostName = ((InetSocketAddress)addr).getHostName();
 				int port = ((InetSocketAddress)addr).getPort();
 				
-				Log.write("SCH", null, "hostname: \"%s\", port:%d", hostName, port);
+				Log.write(API_TYPE, null, "hostname: \"%s\", port:%d", hostName, port);
 			}
+		}
+	}
+	
+	/**
+	 * 접속 실패시 로깅
+	 * 
+	 * @param addr 접속 주소
+	 * @param ioex 예외 객체
+	 */
+	private static void logConnFail(SocketAddress addr, IOException ioex) {
+		if(addr != null) {
+			Log.write(API_TYPE, null, "fail to connect addr(" + addr + "):" + ioex.getMessage());
+		} else {
+			Log.write(API_TYPE, null, "addr is null.");
 		}
 	}
 
@@ -47,8 +64,16 @@ public class SocketChannelWrapper {
 		
 		logAddr(addr);
 		
-		SocketChannel channel = SocketChannel.open();
-		return channel;
+		try {
+			
+			SocketChannel channel = SocketChannel.open();
+			return channel;
+			
+		} catch(IOException ioex) {
+
+			logConnFail(addr, ioex);
+			throw ioex;
+		}
 	}
 
 	/**
@@ -63,7 +88,15 @@ public class SocketChannelWrapper {
 		
 		logAddr(addr);
 		
-		boolean result = channel.connect(addr);
-		return result;
+		try {
+			
+			boolean result = channel.connect(addr);
+			return result;
+			
+		} catch(IOException ioex) {
+			
+			logConnFail(addr, ioex);
+			throw ioex;
+		}
 	}
 }
