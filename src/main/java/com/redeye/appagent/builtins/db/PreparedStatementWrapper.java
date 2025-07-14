@@ -19,7 +19,8 @@ public class PreparedStatementWrapper {
 		int result = pstmt.executeUpdate();
 		long end = System.currentTimeMillis();
 
-		Log.write(ActionType.DB_INS.name(), pstmt, end-start, "\"sql\": \"%s\", \"params\": \"%s\"", ConstentsDB.getSql(), ConstantsDB.getParams());
+		Log.write(ActionType.DB_INS.name(), pstmt, end-start, "\"sql\": \"%s\", \"params\": \"%s\"", ContentsDB.getSql(), ConstantsDB.getParams());
+		ContentsDB.clear();
 		
 		return result;
 	}
