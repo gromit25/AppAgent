@@ -20,6 +20,20 @@ public class PreparedStatementWrapper {
 		ContentsDB.addParam(x);
 	}
 
+	@TargetMethod("setInt(IL)V")
+	public static void setLong(PreparedStatement pstmt, int parameterIndex, long x) throws SQLException {
+
+		pstmt.setLong(parameterIndex, x);
+		ContentsDB.addParam(x);
+	}
+
+	@TargetMethod("setFloat(IF)V")
+	public static void setLong(PreparedStatement pstmt, int parameterIndex, float x) throws SQLException {
+
+		pstmt.setFloat(parameterIndex, x);
+		ContentsDB.addParam(x);
+	}
+
 	@TargetMethod("execute()Z")
 	public static boolean execute(PreparedStatement pstmt) throws SQLException {
 
