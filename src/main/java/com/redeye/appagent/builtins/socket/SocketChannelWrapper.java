@@ -34,7 +34,7 @@ public class SocketChannelWrapper {
 				String hostName = ((InetSocketAddress)addr).getHostName();
 				int port = ((InetSocketAddress)addr).getPort();
 				
-				Log.write(API_TYPE, null, "hostname: \"%s\", port:%d", hostName, port);
+				Log.write(API_TYPE, null, "\"hostname\": \"%s\", \"port\":%d", hostName, port);
 			}
 		}
 	}
