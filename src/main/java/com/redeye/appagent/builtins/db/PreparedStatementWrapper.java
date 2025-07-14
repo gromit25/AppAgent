@@ -20,7 +20,7 @@ public class PreparedStatementWrapper {
 		ContentsDB.addParam(x);
 	}
 
-	@TargetMethod("setInt(IL)V")
+	@TargetMethod("setLong(IJ)V")
 	public static void setLong(PreparedStatement pstmt, int parameterIndex, long x) throws SQLException {
 
 		pstmt.setLong(parameterIndex, x);
