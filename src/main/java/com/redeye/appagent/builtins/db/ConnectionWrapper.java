@@ -6,13 +6,6 @@ import java.sql.PreparedStatement;
 @TargetClass(type = "DB", cls = "java/sql/Connection")
 public class ConnectionWrapper {
 
-	@TargetMethod("createStatement()Ljava/sql/Statement;")
-	public static Statement createStatement() throws SQLException {
-
-		Statement stmt = conn.createStatement();
-		return stmt;
-	}
-	
 	@TargetMethod("prepareStatement(Ljava/lang/String;)Ljava/sql/PreparedStatement;")
 	public static PreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
 
