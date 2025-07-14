@@ -34,6 +34,13 @@ public class PreparedStatementWrapper {
 		ContentsDB.addParam(x);
 	}
 
+	@TargetMethod("setDouble(ID)V")
+	public static void setDouble(PreparedStatement pstmt, int parameterIndex, double x) throws SQLException {
+
+		pstmt.setDouble(parameterIndex, x);
+		ContentsDB.addParam(x);
+	}
+
 	@TargetMethod("execute()Z")
 	public static boolean execute(PreparedStatement pstmt) throws SQLException {
 
