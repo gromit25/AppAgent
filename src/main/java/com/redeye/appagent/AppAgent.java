@@ -65,7 +65,7 @@ public final class AppAgent {
 					// App 종료 메시지 출력
 					Log.write("APP_END", 0, AppAgentUtil.getSysName());
 					
-					// 출력큐가 비어 있지 않으면 잠시 대기 후 종료
+					// 출력큐가 비어 있지 않으면 잠시 대기(0.5초) 후 종료
 					if(Log.isEmpty() == false) {
 						try {
 							Thread.sleep(500);
