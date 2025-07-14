@@ -13,6 +13,13 @@ public class PreparedStatementWrapper {
 		ContentsDB.addParam(x);
 	}
 
+	@TargetMethod("setInt(II)V")
+	public static void setInt(PreparedStatement pstmt, int parameterIndex, int x) throws SQLException {
+
+		pstmt.setInt(parameterIndex, x);
+		ContentsDB.addParam(x);
+	}
+
 	@TargetMethod("execute()Z")
 	public static boolean execute(PreparedStatement pstmt) throws SQLException {
 
