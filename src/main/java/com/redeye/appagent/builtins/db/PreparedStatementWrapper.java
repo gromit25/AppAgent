@@ -20,7 +20,7 @@ public class PreparedStatementWrapper {
 		boolean result = pstmt.execute();
 		long end = System.currentTimeMillis();
 
-		Log.write(ActionType.DB_INS.name(), pstmt, end-start, "\"sql\": \"%s\", \"params\": \"%s\"", ContentsDB.getSql(), ConstantsDB.getParams());
+		Log.write(ActionType.DB_SQL.name(), pstmt, end-start, "\"sql\": \"%s\", \"params\": \"%s\"", ContentsDB.getSql(), ConstantsDB.getParams());
 		ContentsDB.clear();
 
 		return result;
