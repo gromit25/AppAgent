@@ -46,6 +46,7 @@ public class SocketChannelWrapper {
 	 * @param ioex 예외 객체
 	 */
 	private static void logConnFail(SocketAddress addr, IOException ioex) {
+		
 		if(addr != null) {
 			Log.write(API_TYPE, null, "fail to connect addr(" + addr + "):" + ioex.getMessage());
 		} else {
