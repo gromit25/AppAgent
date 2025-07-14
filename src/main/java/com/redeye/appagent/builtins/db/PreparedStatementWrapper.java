@@ -11,4 +11,16 @@ public class PreparedStatementWrapper {
 		pstmt.setString(parameterIndex, x);
 		ContentsDB.addParam(x);
 	}
+
+	@TargetMethod("executeUpdate()I")
+	public static int executeUpdate(PreparedStatement pstmt) throws SQLException {
+
+		long start = System.currentTimeMillis();
+		int result = pstmt.executeUpdate();
+		long end = System.currentTimeMillis();
+
+		Log.write(ActionType.DB_INS.name(), pstmt, end-start, "\"sql\": \"%s\", \"params\": \"%s\"", ConstentsDB.getSql(), ConstantsDB.getParams());
+		
+		return result;
+	}
 }
