@@ -8,10 +8,10 @@ public class ConnectionWrapper {
 
 	@TargetMethod("prepareStatement(Ljava/lang/String;)Ljava/sql/PreparedStatement;")
 	public static PreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
-
-		ContentsDB.setSql(sql);
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
+		ContentsDB.setSql(sql);
+		
 		return pstmt;
 	}
 }
