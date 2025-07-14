@@ -10,7 +10,7 @@ import com.redeye.StringUtil;
  */
 public class ContentsDB {
 	
-	/** sql문 */
+	/** SQL 문 */
 	private static ThreadLocal<String> sql = new ThreadLocal<String>();
 	
 	/** 파라미터 */
