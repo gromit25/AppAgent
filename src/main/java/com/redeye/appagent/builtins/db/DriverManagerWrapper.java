@@ -17,9 +17,10 @@ import com.redeye.appagent.logger.Log;
 public class DriverManagerWrapper {
 	
 	/**
+	 * DB 접속시 로깅
 	 * 
-	 * 
-	 * @param conn
+	 * @param conn DB 연결 객체
+	 * @param url DB 연결 url
 	 */
 	private static void logConn(Connection conn, String url) {
 		
@@ -34,8 +35,8 @@ public class DriverManagerWrapper {
 	 *  getConnection Wrapper 메소드
 	 * 
 	 * @param url 데이터베이스 연결 url
-	 * @param user 접속 사용자
-	 * @param password 접속 패스워드
+	 * @param user DB 접속 사용자명
+	 * @param password DB 접속 패스워드
 	 */
 	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url, String user, String password) throws SQLException {
@@ -49,7 +50,7 @@ public class DriverManagerWrapper {
 	/**
 	 * getConnection Wrapper 메소드
 	 * 
-	 * @param url 데이터베이스 연결 url
+	 * @param url DB 연결 url
 	 */
 	@TargetMethod("getConnection(Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url) throws SQLException {

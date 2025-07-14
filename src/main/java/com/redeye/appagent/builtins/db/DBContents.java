@@ -4,7 +4,7 @@ import com.redeye.StringUtil;
 
 /**
  * 데이터베이스 쿼리 수행 정보 저장용<br>
- * 스레드 별로 저장함
+ * 스레드 별로 저장(ThreadLocal 사용)
  * 
  * @author jmsohn
  */

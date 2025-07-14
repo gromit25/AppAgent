@@ -10,7 +10,7 @@ import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.logger.Log;
 
 /**
- * 
+ * DB DataSource Wrapper
  * 
  * @author jmsohn
  */
@@ -18,9 +18,10 @@ import com.redeye.appagent.logger.Log;
 public class DataSourceWrapper {
 	
 	/**
+	 * DB 연결시 로깅
 	 * 
-	 * 
-	 * @param conn
+	 * @param conn DB Connection
+	 * @param username DB 접속 사용자명
 	 */
 	private static void logConn(Connection conn, String username) {
 		
@@ -32,10 +33,10 @@ public class DataSourceWrapper {
 	}
 
 	/**
+	 * getConnection Wrapper
 	 * 
-	 * 
-	 * @param ds
-	 * @return
+	 * @param ds Data Source 객체
+	 * @return 생성된 DB 연결
 	 */
 	@TargetMethod("getConnection()Ljava/sql/Connection;")
 	public static Connection getConnection(DataSource ds) throws SQLException {
@@ -47,12 +48,12 @@ public class DataSourceWrapper {
 	}
 	
 	/**
+	 * getConnection Wrapper
 	 * 
-	 * 
-	 * @param ds
-	 * @param username
-	 * @param password
-	 * @return
+	 * @param ds Data Source 객체
+	 * @param username DB 접속 사용자 명
+	 * @param password DB 접속 패스트워드
+	 * @return 생성된 DB 연결
 	 */
 	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(DataSource ds, String username, String password) throws SQLException {

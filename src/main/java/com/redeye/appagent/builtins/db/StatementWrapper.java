@@ -8,9 +8,21 @@ import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.logger.Log;
 
+/**
+ * 
+ * 
+ * @author jmsohn
+ */
 @TargetClass(type="DB", cls="java/sql/Statement")
 public class StatementWrapper {
 
+	/**
+	 * 
+	 * 
+	 * @param stmt
+	 * @param sql
+	 * @return
+	 */
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(Statement stmt, String sql) throws SQLException {
 		

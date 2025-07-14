@@ -8,9 +8,21 @@ import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.logger.Log;
 
+/**
+ * 
+ * 
+ * @author jmsohn
+ */
 @TargetClass(type="DB", cls="java/sql/Statement")
 public class PreparedStatementWrapper {
 	
+	/**
+	 * 
+	 * 
+	 * @param pstmt
+	 * @param parameterIndex
+	 * @param x
+	 */
 	@TargetMethod("setString(ILjava/lang/String;)V")
 	public static void setString(PreparedStatement pstmt, int parameterIndex, String x) throws SQLException {
 
@@ -18,6 +30,12 @@ public class PreparedStatementWrapper {
 		DBContents.addParam(x);
 	}
 
+	/**
+	 * 
+	 * @param pstmt
+	 * @param parameterIndex
+	 * @param x
+	 */
 	@TargetMethod("setInt(II)V")
 	public static void setInt(PreparedStatement pstmt, int parameterIndex, int x) throws SQLException {
 
@@ -25,6 +43,13 @@ public class PreparedStatementWrapper {
 		DBContents.addParam(Integer.toString(x));
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param pstmt
+	 * @param parameterIndex
+	 * @param x
+	 */
 	@TargetMethod("setLong(IJ)V")
 	public static void setLong(PreparedStatement pstmt, int parameterIndex, long x) throws SQLException {
 
@@ -32,6 +57,13 @@ public class PreparedStatementWrapper {
 		DBContents.addParam(Long.toString(x));
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param pstmt
+	 * @param parameterIndex
+	 * @param x
+	 */
 	@TargetMethod("setFloat(IF)V")
 	public static void setLong(PreparedStatement pstmt, int parameterIndex, float x) throws SQLException {
 
@@ -39,6 +71,13 @@ public class PreparedStatementWrapper {
 		DBContents.addParam(Float.toString(x));
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param pstmt
+	 * @param parameterIndex
+	 * @param x
+	 */
 	@TargetMethod("setDouble(ID)V")
 	public static void setDouble(PreparedStatement pstmt, int parameterIndex, double x) throws SQLException {
 
@@ -46,6 +85,13 @@ public class PreparedStatementWrapper {
 		DBContents.addParam(Double.toString(x));
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param pstmt
+	 * @return
+	 */
 	@TargetMethod("execute()Z")
 	public static boolean execute(PreparedStatement pstmt) throws SQLException {
 
@@ -61,7 +107,13 @@ public class PreparedStatementWrapper {
 
 		return result;
 	}
-	
+
+	/**
+	 *
+	 * 
+	 * @param pstmt
+	 * @return
+	 */
 	@TargetMethod("executeUpdate()I")
 	public static int executeUpdate(PreparedStatement pstmt) throws SQLException {
 
@@ -78,6 +130,12 @@ public class PreparedStatementWrapper {
 		return result;
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param pstmt
+	 * @return
+	 */
 	@TargetMethod("executeQuery()Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(PreparedStatement pstmt) throws SQLException {
 
