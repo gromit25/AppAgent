@@ -9,8 +9,10 @@ enum ActionType {
 	
 	DB_CON,
 	DB_CLS,
-	
+
 	DB_SQL,
+	
+	DB_SEL,
 	DB_INS,
 	DB_UPD,
 	DB_DEL,
