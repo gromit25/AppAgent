@@ -1,9 +1,14 @@
 package com.redeye.appagent.builtins.db;
 
-import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-@TargetClass("java/sql/Statement")
+import com.redeye.appagent.annotation.TargetClass;
+import com.redeye.appagent.annotation.TargetMethod;
+import com.redeye.appagent.logger.Log;
+
+@TargetClass(type="DB", cls="java/sql/Statement")
 public class StatementWrapper {
 
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")

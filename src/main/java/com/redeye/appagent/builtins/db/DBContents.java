@@ -8,7 +8,7 @@ import com.redeye.StringUtil;
  * 
  * @author jmsohn
  */
-public class ContentsDB {
+public class DBContents {
 	
 	/** SQL 문 */
 	private static ThreadLocal<String> sql = new ThreadLocal<String>();
@@ -40,7 +40,7 @@ public class ContentsDB {
 	 * @param sql 쿼리
 	 */
 	public static void setSql(String sql) {
-		ContentsDB.sql.set(sql);
+		DBContents.sql.set(sql);
 	}
 	
 	/**
@@ -60,6 +60,6 @@ public class ContentsDB {
 	public static void addParam(String param) {
 		
 		String params = (StringUtil.isEmpty(getParams()) == true) ?	param : getParams() + "," + param;
-		ContentsDB.params.set(params);
+		DBContents.params.set(params);
 	}
 }
