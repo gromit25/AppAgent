@@ -20,7 +20,7 @@ public class ContentsDB {
 	/**
 	 * 설정된값 전체 삭제
 	 */
-	public static void removeAll() {
+	public static void clear() {
 		sql.remove();
 		params.remove();
 	}
