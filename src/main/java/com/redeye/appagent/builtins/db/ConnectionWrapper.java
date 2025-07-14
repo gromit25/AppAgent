@@ -10,7 +10,6 @@ public class ConnectionWrapper {
 	public static PreparedStatement prepareStatement(Connection conn, String sql) throws SQLException {
 
 		ContentsDB.setSql(sql);
-		Log.write(ActionType.DB_SQL.name(), null, "\"sql\": \"%s\"", sql);
 		
 		PreparedStatement pstmt = conn.prepareStatement(sql);
 		return pstmt;
