@@ -14,7 +14,7 @@ import com.redeye.appagent.logger.Log;
  *
  * @author jmsohn
  */
-@TargetClass(type="SOCKET_CHANNEL", cls="java/nio/channels/SocketChannel")
+@TargetClass(type = "SOCKET_CHANNEL", cls = "java/nio/channels/SocketChannel")
 public class SocketChannelWrapper {
 	
 	/** 채널 타입 */
