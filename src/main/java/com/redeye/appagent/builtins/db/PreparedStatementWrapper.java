@@ -13,7 +13,7 @@ import com.redeye.appagent.logger.Log;
  * 
  * @author jmsohn
  */
-@TargetClass(type="DB", cls="java/sql/Statement")
+@TargetClass(type = "DB", cls = "java/sql/Statement")
 public class PreparedStatementWrapper {
 	
 	/**
