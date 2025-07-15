@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * 
  * @author jmsohn
  */
-@TargetClass(cls="jakarta/servlet/Servlet", type="WAS")
+@TargetClass(type = "WAS", cls = "jakarta/servlet/Servlet")
 public class ServletWrapper {
 	
 	/**
