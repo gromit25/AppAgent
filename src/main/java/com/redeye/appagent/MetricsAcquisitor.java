@@ -83,7 +83,7 @@ class MetricsAcquisitor implements Runnable {
 
 		double avgLoad = totalLoad / cpuLoads.length;
 		Log.write("SYS_MTRC", "CPU",
-				"\"usage\": %d",
+				"\"usage\": %.2f",
 				avgLoad * 100);
 		
 		// ---- Memory
