@@ -72,7 +72,7 @@ class JoinAdvice {
 		// 각 어드바이스 객체를 생성하여 목록에 저장
 		for(String adviceStr: adviceStrArr) {
 		
-			// 클래스 명 과 메소드 명 어드바이스 분리
+			// 어드바이스에서 클래스 명과 메소드 명 어드바이스 분리
 			String[] classAndMethodAdvice = StringUtil.splitLast(adviceStr, "\\.");
 			
 			if(
