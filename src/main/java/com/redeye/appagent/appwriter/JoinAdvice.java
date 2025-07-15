@@ -84,7 +84,7 @@ class JoinAdvice {
 			}
 			
 			String classAdvice = classAndMethodAdvice[0];
-			String methodAdvice = "*";
+			String methodAdvice = "*";  // 메소드 어드바이스가 없을 경우, 모든 메소드를 대상으로 함
 			if(classAndMethodAdvice.length == 2) {
 				methodAdvice = classAndMethodAdvice[1];
 			}
