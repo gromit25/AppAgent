@@ -28,7 +28,7 @@ public class ServletWrapper {
 	 * @param req 사용자 요청 객체
 	 * @param res 서버 응답 객체
 	 */
-	@TargetMethod( "service(Ljakarta/servlet/ServletRequest;Ljakarta/servlet/ServletResponse;)V")
+	@TargetMethod("service(Ljakarta/servlet/ServletRequest;Ljakarta/servlet/ServletResponse;)V")
 	@JoinAdvice("org/apache/catalina/core*")
 	public static void service(
 		Servlet servlet,
