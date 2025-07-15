@@ -82,14 +82,18 @@ class MetricsAcquisitor implements Runnable {
 		}
 
 		double avgLoad = totalLoad / cpuLoads.length;
-		Log.write("SYS_MTRC", "CPU",
-				"\"usage\": %.2f",
-				avgLoad * 100);
+		Log.write(
+			"SYS_MTRC", "CPU",
+			"\"usage\": %.2f",
+			avgLoad * 100
+		);
 		
 		// ---- Memory
 		GlobalMemory mem = this.sysInfo.getHardware().getMemory();
-		Log.write("SYS_MTRC", "MEM",
-				"\"total\": %d, \"available\": %d",
-				mem.getTotal(), mem.getAvailable());
+		Log.write(
+			"SYS_MTRC", "MEM",
+			"\"total\": %d, \"available\": %d",
+			mem.getTotal(), mem.getAvailable()
+		);
 	}
 }
