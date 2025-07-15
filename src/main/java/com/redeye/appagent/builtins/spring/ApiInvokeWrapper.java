@@ -15,7 +15,7 @@ import com.redeye.appagent.annotation.TargetMethod;
  * 
  * @author jmsohn
  */
-@TargetClass(cls="java/lang/reflect/Method", type="SPR")
+@TargetClass(type="SPR", cls = "java/lang/reflect/Method")
 public class ApiInvokeWrapper {
 	
 	/**
