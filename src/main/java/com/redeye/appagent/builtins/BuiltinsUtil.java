@@ -2,26 +2,22 @@ package com.redeye.appagent.builtins;
 
 public class BuiltinsUtil {
   
-  public static void measureExecTime(
+  public static <T> T logExecTime(
     String apiType,
     Object obj,
     String message,
-    ExecuteMethod execMethod
+    Supplier<T> supplier
   ) throws Exception {
-    
+
+    //
     long start = System.currentTimeMillis();
-    executeMethod.execute();
+    T result = supplier.get();
     long end = System.currentTimeMillis();
 
+    //
     Log.write(apiType, obj, end-start, message);
-  }
 
-  public static void measureExecTime(
-    String apiType,
-    String message,
-    ExecuteMethod execMethod
-  ) throws Exception {
-    
-    measureExecTime(apiType, null, message, execMethod);
+    //
+    return result;
   }
 }
