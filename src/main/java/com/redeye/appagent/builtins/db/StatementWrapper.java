@@ -26,9 +26,13 @@ public class StatementWrapper {
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(Statement stmt, String sql) throws SQLException {
 		
-		long start = System.currentTimeMillis();
-		ResultSet result = stmt.executeQuery(sql);
-		long end = System.currentTimeMillis();
+		ResultSet result = null;
+
+		BuiltinsUtil.measureExecTime(
+			() -> {
+				result = stmt.executeQuery(sql);
+			}
+		);
 		
 		Log.write(ActionType.DB_SEL.name(), stmt, end-start, "\"sql\": \"%s\"", sql);
 		
