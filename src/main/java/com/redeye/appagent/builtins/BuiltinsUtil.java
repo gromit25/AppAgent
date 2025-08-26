@@ -22,6 +22,6 @@ public class BuiltinsUtil {
     ExecuteMethod execMethod
   ) throws Exception {
     
-    measureExecutionTime(apiType, null, message, execMethod);
+    measureExecTime(apiType, null, message, execMethod);
   }
 }
