@@ -1,5 +1,9 @@
 package com.redeye.appagent.builtins;
 
+import java.util.function.Supplier;
+
+import com.redeye.appagent.logger.Log;
+
 public class BuiltinsUtil {
   
   public static <T> T logExecTime(
