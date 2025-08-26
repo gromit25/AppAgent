@@ -122,7 +122,7 @@ public class PreparedStatementWrapper {
 		long end = System.currentTimeMillis();
 
 		Log.write(
-			ActionType.DB_UPD.name(), pstmt, end-start,
+			ActionType.DB_CUD.name(), pstmt, end-start,
 			"\"sql\": \"%s\", \"params\": \"%s\"", DBContents.getSql(), DBContents.getParams()
 		);
 		DBContents.clear();

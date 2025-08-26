@@ -13,9 +13,7 @@ enum ActionType {
 	DB_SQL,
 	
 	DB_SEL,
-	DB_INS,
-	DB_UPD,
-	DB_DEL,
+	DB_CUD,
 	
 	DB_CMT,
 	DB_RBK
