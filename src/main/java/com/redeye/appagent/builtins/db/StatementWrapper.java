@@ -26,15 +26,14 @@ public class StatementWrapper {
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(Statement stmt, String sql) throws SQLException {
 		
-		ResultSet result = null;
-
-		BuiltinsUtil.measureExecTime(
+		ResultSet result = BuiltinsUtil.logExecTime(
+			ActionType.DB_SEL.name(),
+			stmt,
+			String.format("\"sql\": \"%s\"", sql),
 			() -> {
-				result = stmt.executeQuery(sql);
+				return stmt.executeQuery(sql);
 			}
 		);
-		
-		Log.write(ActionType.DB_SEL.name(), stmt, end-start, "\"sql\": \"%s\"", sql);
 		
 		return result;
 	}
