@@ -9,7 +9,7 @@ import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.logger.Log;
 
 /**
- * 
+ * Statement Wrapper 클래스
  * 
  * @author jmsohn
  */
@@ -17,11 +17,11 @@ import com.redeye.appagent.logger.Log;
 public class StatementWrapper {
 
 	/**
+	 * executeQuery Wrapper 메소드
 	 * 
-	 * 
-	 * @param stmt
-	 * @param sql
-	 * @return
+	 * @param stmt Statement 객체
+	 * @param sql 쿼리
+	 * @return 쿼리 결과
 	 */
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(Statement stmt, String sql) throws SQLException {
