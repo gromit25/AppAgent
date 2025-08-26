@@ -6,7 +6,6 @@ import java.sql.Statement;
 
 import com.redeye.appagent.annotation.TargetClass;
 import com.redeye.appagent.annotation.TargetMethod;
-import com.redeye.appagent.logger.Log;
 
 /**
  * Statement Wrapper 클래스
@@ -26,7 +25,7 @@ public class StatementWrapper {
 	@TargetMethod("executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(Statement stmt, String sql) throws SQLException {
 		
-		return BuiltinsUtil.logExecTime(
+		return DBUtil.logExecTime(
 			ActionType.DB_SEL.name(),
 			stmt,
 			String.format("\"sql\": \"%s\"", sql),
