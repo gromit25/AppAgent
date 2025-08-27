@@ -33,7 +33,11 @@ public class DBUtil {
 		long end = System.currentTimeMillis();
 
 		// 로그 write
-		Log.write(apiType, obj, end-start, message);
+		if(obj != null) {
+			Log.write(apiType, obj, end-start, message);
+		} else {
+			Log.write(apiType, result, end-start, message);
+		}
 
 		// 결과 반환
 		return result;
