@@ -30,13 +30,13 @@ public class DBUtil {
 		// 메소드 실행 및 수행 시간 측정
 		long start = System.currentTimeMillis();
 		T result = method.execute();
-		long end = System.currentTimeMillis();
+		long elapsed = System.currentTimeMillis() - start;
 
 		// 로그 write
 		if(obj != null) {
-			Log.write(apiType, obj, end-start, message);
+			Log.write(apiType, obj, elapsed, message);
 		} else {
-			Log.write(apiType, result, end-start, message);
+			Log.write(apiType, result, elapsed, message);
 		}
 
 		// 결과 반환
