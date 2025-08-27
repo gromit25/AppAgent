@@ -139,16 +139,14 @@ public class PreparedStatementWrapper {
 	@TargetMethod("executeQuery()Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(PreparedStatement pstmt) throws SQLException {
 
-		long start = System.currentTimeMillis();
-		ResultSet rs = pstmt.executeQuery();
-		long end = System.currentTimeMillis();
-
-		Log.write(
-			ActionType.DB_SEL.name(), pstmt, end-start,
-			"\"sql\": \"%s\", \"params\": \"%s\"", DBContents.getSql(), DBContents.getParams()
+		return DBUtil.writeExecTime(
+			ActionType.DB_SEL.name(),
+			pstmt,
+			String.format("\"sql\": \"%s\", \"params\": \"%s\"", DBContents.getSql(), DBContents.getParams()),
+			() -> {
+				DBContents.clear(); // 로그 남긴 후 클리어
+				return pstmt.executeQuery();
+			}
 		);
-		DBContents.clear();
-
-		return rs;
 	}
 }
