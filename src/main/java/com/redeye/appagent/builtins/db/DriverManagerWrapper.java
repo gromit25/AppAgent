@@ -17,21 +17,6 @@ import com.redeye.appagent.logger.Log;
 public class DriverManagerWrapper {
 	
 	/**
-	 * DB 접속시 로깅
-	 * 
-	 * @param conn DB 연결 객체
-	 * @param url DB 연결 url
-	 */
-	private static void logConn(Connection conn, String url) {
-		
-		Log.write(
-			ActionType.DB_CON.name(),
-			conn,
-			"\"url\":\"%s\"", url
-		);
-	}
-	
-	/**
 	 *  getConnection Wrapper 메소드
 	 * 
 	 * @param url 데이터베이스 연결 url
@@ -41,10 +26,14 @@ public class DriverManagerWrapper {
 	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url, String user, String password) throws SQLException {
 		
-		Connection conn = DriverManager.getConnection(url, user, password);
-		logConn(conn, url);
-		
-		return conn;
+		return DBUtil.writeExecTime(
+			ActionType.DB_CON.name(),
+			null,
+			String.format("\"url\":\"%s\", \"user\":\"%s\" ", url, user),
+			() -> {
+				return DriverManager.getConnection(url, user, password);
+			}
+		);
 	}
 	
 	/**
@@ -55,9 +44,13 @@ public class DriverManagerWrapper {
 	@TargetMethod("getConnection(Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url) throws SQLException {
 		
-		Connection conn = DriverManager.getConnection(url);
-		logConn(conn, url);
-		
-		return conn;
+		return DBUtil.writeExecTime(
+			ActionType.DB_CON.name(),
+			null,
+			String.format("\"url\":\"%s\"", url),
+			() -> {
+				return DriverManager.getConnection(url);
+			}
+		);
 	}
 }
