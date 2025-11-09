@@ -20,7 +20,7 @@ public class DBUtil {
 	 * @param method 실행할 메소드
 	 * @return 실행 후 결과
 	 */
-	public static <T> T writeExecTime(
+	public static <T> T writeElapsedTime(
 		String apiType,
 		Object obj,
 		String message,

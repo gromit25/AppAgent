@@ -139,7 +139,7 @@ public class PreparedStatementWrapper {
 	@TargetMethod("executeQuery()Ljava/sql/ResultSet;")
 	public static ResultSet executeQuery(PreparedStatement pstmt) throws SQLException {
 
-		return DBUtil.writeExecTime(
+		return DBUtil.writeElapsedTime(
 			ActionType.DB_SEL.name(),
 			pstmt,
 			String.format("\"sql\": \"%s\", \"params\": \"%s\"", DBContents.getSql(), DBContents.getParams()),

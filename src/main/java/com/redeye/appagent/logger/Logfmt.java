@@ -2,8 +2,6 @@ package com.redeye.appagent.logger;
 
 import java.util.Map;
 
-import com.redeye.appagent.util.StringUtil;
-
 /**
  * Logfmt 유틸리티 클래스
  * 
@@ -27,13 +25,23 @@ public class Logfmt {
 				builder.append(" ");
 			}
 			
+			// key 추가
+			builder
+				.append(key)
+				.append("=");
+			
+			// value 추가
 			String value = map.get(key).toString();
 			
-			if(StringUtil.hasBlank(value) == true) {
+			if(value.matches(".*[\\s\"].*") == true) {
+				
+				value = value.replace("\"", "\\\"");
+				
 				builder
 					.append("\"")
 					.append(value)
 					.append("\"");
+				
 			} else {
 				builder.append(value);
 			}

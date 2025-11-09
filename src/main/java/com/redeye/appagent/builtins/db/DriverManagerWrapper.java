@@ -25,7 +25,7 @@ public class DriverManagerWrapper {
 	@TargetMethod("getConnection(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url, String user, String password) throws SQLException {
 		
-		return DBUtil.writeExecTime(
+		return DBUtil.writeElapsedTime(
 			ActionType.DB_CON.name(),
 			null,
 			String.format("\"url\":\"%s\", \"user\":\"%s\" ", url, user),
@@ -43,7 +43,7 @@ public class DriverManagerWrapper {
 	@TargetMethod("getConnection(Ljava/lang/String;)Ljava/sql/Connection;")
 	public static Connection getConnection(String url) throws SQLException {
 		
-		return DBUtil.writeExecTime(
+		return DBUtil.writeElapsedTime(
 			ActionType.DB_CON.name(),
 			null,
 			String.format("\"url\":\"%s\"", url),
