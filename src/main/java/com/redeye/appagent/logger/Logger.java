@@ -14,6 +14,7 @@ import lombok.Setter;
  */
 class Logger implements Runnable {
 	
+	
 	/** 로그 메시지 입력 큐 */
 	private BlockingQueue<String> inQ;
 	
@@ -23,7 +24,8 @@ class Logger implements Runnable {
 	/** 중단 여부 */
 	@Getter
 	@Setter
-	private boolean stop;
+	private volatile boolean stop;
+	
 	
 	/**
 	 * 생성자

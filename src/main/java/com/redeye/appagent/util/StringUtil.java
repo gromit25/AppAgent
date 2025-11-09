@@ -488,6 +488,22 @@ public class StringUtil {
 		
 		return str.matches("\\s*");
 	}
+	
+	/**
+	 * 문자열에 공란이 있는지 여부 반환<br>
+	 * 빈문자열(empty) 및 문자열이 null 일 경우 true 반환
+	 * 
+	 * @param str 문자열
+	 * @return 공란이 있는지 여부
+	 */
+	public static boolean hasBlank(String str) {
+		
+		if(isEmpty(str) == true) {
+			return true;
+		}
+		
+		return str.matches(".*\\s.*");
+	}
 
 	/**
 	 * 문자열을 역전 시켜 반환하는 메소드<br>

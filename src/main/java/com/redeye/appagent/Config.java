@@ -97,20 +97,6 @@ public enum Config {
 		"로그 Writer(전체 클래스 명)"
 	),
 	
-	/** 출력 로그 템플릿 */
-	LOG_TEMPLATE(
-		"AGENT_LOG_TEMPLATE",
-		"${curTime}"
-		+ "\t${elapsedTime}"
-		+ "\t${pid}"
-		+ "\t${txId}"
-		+ "\t${apiType}"
-		+ "\t${objId}"
-		+ "\t${stackTrace}"
-		+ "\t${message}",
-		"출력 로그 템플릿"
-	),
-	
 	/** 출력 로그 생성 실패시 로그 메시지 */
 	LOG_TEMPLATE_FAIL_MESSAGE(
 		"AGENT_LOG_TEMPLATE_FAIL_MESSAGE",

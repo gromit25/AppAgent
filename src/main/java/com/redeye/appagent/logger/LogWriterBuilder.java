@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Vector;
 
-import com.redeye.StringUtil;
+import com.redeye.appagent.util.StringUtil;
 
 import lombok.Getter;
 
@@ -15,12 +15,14 @@ import lombok.Getter;
  */
 class LogWriterBuilder {
 	
+	
 	/** 생성할 로그 writer 타입명 */
 	@Getter
 	private String types;
 	
 	/** 로그 writer 생성자 목록 */
 	private List<Constructor<?>> writerConstructors;
+	
 	
 	/**
 	 * 생성자

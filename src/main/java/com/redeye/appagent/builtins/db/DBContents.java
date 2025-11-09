@@ -1,6 +1,6 @@
 package com.redeye.appagent.builtins.db;
 
-import com.redeye.StringUtil;
+import com.redeye.appagent.util.StringUtil;
 
 /**
  * 데이터베이스 쿼리 수행 정보 저장용<br>

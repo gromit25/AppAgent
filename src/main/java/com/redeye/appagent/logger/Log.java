@@ -12,7 +12,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.redeye.appagent.Config;
 import com.redeye.appagent.builtins.ContentsApp;
 import com.redeye.appagent.util.StringUtil;
-import com.redeye.textgen.TextGen;
 
 /**
  * 로깅 클래스<br>
@@ -23,14 +22,12 @@ import com.redeye.textgen.TextGen;
  */
 public class Log {
 	
+	
 	/** 로그 메시지 큐 - Logger 에게 로그메시지를 전달할 큐 객체 */
 	private static BlockingQueue<String> outQ;
 	
 	/** Logger 목록 - Logger: 실제 로그를 저장 작업 수행 */
 	private static List<Logger> loggers;
-	
-	/** log 생성 포맷 */
-	private static TextGen logTemplate;
 	
 	/** 큐의 최대 로그 메시지 개수 */
 	private static int maxLogCount;
@@ -40,6 +37,7 @@ public class Log {
 	
 	/** 패키지 명 줄임 여부 */
 	private static boolean isShortPackage;
+	
 	
 	static {
 		
@@ -117,19 +115,6 @@ public class Log {
 		}
 		
 		// --- 로그 메시지 생성 관련 설정 --- 
-		
-		// 로그 템플릿 객체 생성
-		try {
-			
-			logTemplate = TextGen.compile(Config.LOG_TEMPLATE.getValue());
-			
-		} catch(Exception ex) {
-			
-			System.err.println("AGENT MESSAGE:");
-			System.err.println("Invalid Value(LOG_TEMPLATE):" + Config.LOG_TEMPLATE.getValue());
-			
-			logTemplate = null;
-		}
 		
 		// 스택 트레이스 정보를 남길 package 목록 초기화
 		tracePackages = new HashSet<>();
@@ -248,7 +233,7 @@ public class Log {
 	) {
 		
 		// 현재시간을 가져옴
-		long curTime = System.currentTimeMillis();
+		long timestamp = System.currentTimeMillis();
 		
 		// 트랜잭션 ID가 없으면 만듦
 		if(ContentsApp.getTxId() == null) {
@@ -271,32 +256,32 @@ public class Log {
 		// 로그 템플릿에서 사용할 데이터 설정
 		Map<String, Object> valueMap = new HashMap<>();
 		
-		valueMap.put("curTime", Long.toString(curTime));
-		valueMap.put("elapsedTime", (Long)elapsedTime);
+		valueMap.put("timestamp", timestamp);
+		valueMap.put("elapsed", (Long)elapsedTime);
 		valueMap.put("pid", Config.SYSTEM_PID.getValue());
-		valueMap.put("txId", ContentsApp.getTxId());
-		valueMap.put("apiType", apiType);
-		valueMap.put("objId", objId);
-		valueMap.put("message", logMsg);
-		valueMap.put("stackTrace", stackTraceMsg);
+		valueMap.put("tx", ContentsApp.getTxId());
+		valueMap.put("type", apiType);
+		valueMap.put("obj", objId);
+		valueMap.put("msg", logMsg);
+		valueMap.put("stack", stackTraceMsg);
 		
 		// 로그 템플릿을 통해 로그 메시지 생성
-		String log = null;
+		StringBuilder log = new StringBuilder("");
 		
 		try {
 			
-			log = logTemplate.gen(valueMap);
+			log.append(Logfmt.toString(valueMap));
 			
 		} catch(Exception ex) {
 			
 			// 오류 발생시 표시할 메시지
-			log = Config.LOG_TEMPLATE_FAIL_MESSAGE.getValue();
+			log.append(Config.LOG_TEMPLATE_FAIL_MESSAGE.getValue());
 		}
 		
 		// 로그 종료 문자열([ASCII 코드 RS(Record Separator)] + "\r\n") 추가
-		log += "\u001E\r\n";
+		log.append("\n");
 		
-		return log;
+		return log.toString();
 	}
 	
 	/**

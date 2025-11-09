@@ -17,6 +17,7 @@ import lombok.Setter;
  */
 class FileManager extends Thread {
 	
+	
 	/** 로그 파일 관리자 */
 	private static FileManager logFileManager;
 	
@@ -46,7 +47,6 @@ class FileManager extends Thread {
 	/** 현재 로그 파일 */
 	private File logFile;
 	
-	//--------------------------------------
 	
 	/**
 	 * 로그 파일 관리자 반환(싱글톤)
