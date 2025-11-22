@@ -256,11 +256,11 @@ public class Log {
 		// 로그 템플릿에서 사용할 데이터 설정
 		Map<String, Object> valueMap = new HashMap<>();
 		
-		valueMap.put("timestamp", timestamp);
+		valueMap.put("ts", timestamp);
 		valueMap.put("elapsed", (Long)elapsedTime);
 		valueMap.put("pid", Config.SYSTEM_PID.getValue());
 		valueMap.put("tx", ContentsApp.getTxId());
-		valueMap.put("type", apiType);
+		valueMap.put("tp", apiType);
 		valueMap.put("obj", objId);
 		valueMap.put("msg", logMsg);
 		valueMap.put("stack", stackTraceMsg);
@@ -279,7 +279,7 @@ public class Log {
 		}
 		
 		// 로그 종료 문자열([ASCII 코드 RS(Record Separator)] + "\r\n") 추가
-		log.append("\n");
+		log.append("\r\n");
 		
 		return log.toString();
 	}

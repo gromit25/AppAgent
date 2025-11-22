@@ -33,6 +33,7 @@ public class Logfmt {
 			// value 추가
 			String value = map.get(key).toString();
 			
+			// 문자열 내부에 스페이스 문자가 포함된 경우 따옴표(") 추가
 			if(value.matches(".*[\\s\"].*") == true) {
 				
 				value = value.replace("\"", "\\\"");

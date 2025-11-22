@@ -12,5 +12,5 @@ public interface LogWriter {
 	 * 
 	 * @param msg 저장할 로그 메시지
 	 */
-	public void write(String msg) throws Exception;
+	void write(String msg) throws Exception;
 }
