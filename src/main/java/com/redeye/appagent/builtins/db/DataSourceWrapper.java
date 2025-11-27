@@ -23,7 +23,7 @@ public class DataSourceWrapper {
 	 * @param conn DB Connection
 	 * @param username DB 접속 사용자명
 	 */
-	private static void logConn(Connection conn, String username) {
+	private static void writeConnLog(Connection conn, String username) {
 		
 		Log.write(
 			ActionType.DB_CON.name(),
@@ -33,7 +33,7 @@ public class DataSourceWrapper {
 	}
 
 	/**
-	 * getConnection Wrapper
+	 * getConnection Wrapper 메소드
 	 * 
 	 * @param ds Data Source 객체
 	 * @return 생성된 DB 연결
@@ -42,13 +42,13 @@ public class DataSourceWrapper {
 	public static Connection getConnection(DataSource ds) throws SQLException {
 		
 		Connection conn = ds.getConnection();
-		logConn(conn, "N/A");
+		writeConnLog(conn, "N/A");
 		
 		return conn;
 	}
 	
 	/**
-	 * getConnection Wrapper
+	 * getConnection Wrapper 메소드
 	 * 
 	 * @param ds Data Source 객체
 	 * @param username DB 접속 사용자 명
@@ -59,7 +59,7 @@ public class DataSourceWrapper {
 	public static Connection getConnection(DataSource ds, String username, String password) throws SQLException {
 		
 		Connection conn = ds.getConnection(username, password);
-		logConn(conn, username);
+		writeConnLog(conn, username);
 		
 		return conn;
 	}
