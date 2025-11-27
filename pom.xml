@@ -110,7 +110,6 @@
              <Premain-Class>com.redeye.appagent.AppAgent</Premain-Class>
              <Can-Redefine-Classes>true</Can-Redefine-Classes>
              <Can-Retransform-Classes>true</Can-Retransform-Classes>
-             <Class-Path>lib/TextGen-0.1.jar</Class-Path>
            </manifestEntries>
         </archive>
       </configuration>
