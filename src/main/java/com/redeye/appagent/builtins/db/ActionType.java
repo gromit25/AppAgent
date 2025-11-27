@@ -7,7 +7,7 @@ package com.redeye.appagent.builtins.db;
  */
 enum ActionType {
 
-	/** DB 연결 */
+	/** DB 연결(connect) */
 	DB_CON,
 	/** DB 연결 해제(close) */
 	DB_CLS,
