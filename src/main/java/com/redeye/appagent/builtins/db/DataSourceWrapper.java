@@ -10,7 +10,7 @@ import com.redeye.appagent.annotation.TargetMethod;
 import com.redeye.appagent.logger.Log;
 
 /**
- * DB DataSource Wrapper
+ * DB DataSource Wrapper 클래스
  * 
  * @author jmsohn
  */
