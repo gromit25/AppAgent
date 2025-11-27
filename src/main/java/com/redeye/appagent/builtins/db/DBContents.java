@@ -10,6 +10,7 @@ import com.redeye.appagent.util.StringUtil;
  */
 public class DBContents {
 	
+	
 	/** SQL 문 */
 	private static ThreadLocal<String> sql = new ThreadLocal<String>();
 	
