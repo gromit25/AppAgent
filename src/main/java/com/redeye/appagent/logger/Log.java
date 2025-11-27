@@ -278,7 +278,7 @@ public class Log {
 			log.append(Config.LOG_TEMPLATE_FAIL_MESSAGE.getValue());
 		}
 		
-		// 로그 종료 문자열([ASCII 코드 RS(Record Separator)] + "\r\n") 추가
+		// 종료 문자 추가
 		log.append("\r\n");
 		
 		return log.toString();
